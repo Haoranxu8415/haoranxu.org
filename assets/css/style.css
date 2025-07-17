@@ -1,29 +1,4 @@
-﻿body {
-  margin: 0;
-  padding: 0;
-  font-family: "Georgia", "Times New Roman", serif;
-  background-color: #f7f3ee; /* 温暖文艺感背景 */
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  padding: 2rem;
-  background-color: #ffffff;
-  font-size: 1.5rem;
-  /* max-width, border, box-shadow, border-radius 已被移除 */
-}
-
-.left {
+﻿.left {
   flex: 1;
   text-align: left;
   padding-left: 2rem;
@@ -49,4 +24,333 @@ h1 {
 p {
   font-size: 1.2rem;
   color: #555;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  justify-content: flex-end;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #2b2b2b;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #8B6F47; /* Adjust based on your palette */
+}
+
+/* About Section */
+.about {
+  margin-top: 20vh;
+  padding: 2rem;
+  max-width: 800px;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  color: #f0f0f0;
+  line-height: 1.6;
+}
+
+.about h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #fefefe;
+}
+
+.about h3 {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  color: #e0e0e0;
+}
+
+.about p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #dddddd;
+}
+
+@media (max-width: 768px) {
+  .about {
+    margin-top: 12vh;
+    padding: 1.5rem;
+  }
+
+  .about h2 {
+    font-size: 1.7rem;
+  }
+
+  .about h3 {
+    font-size: 1.2rem;
+  }
+
+  .about p {
+    font-size: 1rem;
+  }
+}
+
+/* Generic Highlighted Box */
+.highlight-box {
+  background-color: #fff8ec;
+  border: 2px solid #8B6F47;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  color: #2b2b2b;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.page-title {
+  text-align: left;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #4A3B2A;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #8B6F47;
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.section-text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Home Page Content Box Style */
+.info-box {
+  background-color: #fff8ec;
+  border: 2px solid #8B6F47;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  color: #2b2b2b;
+}
+
+.info-box p {
+  margin-bottom: 1rem;
+}
+
+.about h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: #fefefe;
+}
+
+.about h3 {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #f0f0f0;
+  font-weight: bold;
+}
+
+.about ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.about ul li {
+  font-size: 1.05rem;
+  color: #dddddd;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.beige-background {
+  background-color: #f6f1e7; 
+}
+
+/* About section container */
+.about-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: flex-start;
+  max-width: 1000px;
+  width: 90%;
+  margin-top: 2rem;
+}
+
+/* Individual highlight blocks */
+.highlight-box.about-block {
+  background-color: #FEF6E5;
+  border: 2px solid #C79A6B;
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  color: #5F503F;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  max-width: 1000px;
+}
+
+.highlight-box.about-block h3 {
+  color: #5F503F;
+}
+
+.highlight-box.about-block ul li {
+  color: #5F503F;
+  font-weight: 500;
+}
+.highlight-box.about-block li {
+  color: #5F503F;
+  font-weight: 500;
+}
+
+/* Section titles */
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #8B6F47;
+}
+
+/* Subtitles inside blocks */
+.about-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #4A3B2A;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Global beige full-screen background */
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #F2E5CE; /* EDDEC5 / F2E5CE beige */
+}
+
+.beige-background {
+    background-color: #F2E5CE;
+}
+
+/* Ensure page wrapper spans full width */
+.page-wrapper {
+  width: 90%;
+  max-width: 800px;
+  margin: 2rem auto;
+  text-align: left;
+}
+
+/* About Me section styles */
+.page-title {
+  text-align: left;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #4A3B2A; /* Taupe for text */
+}
+
+/* Container for the highlight boxes */
+.about-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: flex-start;
+}
+
+.highlight-box,
+.about-block {
+  margin-left: 0;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .about-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .highlight-box {
+        width: 100%;
+    }
+}
+
+/* Top navigation: keep existing selector and ensure right alignment */
+nav {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+}
+
+body.beige-background {
+  background-color: #F2E5CE;
+  background-image: none;
+}
+.navbar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1.5rem;
+  background-color: rgba(245, 237, 206, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+.navbar a {
+  color: #4A3B2A;
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar a:hover {
+  color: #5F503F;
+}
+
+.visit-button {
+  transition: background-color 0.05s ease-in-out, color 0.05s ease-in-out, transform 0.05s ease-out;
+  background-color: #E1B87F;
+  color: #ffffff;
+  padding: 0.8rem 1.6rem;
+  border-radius: 9999px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.visit-button:hover {
+  background-color: #D39C5F;
+  color: #ffffff;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+body.fade-in {
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
