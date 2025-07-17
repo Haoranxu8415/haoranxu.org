@@ -484,6 +484,12 @@ body, html {
   box-sizing: border-box;
 }
 
+.frosted-block:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
 .frosted-block h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
