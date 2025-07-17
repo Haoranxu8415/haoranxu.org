@@ -476,7 +476,7 @@ body, html {
   margin-bottom: 2rem;
   color: #333;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  max-height: 170%; /* New: set height to 1.7x width */
+  /* Removed height or min-height */
   flex: 1 1 calc(33% - 2rem); /* New: allow 2–3 per row with wrapping */
   min-width: 240px;
   max-width: 480px;
@@ -525,16 +525,31 @@ body, html {
   justify-content: space-between;
 }
 
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .card-container.masonry .frosted-block {
-  height: auto; /* 固定高度 */
+  /* Removed fixed height */
   min-width: 200px;
   margin-bottom: 2rem;
   color: white;
 }
 
 .card {
-  flex: 1 1 calc(30% - 2rem);
-  min-width: 250px;
+  flex: 1 1 300px;
+  padding: 2rem;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  /* Removed any height or min-height */
 }
 
 .nav-wrapper {

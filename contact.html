@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact</title>
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <script defer src="assets/js/main.js"></script>
 </head>
 <body class="beige-background other-page page-contact">
@@ -24,8 +26,31 @@
       <section style="padding: 5vh 5vw; color: white;">
         <h1 style="color: white;">Get in Touch</h1>
         <p style="color: #cccccc;">Feel free to reach out for collaboration, questions, or just to say hi!</p>
+        <div class="social-links">
+          <a href="mailto:haoranxu@icloud.com" title="Email (iCloud)"><i class="fas fa-envelope"></i></a>
+          <a href="mailto:haoranxu@outlook.com" title="Email (Outlook)"><i class="fas fa-paper-plane"></i></a>
+          <a href="https://github.com/haoranxu" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
       </section>
     </main>
   </div>
+  <style>
+    .social-links {
+      margin-top: 2rem;
+      display: flex;
+      gap: 2rem;
+      font-size: 1.8rem;
+    }
+
+    .social-links a {
+      color: #cccccc;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: white;
+      transform: scale(1.2);
+    }
+  </style>
 </body>
 </html>
