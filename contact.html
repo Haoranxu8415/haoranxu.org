@@ -22,34 +22,95 @@
     </div>
   </nav>
   <div class="scrollable-content">
-    <main style="margin-top: -2vh;">
-      <section style="padding: 5vh 5vw; color: white;">
-        <h1 style="color: white;">Get in Touch</h1>
-        <p style="color: #cccccc;">Feel free to reach out for collaboration, questions, or just to say hi!</p>
-        <div class="social-links">
-          <a href="mailto:haoranxu@icloud.com" title="Email (iCloud)"><i class="fas fa-envelope"></i></a>
-          <a href="mailto:haoranxu@outlook.com" title="Email (Outlook)"><i class="fas fa-paper-plane"></i></a>
-          <a href="https://github.com/haoranxu" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-        </div>
+    <main class="contact-container">
+      <section class="contact-block glass">
+        <h2>Haoran Xu</h2>
+        <p>UTC+8 (China Standard Time)</p>
+        <p>Based in Hefei, China</p>
+      </section>
+
+      <section class="contact-block glass email-block">
+        <h2>Emails</h2>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:x_haoran@icloud.com">haoranxu@icloud.com</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:e1718502489@outlook.com">haoranxu@outlook.com</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:haoranxu8415@gmail.com">haoranxu@github.com</a></p>
+      </section>
+
+      <section class="contact-block glass social-icons">
+        <a href="https://github.com/Haoranxu8415" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://x.com/xiayu8415" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://instagram.com/haoran8415" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
       </section>
     </main>
   </div>
   <style>
-    .social-links {
-      margin-top: 2rem;
+    .contact-container {
       display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      flex-wrap: nowrap;
       gap: 2rem;
-      font-size: 1.8rem;
+      padding: 5vh 10vw;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
-    .social-links a {
+    .contact-block {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 2.5rem;
+      border-radius: 1rem;
+      color: white;
+      font-size: 1.1rem;
+      text-align: left;
+      height: 300px;
+      min-width: 0;
+    }
+
+    .contact-block h2 {
+      color: white;
+    }
+
+    .contact-block p, .contact-block a {
+      color: #e0e0e0;
+    }
+
+    .email-block a {
+      color: #cccccc;
+      text-decoration: none;
+    }
+
+    .email-block a:hover {
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      font-size: 2.8rem;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .social-icons a {
       color: #cccccc;
       transition: transform 0.3s ease, color 0.3s ease;
     }
 
-    .social-links a:hover {
+    .social-icons a:hover {
       color: white;
-      transform: scale(1.2);
+      transform: scale(1.3);
+    }
+
+    .glass {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
   </style>
 </body>
