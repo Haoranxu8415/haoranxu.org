@@ -570,11 +570,11 @@ body, html {
 }
 
 .slide-left {
-  animation: slideFromRight 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: slideFromRight 1.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .slide-right {
-  animation: slideFromLeft 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: slideFromLeft 1.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @keyframes slideFromRight {
@@ -582,8 +582,8 @@ body, html {
     transform: translateX(100vw);
     opacity: 0;
   }
-  60% {
-    transform: translateX(-2%);
+  50% {
+    transform: translateX(6%);
     opacity: 1;
   }
   100% {
@@ -596,8 +596,8 @@ body, html {
     transform: translateX(-100vw);
     opacity: 0;
   }
-  60% {
-    transform: translateX(2%);
+  50% {
+    transform: translateX(-6%);
     opacity: 1;
   }
   100% {

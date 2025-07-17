@@ -73,17 +73,3 @@ document.addEventListener("DOMContentLoaded", function () {
     sessionStorage.removeItem("pageTransition");
   }
 });
-
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const params = new URLSearchParams(window.location.search);
-    const from = params.get("from");
-
-    const body = document.getElementById("home-body");
-    if (from === "visit") {
-      body.classList.add("fade-in");
-    } else {
-      // 预留接口：来自其他标签页后的动画逻辑
-      // body.classList.add("from-nav");
-    }
-  });
