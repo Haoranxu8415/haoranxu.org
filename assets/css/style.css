@@ -26,27 +26,6 @@ p {
   color: #555;
 }
 
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-  justify-content: flex-end;
-  padding: 0;
-  margin: 0;
-}
-
-.nav-links li a {
-  text-decoration: none;
-  color: #2b2b2b;
-  font-weight: 500;
-  font-size: 1.1rem;
-  transition: color 0.3s ease;
-}
-
-.nav-links li a:hover {
-  color: #8B6F47; /* Adjust based on your palette */
-}
-
 /* About Section */
 .about {
   margin-top: 20vh;
@@ -290,9 +269,6 @@ html, body {
         flex-direction: column;
         align-items: center;
     }
-    .highlight-box {
-        width: 100%;
-    }
 }
 
 /* Top navigation: keep existing selector and ensure right alignment */
@@ -302,47 +278,70 @@ nav {
     right: 2rem;
 }
 
-body.beige-background {
-  background-color: #F2E5CE;
-  background-image: none;
-}
-.navbar {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+/* Styles for navbar on other pages only */
+body.other-page nav.navbar {
+  position: fixed;
+  top: 1.5rem;
+  right: 2rem;
+  left: 2rem;
+  padding: 0.75rem 2rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 2em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   display: flex;
-  gap: 1.5rem;
-  background-color: rgba(245, 237, 206, 0.8);
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
+  justify-content: space-between; /* changed from flex-end */
+  z-index: 1000;
 }
-.navbar a {
-  color: #4A3B2A;
+
+body.other-page nav.navbar .page-label {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+}
+
+body.other-page nav.navbar ul.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 3vw;
+}
+
+body.other-page nav.navbar ul.nav-links li a {
   text-decoration: none;
   font-weight: 500;
+  color: #333;
+  transition: color 0.3s ease;
 }
-.navbar a:hover {
-  color: #5F503F;
+
+body.other-page nav.navbar ul.nav-links li a:hover {
+  color: #000;
+}
+
+body.beige-background {
+  background-image: none;
 }
 
 .visit-button {
-  transition: background-color 0.05s ease-in-out, color 0.05s ease-in-out, transform 0.05s ease-out;
-  background-color: #E1B87F;
-  color: #ffffff;
-  padding: 0.8rem 1.6rem;
-  border-radius: 9999px;
-  border: none;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  margin-top: 2em;
+  padding: 0.75em 1.5em;
+  background-color: #d9a15f;
+  color: white;
+  text-decoration: none;
+  border-radius: 2em;
+  font-weight: 600;
+  font-size: 1em;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
 }
 
 .visit-button:hover {
-  background-color: #D39C5F;
-  color: #ffffff;
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+  background-color: #c68d47;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 body.fade-out {
@@ -353,4 +352,83 @@ body.fade-out {
 body.fade-in {
   opacity: 1;
   transition: opacity 0.4s ease;
+}
+
+
+body.index-page {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+body.index-page {
+  background-image: url('../images/Other_bkg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.index-hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body.other-page {
+  background-image: url("../images/Other_bkg.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.frosted-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(16px);
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.5vh 2vw;
+  z-index: 1000;
+}
+
+.site-title-home {
+  margin-left: 4vw;
+}
+
+body.other-page .top-header {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 0 0 2em 2em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Top header with page title and navbar */
+.top-header {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8em 2em;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 0 0 2em 2em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.top-header .page-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #5F503F;
+  margin: 0;
 }

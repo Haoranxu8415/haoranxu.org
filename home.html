@@ -3,42 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>About Me</title>
+  <title>Home</title>
   <!-- fix: 正确引用 CSS -->
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
-<body class="beige-background">
-  <!-- 使用与 index 页面一致的导航栏样式 -->
-  <nav class="navbar">
-    <ul class="nav-links">
-      <li><a href="home.html">Home</a></li>
+<body class="beige-background other-page">
+  <nav class="navbar" style="display: flex; align-items: center;">
+    <div class="page-label" style="font-weight: bold; font-size: 2rem; padding-left: 2rem;">Home</div>
+    <ul class="nav-links" style="align-items: center; display: flex;">
+      <li><a href="home.html" class="js-scroll-to-home">Home</a></li>
       <li><a href="#">Projects</a></li>
       <li><a href="#">Blog</a></li>
       <li><a href="#">Contact</a></li>
     </ul>
   </nav>
-  <div class="page-wrapper">
-    <h1 class="page-title">About Me</h1>
-    <section class="section about">
-      <div class="about-container">
-        <div class="about-block">
-          <h3 class="about-subtitle">Education</h3>
-          <p>Hefei Thomas School (2023–2026), AP & A-Level Curriculum</p>
-          <p>Summer Program at Cornell University (2025)</p>
-        </div>
-        <div class="about-block">
-          <h3 class="about-subtitle">Experience</h3>
-          <p>Founder of LexiBloom – a SwiftUI vocabulary learning app</p>
-          <p>Developer of Aerova Monitor – macOS system monitor</p>
-          <p>Intern at China Telecom, Hefei Branch (Summer 2025)</p>
-        </div>
-        <div class="about-block">
-          <h3 class="about-subtitle">Skills</h3>
-          <p>SwiftUI, HTML/CSS/JavaScript, UI/UX Design, Figma</p>
-          <p>Business Strategy, Photography, Video Editing</p>
-        </div>
-      </div>
-    </section>
-  </div>
 </body>
 </html>
