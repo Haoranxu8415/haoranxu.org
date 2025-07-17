@@ -10,12 +10,39 @@
 <body class="beige-background other-page">
   <nav class="navbar" style="display: flex; align-items: center;">
     <div class="page-label" style="font-weight: bold; font-size: 2rem; padding-left: 2rem;">Home</div>
-    <ul class="nav-links" style="align-items: center; display: flex;">
-      <li><a href="home.html" class="js-scroll-to-home">Home</a></li>
-      <li><a href="#">Projects</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
+    <div class="nav-wrapper">
+      <ul class="nav-links" style="align-items: center; display: flex;">
+        <li><a href="home.html" class="js-scroll-to-home active">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
   </nav>
+  <div class="scrollable-content">
+    <main style="margin-top: -2vh;">
+      <section style="padding: 5vh 5vw; color: white;">
+        <h1 style="color: white;">Welcome to my website</h1>
+        <p style="color: #cccccc;">This is the homepage.</p>
+      </section>
+
+      <div class="card-container masonry">
+        <div class="frosted-block card">
+          <h2>About Me</h2>
+          <p>I’m a high school student passionate about UI/UX design, coding, and photography. This site showcases my projects and journey.</p>
+        </div>
+
+        <div class="frosted-block card">
+          <h2>Current Projects</h2>
+          <p>I'm currently working on a vocabulary learning app for English learners and a macOS system monitoring tool with a minimalist interface.</p>
+        </div>
+
+        <div class="frosted-block card">
+          <h2>Interests</h2>
+          <p>Beyond tech, I love playing badminton, exploring coffee culture, and watching sci-fi series like <em>The Expanse</em>.</p>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
