@@ -443,6 +443,7 @@ body.other-page .top-header {
   gap: clamp(1rem, 3vw, 2rem);
   align-items: center;
   height: 3rem;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .navbar-hidden {
@@ -560,6 +561,7 @@ body, html {
 
 .nav-wrapper {
   position: relative;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .nav-underline {
@@ -591,37 +593,76 @@ body, html {
 }
 
 .slide-left {
-  animation: slideFromRight 1.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: slideFromRight 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .slide-right {
-  animation: slideFromLeft 1.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: slideFromLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes slideFromRight {
   0% {
-    transform: translateX(100vw);
+    transform: translateX(120%);
     opacity: 0;
   }
-  50% {
-    transform: translateX(6%);
+  60% {
+    transform: translateX(4%);
     opacity: 1;
   }
   100% {
     transform: translateX(0);
+    opacity: 1;
   }
 }
 
 @keyframes slideFromLeft {
   0% {
-    transform: translateX(-100vw);
+    transform: translateX(-120%);
     opacity: 0;
   }
-  50% {
-    transform: translateX(-6%);
+  60% {
+    transform: translateX(-4%);
     opacity: 1;
   }
   100% {
     transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.5rem;
+    height: auto;
+  }
+
+  .top-header .page-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .top-header .nav-wrapper {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+
+  .top-header .nav-links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    line-height: 1.8rem;
+  }
+
+  .top-header .nav-links a {
+    padding: 0.25rem 0;
   }
 }
