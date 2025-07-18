@@ -1,19 +1,16 @@
-﻿# Test Post
+﻿---
+"The Day I Fell in Love with Claymation"
+---
+Date: 2025-07-06
 
-This is a test markdown post for my blog.
+[Creativity, Animation, Storytelling]
 
-## Section One
+It started with a rabbit, a cat, a dog, and a cookie.
 
-Here is some example content with **bold text**, *italic text*, and a [link](https://haoranxu.org).
+I didn’t expect much when I opened that pack of modeling clay. I thought it’d be fun to test my Sony A7R3 and shoot something small. But by the time I was animating the cookie slowly falling, I realized I was doing more than testing a camera — I was storytelling.
 
-- Item one
-- Item two
-- Item three
+Claymation demands patience. Every frame, every shadow matters. But it also gives back magic — the kind of magic you can’t quite replicate with CGI.
 
-### Code Example
+My short film, **“The Last Crumb,”** might only be two minutes long. But it taught me how constraints — like gravity, imperfection, or a lopsided bunny ear — can **spark creativity**, not limit it.
 
-```javascript
-console.log("Hello, world!");
-```
-
-> This is a blockquote for emphasis.
+That’s something I want to carry into every project I make.

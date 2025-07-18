@@ -20,107 +20,6 @@ p {
   color: #555;
 }
 
-/* ============================================
-   Generic Highlighted Box Styling
-   ============================================ */
-.highlight-box {
-  background-color: #fff8ec;
-  border: 2px solid #8B6F47;
-  border-radius: 20px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  color: #2b2b2b;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-}
-
-/* Styles for section headers and content text */
-.page-title {
-  text-align: left;
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  color: #4A3B2A;
-}
-
-.section-title {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #8B6F47;
-  font-weight: 600;
-}
-
-.section-subtitle {
-  font-size: 1.2rem;
-  color: #444;
-  margin-bottom: 0.5rem;
-}
-
-.section-text {
-  font-size: 1rem;
-  color: #333;
-  line-height: 1.6;
-}
-
-/* Individual highlight blocks */
-.highlight-box.about-block {
-  background-color: #FEF6E5;
-  border: 2px solid #C79A6B;
-  border-radius: 1rem;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-  color: #5F503F;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-  max-width: 1000px;
-}
-
-.highlight-box.about-block h3 {
-  color: #5F503F;
-}
-
-.highlight-box.about-block ul li {
-  color: #5F503F;
-  font-weight: 500;
-}
-
-
-/* Responsive behavior for about block layout */
-@media (max-width: 768px) {
-  .about-container {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-}
-
-/* ============================================
-   Global Background and Scroll Behavior
-   ============================================ */
-html, body {
-    height: 100%;
-    margin: 0;
-    background-color: #F2E5CE; /* EDDEC5 / F2E5CE beige */
-    overflow: auto; /* 防止背景跟随滚动 */
-}
-
-/* Beige background utility class */
-.beige-background {
-    background-color: #F2E5CE;
-}
-
-/* Page layout wrapper and block alignment overrides */
-.page-wrapper {
-  width: 90%;
-  max-width: 800px;
-  margin: 2rem auto;
-  text-align: left;
-}
-
-/* Container for the highlight boxes */
-.highlight-box,
-.about-block {
-  margin-left: 0;
-}
-
 /* Styles for navbar on other pages only */
 body.other-page nav.navbar {
   position: fixed;
@@ -186,7 +85,7 @@ body.other-page nav.navbar ul.nav-links li a.active {
 }
 
 .visit-button:hover {
-  background-color: #c68d47;
+  background-color: #f5f5f5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: scale(1.05);
   transition: transform 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease;
@@ -263,6 +162,14 @@ body.other-page {
   padding: 2rem;
   max-width: 100vw;
   box-sizing: border-box;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.scrollable-content.fade-in-up {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
 }
 /* Frosted content card styling for grid display */
 .frosted-block {
@@ -321,16 +228,6 @@ body.other-page {
   color: white !important;
 }
 
-/* ============================================
-   Card Layout Containers (Masonry / Centered)
-   ============================================ */
-.card-container.masonry {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: space-between;
-}
-
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -358,33 +255,6 @@ body.other-page {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
   /* Removed any height or min-height */
-}
-
-/* Navigation link underline animation and active state */
-.nav-wrapper {
-  position: relative;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.nav-underline {
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  background-color: #d97706; /* 橙色 */
-  transition: all 0.3s ease;
-  width: 0;
-  left: 0;
-}
-
-.nav-links a {
-  position: relative;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-}
-
-.nav-links a.active {
-  color: #b45309; /* 可选：加深文字颜色 */
-  font-weight: bold;
 }
 
 /* Slide animation utility classes */
@@ -434,39 +304,25 @@ body.other-page {
   }
 }
 
-/* Responsive adjustments for mobile header layout */
-@media (max-width: 768px) {
-  .top-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem 1.5rem;
-    height: auto;
-  }
+html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+}
 
-  .top-header .page-title {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    padding-left: 0;
-    margin-bottom: 0.5rem;
+@keyframes fadeInUp {
+  from {
+    transform: translateY(80px);
   }
-
-  .top-header .nav-wrapper {
-    flex-wrap: wrap;
-    padding: 0.5rem 1rem;
-    width: 100%;
-    gap: 1rem;
-    justify-content: flex-start;
+  to {
+    transform: translateY(0);
   }
+}
 
-  .top-header .nav-links {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    line-height: 1.8rem;
+@keyframes fadeInDown {
+  from {
+    transform: translateY(0);
   }
-
-  .top-header .nav-links a {
-    padding: 0.25rem 0;
+  to {
+    transform: translateY(-80px);
   }
 }

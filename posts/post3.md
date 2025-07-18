@@ -1,19 +1,17 @@
-﻿# Test Post
+﻿---
+"Why I Started Designing My Own Website"
+---
+Date: 2025-07-19
 
-This is a test markdown post for my blog.
+[Design, Personal Reflection, Web Development]
 
-## Section One
+I’ve always admired beautifully crafted websites — the kind where every element feels intentional. As someone interested in **UI/UX design**, I wanted to go beyond admiring and start creating.
 
-Here is some example content with **bold text**, *italic text*, and a [link](https://haoranxu.org).
+Building **haoranxu.org** was not just a coding exercise. It was a space where I could experiment with layout, motion, and typography without constraints. No templates. No drag-and-drop editors. Just raw HTML, CSS, and JavaScript — the closest thing I could find to building a world from scratch.
 
-- Item one
-- Item two
-- Item three
+I found joy in the smallest things:
+- Picking the right easing curve for an animation
+- Tuning the opacity of a background blur until it felt just right
+- Writing my own routing logic for page transitions
 
-### Code Example
-
-```javascript
-console.log("Hello, world!");
-```
-
-> This is a blockquote for emphasis.
+This site is not just a portfolio. It’s an evolving sketchbook of everything I love about digital design.

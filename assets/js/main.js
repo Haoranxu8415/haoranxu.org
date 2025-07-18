@@ -66,14 +66,17 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollContainer.addEventListener('scroll', () => {
       const scrollTop = scrollContainer.scrollTop;
 
-      if (scrollTop > lastScrollTop + 5) {
-        // scroll down -> navbar disappear
-        navbar.style.transform = 'translateY(-200%)';
-      } else if (scrollTop < lastScrollTop - 5) {
-        // scroll up -> navbar appear
-        navbar.style.transform = 'translateY(0)';
+      if (document.body.classList.contains('other-page')) {
+        if (scrollTop > lastScrollTop + 5) {
+          navbar.classList.remove('fadeInUp');
+          navbar.classList.add('fadeInDown');
+          navbar.style.transform = 'translateY(-200%)';
+        } else if (scrollTop < lastScrollTop - 5) {
+          navbar.classList.remove('fadeInDown');
+          navbar.classList.add('fadeInUp');
+          navbar.style.transform = 'translateY(0)';
+        }
       }
-
       lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // prevent negative values
     });
   }

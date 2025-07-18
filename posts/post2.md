@@ -1,19 +1,14 @@
-﻿# Test Post
+﻿---
+"What Social Media Algorithms Don’t Show You"
+---
+Date: 2025-07-12
 
-This is a test markdown post for my blog.
+[Psychology, Media, Identity]
 
-## Section One
+Lately, I’ve been thinking about how **algorithms shape our identity**. Not just what we like — but how we see ourselves.
 
-Here is some example content with **bold text**, *italic text*, and a [link](https://haoranxu.org).
+Social platforms tend to amplify the parts of us that are easiest to categorize. If you pause on one cooking video, you’ll get more. Watch two, and suddenly you're a “foodie.” But what if you’re also into coding, philosophy, and street photography? Those parts get buried.
 
-- Item one
-- Item two
-- Item three
+This isn’t just a tech problem. It’s a **self-perception** problem. When you’re constantly being shown a simplified version of yourself, it’s easy to start believing it.
 
-### Code Example
-
-```javascript
-console.log("Hello, world!");
-```
-
-> This is a blockquote for emphasis.
+We need more platforms that reflect complexity — not just preference. Places where contradiction is okay. Where discovery isn’t optimized, but accidental.
