@@ -1,2 +1,27 @@
-# Auto detect text files and perform LF normalization
+# .gitattributes file for haoranxu.org
+# This file defines attributes for Git to handle different file types properly.
+
+# Automatically normalize line endings for all text files
 * text=auto
+
+# Treat common source files as text to ensure proper diffing and merging
+*.md  text
+*.html text
+*.css  text
+*.js   text
+
+# Treat image and font files as binary to prevent Git from diffing or modifying them
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.webp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Exclude macOS system files and node_modules from export
+/*.DS_Store export-ignore
+/node_modules/ export-ignore

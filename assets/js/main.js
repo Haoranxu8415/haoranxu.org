@@ -1,4 +1,6 @@
+// Main JavaScript for handling page transitions, navbar behavior, and interactive navigation
 document.addEventListener("DOMContentLoaded", function () {
+  // Handle transition animation when "visit" button is clicked
   const visitButton = document.querySelector(".visit-button");
 
   if (visitButton) {
@@ -16,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Scroll event: fade navbar in/out
+  // Hide navbar on scroll down and show on scroll up
   let lastScrollTop = 0;
   const navbar = document.querySelector('.navbar');
 
@@ -36,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, false);
   }
 
+  // Intercept navigation links and store transition direction for animation
   const navLinks = document.querySelectorAll(".nav-links a");
   if (navLinks.length) {
     navLinks.forEach(link => {
@@ -48,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const currentIndex = pageOrder.indexOf(currentPage);
         const targetIndex = pageOrder.indexOf(targetPage);
 
-        // 记录方向信息到 sessionStorage
+        // Record direction information to sessionStorage
         if (targetIndex > currentIndex) {
           sessionStorage.setItem("pageTransition", "slide-left");
         } else if (targetIndex < currentIndex) {
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
           sessionStorage.removeItem("pageTransition");
         }
 
-        // 添加淡出效果再跳转
+        // Add fade out effect and redirect
         document.body.classList.add("fade-out");
         setTimeout(() => {
           window.location.href = targetPage;
@@ -66,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 页面载入时检查并添加动画类
+  // Apply transition animation class on page load and remove it from sessionStorage
   const transitionClass = sessionStorage.getItem("pageTransition");
   if (transitionClass) {
     document.body.classList.add(transitionClass);

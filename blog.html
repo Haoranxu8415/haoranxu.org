@@ -24,9 +24,42 @@
   <div class="scrollable-content">
     <main style="margin-top: -2vh;">
       <section style="padding: 5vh 5vw; color: white;">
-        <!-- Placeholder content for the blog page -->
+        <div class="card-container masonry">
+          <div class="frosted-block card">
+            <div id="markdown-content"></div>
+          </div>
+
+          <div class="frosted-block card">
+            <div id="markdown-content-2"></div>
+          </div>
+
+          <div class="frosted-block card">
+            <div id="markdown-content-3"></div>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="assets/js/blog.js"></script>
       </section>
     </main>
   </div>
+  <script>
+    fetch('posts/post1.md')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('markdown-content').innerHTML = marked.parse(text);
+      });
+
+    fetch('posts/post2.md')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('markdown-content-2').innerHTML = marked.parse(text);
+      });
+
+    fetch('posts/post3.md')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('markdown-content-3').innerHTML = marked.parse(text);
+      });
+  </script>
 </body>
 </html>
