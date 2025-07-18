@@ -1,9 +1,8 @@
 ﻿---
-"Why I Started Designing My Own Website"
+title: "Why I Started Designing My Own Website"
+date: 2025-07-19
+tags: [Design, Personal Reflection, Web Development]
 ---
-Date: 2025-07-19
-
-[Design, Personal Reflection, Web Development]
 
 I’ve always admired beautifully crafted websites — the kind where every element feels intentional. As someone interested in **UI/UX design**, I wanted to go beyond admiring and start creating.
 

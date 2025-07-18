@@ -1,9 +1,8 @@
 ﻿---
-"The Day I Fell in Love with Claymation"
+title: "The Day I Fell in Love with Claymation"
+date: 2025-07-06
+tags: [Creativity, Animation, Storytelling]
 ---
-Date: 2025-07-06
-
-[Creativity, Animation, Storytelling]
 
 It started with a rabbit, a cat, a dog, and a cookie.
 

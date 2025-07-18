@@ -1,9 +1,8 @@
 ﻿---
-"What Social Media Algorithms Don’t Show You"
+title: "What Social Media Algorithms Don’t Show You"
+date: 2025-07-12
+tags: [Psychology, Media, Identity]
 ---
-Date: 2025-07-12
-
-[Psychology, Media, Identity]
 
 Lately, I’ve been thinking about how **algorithms shape our identity**. Not just what we like — but how we see ourselves.
 
