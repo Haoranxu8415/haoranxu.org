@@ -18,26 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Hide navbar on scroll down and show on scroll up
-  let lastScrollTop = 0;
-  const navbar = document.querySelector('.navbar');
-
-  if (navbar) {
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      if (scrollTop > lastScrollTop) {
-        // Scrolling down
-        navbar.style.opacity = '0';
-        navbar.style.transition = 'opacity 0.3s ease';
-      } else {
-        // Scrolling up
-        navbar.style.opacity = '1';
-        navbar.style.transition = 'opacity 0.3s ease';
-      }
-      lastScrollTop = Math.max(scrollTop, 0);
-    }, false);
-  }
-
   // Intercept navigation links and store transition direction for animation
   const navLinks = document.querySelectorAll(".nav-links a");
   if (navLinks.length) {
@@ -74,5 +54,27 @@ document.addEventListener("DOMContentLoaded", function () {
   if (transitionClass) {
     document.body.classList.add(transitionClass);
     sessionStorage.removeItem("pageTransition");
+  }
+
+  // Scroll navbar behavior
+  let lastScrollTop = 0;
+  const navbar = document.querySelector('nav.navbar');
+
+  const scrollContainer = document.querySelector('.scrollable-content');
+
+  if (navbar && scrollContainer) {
+    scrollContainer.addEventListener('scroll', () => {
+      const scrollTop = scrollContainer.scrollTop;
+
+      if (scrollTop > lastScrollTop + 5) {
+        // scroll down -> navbar disappear
+        navbar.style.transform = 'translateY(-200%)';
+      } else if (scrollTop < lastScrollTop - 5) {
+        // scroll up -> navbar appear
+        navbar.style.transform = 'translateY(0)';
+      }
+
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // prevent negative values
+    });
   }
 });
