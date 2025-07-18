@@ -24,42 +24,47 @@
   <div class="scrollable-content">
     <main style="margin-top: 0vh;">
       <section style="padding: 10vh 5vw; color: white;">
-        <div class="card-container masonry">
-          <div class="frosted-block card">
-            <div id="markdown-content"></div>
+        <div style="display: flex; align-items: flex-start; gap: 3rem;">
+          <div class="timeline-column" style="position: relative; font-family: 'Courier New', Courier, monospace; color: white; font-size: 1rem; padding-left: 2rem; margin-left: -4rem; line-height: 1.6;">
+            <div style="position: absolute; top: 0; bottom: 0; left: 0.2rem; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.1));"></div>
+            <div style="margin-bottom: 1rem; font-weight: 700; font-size: 1.2rem; text-align: right;">2025</div>
+            <div style="margin-left: 0.7rem; font-weight: 500;">07</div>
+            <a href="#markdown-content" style="margin-left: 2rem; position: relative; display: block; text-decoration: none; color: white; padding-left: 0.8rem; transition: color 0.2s ease;">
+              <span style="position: absolute; left: 0; top: 0.45rem; width: 6px; height: 6px; background: white; border-radius: 50%;"></span>06
+            </a>
+            <a href="#markdown-content-2" style="margin-left: 2rem; position: relative; display: block; text-decoration: none; color: white; padding-left: 0.8rem; transition: color 0.2s ease;">
+              <span style="position: absolute; left: 0; top: 0.45rem; width: 6px; height: 6px; background: white; border-radius: 50%;"></span>12
+            </a>
+            <a href="#markdown-content-3" style="margin-left: 2rem; position: relative; display: block; text-decoration: none; color: white; padding-left: 0.8rem; transition: color 0.2s ease;">
+              <span style="position: absolute; left: 0; top: 0.45rem; width: 6px; height: 6px; background: white; border-radius: 50%;"></span>19
+            </a>
           </div>
+          <div class="card-container masonry">
+            <div class="frosted-block card">
+              <div id="markdown-content"></div>
+            </div>
 
-          <div class="frosted-block card">
-            <div id="markdown-content-2"></div>
-          </div>
+            <div class="frosted-block card">
+              <div id="markdown-content-2"></div>
+            </div>
 
-          <div class="frosted-block card">
-            <div id="markdown-content-3"></div>
+            <div class="frosted-block card">
+              <div id="markdown-content-3"></div>
+            </div>
           </div>
         </div>
+        <div id="bottom-anchor"></div>
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <script src="assets/js/blog.js"></script>
       </section>
-    </main>
+  </main>
+  <a href="#bottom-anchor" class="newest-button">Newest ↓</a>
   </div>
   <script>
-    fetch('posts/post1.md')
-      .then(response => response.text())
-      .then(text => {
-        document.getElementById('markdown-content').innerHTML = marked.parse(text);
-      });
-
-    fetch('posts/post2.md')
-      .then(response => response.text())
-      .then(text => {
-        document.getElementById('markdown-content-2').innerHTML = marked.parse(text);
-      });
-
-    fetch('posts/post3.md')
-      .then(response => response.text())
-      .then(text => {
-        document.getElementById('markdown-content-3').innerHTML = marked.parse(text);
-      });
+    function extractDate(text) {
+      const match = text.match(/Date:\s*(\d{4})-(\d{2})-\d{2}/);
+      return match ? `${match[1]}/${match[2]}` : 'Unknown';
+    }
   </script>
 </body>
 </html>

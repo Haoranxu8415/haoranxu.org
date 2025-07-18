@@ -81,3 +81,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+
+    fetch('posts/post1.md')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('markdown-content').innerHTML = marked.parse(text);
+        document.getElementById('timeline-entry-1').innerText = extractDate(text);
+      });
+
+    fetch('posts/post2.md')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('markdown-content-2').innerHTML = marked.parse(text);
+        document.getElementById('timeline-entry-2').innerText = extractDate(text);
+      });
+
+    fetch('posts/post3.md')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('markdown-content-3').innerHTML = marked.parse(text);
+        document.getElementById('timeline-entry-3').innerText = extractDate(text);
+      });

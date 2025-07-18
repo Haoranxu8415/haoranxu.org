@@ -21,3 +21,5 @@ fetch(markdownFile)
     // Display an error message if fetching or parsing fails
     document.getElementById('blog-content').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
   });
+  
+  
