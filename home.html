@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -29,20 +29,55 @@
         <p style="color: #cccccc;">Explore my personal journey, projects, and passions.</p>
       </section>
 
-      <div class="card-container masonry">
-        <div class="frosted-block card">
-          <h2>About Me</h2>
-          <p>I’m a high school student passionate about UI/UX design, coding, and photography. This site showcases my projects and journey. I’ve led several initiatives at school, including a photography club and tech workshops for peers. My aim is to integrate aesthetics and functionality into digital experiences.</p>
+      <div class="card-container masonry" style="display: flex; gap: 2rem;">
+        <!-- Column 1 -->
+        <div style="display: flex; flex-direction: column; gap: 2rem; flex: 1;">
+          <div class="frosted-block card">
+            <h2>About Me</h2>
+            <p>I’m a high school student passionate about business, marketing, photography and UI design. This site showcases my projects and journey. I’ve led several initiatives at school, including a photography club. My aim is to integrate aesthetics and functionality into digital experiences.</p>
+          </div>
+          <div class="frosted-block card">
+            <h2>Medium Block</h2>
+            <p>This section contains a bit more content to simulate mid-length blocks. It helps in checking how moderate scroll behaviors perform across various screen sizes and resolutions. Consistency in animations and transition effects are essential.</p>
+          </div>
         </div>
 
-        <div class="frosted-block card">
-          <h2>Current Projects</h2>
-          <p>I'm currently working on a vocabulary learning app for English learners and a macOS system monitoring tool with a minimalist interface. Both apps follow Apple-inspired design principles, prioritize user clarity, and include animations and responsive layouts. These projects are part of my portfolio for university applications.</p>
+        <!-- Column 2 -->
+        <div style="display: flex; flex-direction: column; gap: 2rem; flex: 1;">
+          <div class="frosted-block card">
+            <h2>Current</h2>
+            <p>I'm preparing to apply colleges and learning AP Microeconomics/Marcoeconomics</p>
+          </div>
+          <div class="frosted-block card">
+            <h2>Long Block</h2>
+            <p>
+              This is a much longer block designed specifically to test vertical scrolling behavior across larger blocks of content. It ensures that content stacking, padding, and layout consistency are preserved during longer scrolls. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. Sed gravida, eros non ornare sollicitudin, orci orci bibendum quam, nec porttitor justo sapien nec metus. Proin eget risus nec leo blandit dictum. In vel nulla at nisi sollicitudin commodo. Aenean a luctus libero, vitae fermentum elit. Nullam sodales nisl in nunc fermentum convallis. Integer eget eros eget nisi convallis ultrices.
+            </p>
+          </div>
         </div>
 
-        <div class="frosted-block card">
-          <h2>Interests</h2>
-          <p>Beyond tech, I love playing badminton, exploring coffee culture, and watching sci-fi series like <em>The Expanse</em>. I’m also deeply interested in modern architecture and ambient music, which often influence my design aesthetic. I enjoy learning new creative tools in my free time.</p>
+        <!-- Column 3 -->
+        <div style="display: flex; flex-direction: column; gap: 2rem; flex: 1;">
+          <div class="frosted-block card">
+            <h2>Interests</h2>
+            <p>Beyond tech, I love playing badminton, exploring coffee culture, and watching sci-fi series like <em>The Expanse</em>. I’m also deeply interested in product design and music, which often influence my design aesthetic. I enjoy learning new creative tools in my free time.</p>
+          </div>
+          <div class="frosted-block card">
+            <h2>Extra Block A</h2>
+            <p>This block continues directly under the column of "About Me" and is used to verify stacking layout behavior under that column. It’s short, but should behave just like previous cards.</p>
+          </div>
+        </div>
+
+        <!-- Column 4 -->
+        <div style="display: flex; flex-direction: column; gap: 2rem; flex: 1;">
+          <div class="frosted-block card">
+            <h2>Short Block</h2>
+            <p>This is a short block to test minimal scroll distance.</p>
+          </div>
+          <div class="frosted-block card">
+            <h2>Extra Block B</h2>
+            <p>This is another vertically stacked card continuing beneath "Current". It helps test how multiple blocks in one column interact when other columns have taller blocks above.</p>
+          </div>
         </div>
       </div>
     </main>
