@@ -367,3 +367,11 @@ html, body {
   flex-wrap: wrap;
   gap: 1rem;
 }
+
+.post-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  margin: 1rem 0;
+  border-radius: 2px;
+}
