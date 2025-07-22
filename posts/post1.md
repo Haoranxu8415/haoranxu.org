@@ -1,9 +1,4 @@
-﻿---
-title: "The Day I Fell in Love with Claymation"
-date: 2025-07-06
-tags: [Creativity, Animation, Storytelling]
----
-
+﻿
 It started with a rabbit, a cat, a dog, and a cookie.
 
 I didn’t expect much when I opened that pack of modeling clay. I thought it’d be fun to test my Sony A7R3 and shoot something small. But by the time I was animating the cookie slowly falling, I realized I was doing more than testing a camera — I was storytelling.
