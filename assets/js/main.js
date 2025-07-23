@@ -26,17 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (menuToggle && navWrapper) {
     menuToggle.addEventListener('click', () => {
       navWrapper.classList.toggle('open');
-      menuToggle.classList.toggle('active');
     });
   }
   if (navLinks.length) {
     navLinks.forEach(link => {
       link.addEventListener("click", function (e) {
         e.preventDefault();
-        if (navWrapper.classList.contains('open')) {
-          navWrapper.classList.remove('open');
-          menuToggle.classList.remove('active');
-        }
         const currentPage = window.location.pathname.split("/").pop();
         const targetPage = this.getAttribute("href");
 
