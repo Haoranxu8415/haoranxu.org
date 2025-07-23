@@ -20,6 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Intercept navigation links and store transition direction for animation
   const navLinks = document.querySelectorAll(".nav-links a");
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navWrapper = document.querySelector('.nav-wrapper');
+
+  if (menuToggle && navWrapper) {
+    menuToggle.addEventListener('click', () => {
+      navWrapper.classList.toggle('open');
+    });
+  }
   if (navLinks.length) {
     navLinks.forEach(link => {
       link.addEventListener("click", function (e) {

@@ -69,6 +69,22 @@ body.other-page nav.navbar ul.nav-links li a.active {
   border-bottom: 2px solid #a95e00;
 }
 
+/* Hamburger toggle hidden on desktop */
+body.other-page nav.navbar .menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+body.other-page nav.navbar .menu-toggle span {
+  width: 24px;
+  height: 2px;
+  background-color: #333;
+}
+
 
 /* Styles for call-to-action buttons */
 .visit-button {
@@ -374,4 +390,60 @@ html, body {
   backdrop-filter: blur(4px);
   margin: 1rem 0;
   border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body.other-page nav.navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  body.other-page nav.navbar .menu-toggle {
+    display: flex;
+  }
+
+  body.other-page nav.navbar .nav-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 1rem;
+    right: 1rem;
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 1rem;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  body.other-page nav.navbar .nav-wrapper.open {
+    display: flex;
+  }
+
+  body.other-page nav.navbar ul.nav-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-container {
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  .contact-block {
+    height: auto;
+  }
+
+  .timeline-column {
+    display: none;
+  }
+
+  .project-images {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .frosted-block {
+    flex: 1 1 100%;
+  }
 }
