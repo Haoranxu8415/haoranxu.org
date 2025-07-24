@@ -412,8 +412,8 @@ html, body {
     border-radius: 1rem;
     padding: 1rem;
     display: none;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
   }
 
   body.other-page nav.navbar .nav-wrapper.open {
@@ -421,7 +421,7 @@ html, body {
   }
 
   body.other-page nav.navbar ul.nav-links {
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
   }
 
