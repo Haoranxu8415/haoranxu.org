@@ -25,7 +25,7 @@
       </ul>
     </div>
   </nav>
-  <div class="scrollable-content" style="overflow: hidden; height: 100vh;">
+  <div class="scrollable-content" style="overflow: hidden;">
     <main style="margin-top: -1vh;"></main>
     <main class="contact-container">
       <section class="contact-block glass">
@@ -116,6 +116,32 @@
       backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsive layout for tablets and phones */
+    @media (max-width: 1024px) {
+      .scrollable-content {
+        height: calc(100vh - 4rem);
+        padding-top: 5rem;
+        gap: 1rem;
+      }
+
+      .contact-container {
+        flex-direction: column;
+        padding: 0 2rem;
+        height: 100%;
+      }
+
+      .contact-block {
+        flex: 1;
+        height: auto;
+        font-size: 0.95rem;
+        padding: 1.2rem;
+      }
+
+      .social-icons {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </body>
