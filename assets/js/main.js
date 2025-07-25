@@ -1,18 +1,11 @@
 // Main JavaScript for handling page transitions, navbar behavior, and interactive navigation
 document.addEventListener("DOMContentLoaded", function () {
-  // Utility function to trigger haptic feedback on supported devices
-  const hapticFeedback = (duration = 50) => {
-    if (navigator.vibrate) {
-      navigator.vibrate(duration);
-    }
-  };
   // Handle transition animation when "visit" button is clicked
   const visitButton = document.querySelector(".visit-button");
 
   if (visitButton) {
     visitButton.addEventListener("click", function (e) {
       e.preventDefault();
-      hapticFeedback();
 
       // Add fade-out animation to body
       document.body.style.transition = "opacity 0.5s ease";
@@ -33,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (menuToggle && navWrapper) {
     menuToggle.addEventListener('click', () => {
       navWrapper.classList.toggle('open');
-      hapticFeedback();
     });
   }
   if (navLinks.length) {
@@ -58,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Add fade out effect and redirect
         document.body.classList.add("fade-out");
-        hapticFeedback();
         setTimeout(() => {
           window.location.href = targetPage;
         }, 300);
