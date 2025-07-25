@@ -187,6 +187,11 @@ body.other-page {
   opacity: 0;
   animation: fadeInUp 0.8s ease forwards;
 }
+.project-section {
+  padding: 5vh 5vw;
+  color: white;
+}
+
 /* Frosted content card styling for grid display */
 .frosted-block {
   backdrop-filter: blur(16px);
@@ -446,4 +451,17 @@ html, body {
   .frosted-block {
     flex: 1 1 100%;
   }
+  /* Reduced spacing for project page on small screens */
+  .page-projects .scrollable-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .page-projects section {
+    padding: 2vh 3vw;
+  }
+  .page-projects .frosted-block {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
 }
