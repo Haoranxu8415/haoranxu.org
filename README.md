@@ -13,6 +13,7 @@ This is the official personal website of Haoran Xu, designed to showcase project
 - Hover effects with dynamic shadow elevation
 - Dedicated blog and contact sections
 - Mobile-specific layout optimizations
+- Haptic feedback on supported mobile devices
 
 ## 🛠️ Tech Stack
 
