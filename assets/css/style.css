@@ -152,53 +152,6 @@ body.index-page {
   align-items: center;
 }
 
-.index-content {
-  text-align: center;
-  margin-top: -5vh;
-}
-
-.index-hero h1 {
-  font-size: 5em;
-  font-weight: bold;
-  color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.index-hero p {
-  font-size: 2em;
-  color: #fefae0;
-  margin-top: 0.5em;
-}
-
-.index-hero .visit-button {
-  display: inline-block;
-  margin-top: 3em;
-  padding: 0.4em 2em;
-  background-color: rgba(255, 255, 255, 0.15);
-  color: white;
-  text-decoration: none;
-  border-radius: 2em;
-  font-weight: 600;
-  font-size: 1.5em;
-  transition: background-color 0.3s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.index-footer {
-  text-align: center;
-  margin-top: auto;
-  padding: 2vh 0;
-  color: #b0b0b0;
-  font-size: 0.9em;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-  position: absolute;
-  bottom: 2vh;
-  width: 100%;
-  left: 0;
-  z-index: 10;
-}
-
 /* ============================================
    Other Page Background and Top Header
    ============================================ */
@@ -492,27 +445,5 @@ html, body {
 
   .frosted-block {
     flex: 1 1 100%;
-  }
-
-  .index-content {
-    margin-top: -2vh;
-  }
-
-  .index-hero h1 {
-    font-size: 3em;
-  }
-
-  .index-hero p {
-    font-size: 1.2em;
-  }
-
-  .index-hero .visit-button {
-    font-size: 1.2em;
-    margin-top: 2em;
-    padding: 0.3em 1.5em;
-  }
-
-  .index-footer {
-    font-size: 0.8em;
   }
 }
