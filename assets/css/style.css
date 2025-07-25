@@ -451,6 +451,15 @@ html, body {
   .frosted-block {
     flex: 1 1 100%;
   }
+  /* Narrow margins on blog cards for small screens */
+  .page-blog .scrollable-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .page-blog .frosted-block {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
   /* Reduced spacing for project page on small screens */
   .page-projects .scrollable-content {
     padding: 1rem;
