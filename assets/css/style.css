@@ -56,7 +56,7 @@
   /* layout */
   --topbar-h:  2.5px;
   --nav-h:     50px;
-  --side-pad:  14vw;   /* results in 72 vw content */
+  --side-pad:  6vw;    /* results in 88 vw content */
 }
 
 
@@ -560,6 +560,7 @@ body.page-home {
   padding: 32px var(--side-pad) 56px;
 }
 
+
 .section-heading {
   font-family: var(--font-display);
   font-weight: 300;
@@ -628,13 +629,13 @@ body.page-home {
 .blog-layout .card-col { gap: 20px; }
 
 
-/* ── 11. Gallery Page — Photo strip (Option A) ────────────── */
+/* ── 11. Gallery Page — Fixed-height flex layout ─────────── */
 /*
-  All photos display at a fixed height; width derives from the photo's
-  own aspect ratio (no cropping, no distortion).
-  Landscape (3:2) → wider cell; portrait (2:3) → narrower cell.
-  Border sits on <img> directly so it hugs the photo, not empty space.
-  Photos wrap left-to-right; rows fill naturally.
+  All photos share a fixed height (260px desktop).
+  Width derives from each photo's natural ratio — no cropping.
+  Landscape (3:2) → wider; portrait (2:3) → narrower; same height.
+  Border sits on <img> so it hugs the photo, not empty space.
+  justify-content:center keeps partial rows visually balanced.
 */
 .masonry-grid {
   display: flex;
@@ -650,8 +651,8 @@ body.page-home {
 }
 
 .masonry-item img {
-  height: 260px;                        /* all photos same height */
-  width: auto;                          /* width from natural ratio */
+  height: 260px;
+  width: auto;
   display: block;
   border-radius: var(--r-card);
   border: 0.5px solid var(--gold-border);
@@ -1137,7 +1138,7 @@ body.page-home {
   .contact-row-top { flex-direction: column; }
   .contact-card { padding: 28px 24px; }
 
-  /* Tablet: slightly shorter photo height */
+  /* Tablet: slightly shorter photos */
   .masonry-item img { height: 200px; }
 
   /* Hamburger visible */
@@ -1234,7 +1235,7 @@ body.page-home {
   .hero-info-block { padding-left: 0; }
   .hero-about { max-width: 100%; }
 
-  /* Mobile: full width, natural height */
+  /* Phone: smaller photos */
   .masonry-item img { height: 160px; }
 
   /* Gallery strip: single row of 5 on phone (inherits from tablet rule) */
