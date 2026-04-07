@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Information Bubbles — Works — Haoran Xu</title>
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <!-- Note: one level up because this file lives in works/ -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<!--
+  works/algorithm-mirror.html — Project detail: Information Bubbles
+  ──────────────────────────────────────────────────────────────────
+  Images are loaded from the GitHub Pages CDN path so they resolve
+  correctly both locally and in production.
+
+  To add more screenshots: copy an <img> inside .project-images.
+-->
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar — paths go up one level (../) ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../gallery.html">Gallery</a></li>
+        <li><a href="../works.html" class="active">Works</a></li>
+        <li><a href="../notes.html">Notes</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Page Content ── -->
+  <div class="page-wrapper">
+    <div class="page-content">
+
+      <!-- Back link to works index -->
+      <a href="../works.html" class="back-link">← Works</a>
+
+      <!-- Project card -->
+      <div class="card project-card">
+
+        <p class="card-tag">Design · Web</p>
+        <h2>Information Bubbles</h2>
+
+        <p>
+          An interactive web-based prototype that simulates the inner workings of social media
+          recommendation algorithms. Users swipe through short-form video content, with their
+          interactions — likes, skips, dwell time, interest selections — logged and analysed
+          in real time.
+        </p>
+        <p>
+          Based on this behaviour, the system generates a personalised summary at session end,
+          visualising the algorithm's "understanding" of the user's preferences. The project
+          explores how seemingly neutral data tracking can influence self-perception, highlighting
+          the psychological and ethical dimensions of algorithmic personalisation.
+        </p>
+        <p>
+          Built with HTML, CSS, and vanilla JavaScript; designed with a minimalist aesthetic
+          aiming to be both elegant and immersive.
+        </p>
+
+        <!-- Screenshots -->
+        <div class="project-images">
+          <img
+            src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj1.jpg"
+            alt="Information Bubbles — swipe interface"
+          />
+          <img
+            src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj2.jpg"
+            alt="Information Bubbles — interaction tracking"
+          />
+          <img
+            src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj3.jpg"
+            alt="Information Bubbles — personalisation summary"
+          />
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script defer src="../assets/js/main.js"></script>
+</body>
+</html>

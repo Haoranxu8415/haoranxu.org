@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Haoran Xu</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<!--
+  gallery.html — Photography gallery (masonry, lightbox)
+  ───────────────────────────────────────────────────────
+  All photos live in assets/images/gallery/.
+  To add a photo:
+    1. Drop the file into assets/images/gallery/
+    2. Copy a .masonry-item block below and update src + alt.
+    3. For a hi-res lightbox version different from the thumb,
+       add data-full="assets/images/gallery/hires-filename.jpg" to the <img>.
+       Otherwise the lightbox just uses the same src.
+
+  Horizontal/vertical photos can be mixed freely —
+  CSS columns masonry keeps natural aspect ratios, no cropping.
+-->
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Page Content ── -->
+  <div class="page-wrapper">
+    <div class="page-content">
+
+      <h1 class="section-heading">Gallery</h1>
+
+      <!-- Masonry grid — 3 col desktop, 2 col tablet, 1 col mobile -->
+      <div class="masonry-grid" id="masonry-grid">
+
+        <!--
+          ── Photo entries ──────────────────────────────────────
+          Landscape or portrait — same markup, no extra class needed.
+          All photos display at the same fixed height; width is derived
+          from each photo's natural aspect ratio. No cropping.
+
+            <div class="masonry-item">
+              <img src="assets/images/gallery/filename.jpg" alt="..." />
+            </div>
+
+          data-full is optional (hi-res lightbox version).
+          ─────────────────────────────────────────────────────── -->
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo6.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo7.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item portrait">
+          <img src="assets/images/gallery/photo2.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo8.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo9.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item portrait">
+          <img src="assets/images/gallery/photo3.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo1.jpg" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo10.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item portrait">
+          <img src="assets/images/gallery/photo4.jpeg" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo11.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo12.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item portrait">
+          <img src="assets/images/gallery/photo5.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo13.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item">
+          <img src="assets/images/gallery/photo14.JPG" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+        <div class="masonry-item portrait">
+          <img src="assets/images/gallery/photo15.jpeg" alt=""
+               onerror="this.closest('.masonry-item').style.display='none'" />
+        </div>
+
+      </div><!-- /.masonry-grid -->
+
+      <!-- Empty-state message shown when no photos have been added yet -->
+      <p id="gallery-empty" style="
+        color: var(--text-dim);
+        font-size: 12px;
+        letter-spacing: .06em;
+        text-align: center;
+        padding: 48px 0;
+        display: none;
+      ">
+        Photos coming soon.
+      </p>
+
+    </div><!-- /.page-content -->
+  </div><!-- /.page-wrapper -->
+
+  <!-- ── Lightbox overlay ── -->
+  <!--
+    Opened/closed by main.js. Click backdrop or × to close.
+    ← / → arrow buttons or keyboard ArrowLeft / ArrowRight to navigate.
+    Escape to close.
+  -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close">×</button>
+    <button id="lightbox-prev"  class="lightbox-prev"  aria-label="Previous photo">‹</button>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="" />
+    <button id="lightbox-next"  class="lightbox-next"  aria-label="Next photo">›</button>
+  </div>
+
+  <script defer src="assets/js/main.js"></script>
+
+  <script>
+    // Show empty-state if every masonry-item was hidden (no valid photos)
+    window.addEventListener('load', () => {
+      const items = document.querySelectorAll('.masonry-item');
+      const visible = [...items].filter(el => el.style.display !== 'none');
+      if (visible.length === 0) {
+        document.getElementById('gallery-empty').style.display = 'block';
+      }
+    });
+  </script>
+
+</body>
+</html>

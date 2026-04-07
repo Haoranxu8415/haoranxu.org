@@ -1,98 +1,130 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blog</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Haoran Xu</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- marked.js for Markdown rendering — loaded once, in <head> -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script defer src="assets/js/main.js"></script>
 </head>
-<body class="beige-background other-page page-blog">
-  <nav class="navbar" style="display: flex; align-items: center;">
-        <div class="page-label" style="font-weight: bold; font-size: 2rem; padding-left: 2rem; font-family: 'Inter', sans-serif;">Blog</div>
-    <button class="menu-toggle" aria-label="Toggle navigation">
+
+<!--
+  blog.html — Blog posts
+  Layout: narrow sticky timeline sidebar (desktop only) + posts column.
+
+  To add a new post:
+    1. Create posts/post4.md with frontmatter: title / date / tags
+    2. Add a new .card.post-card block below (copy an existing one)
+    3. Add a matching <a class="timeline-entry"> in the timeline sidebar
+    4. Register the post in assets/js/blog.js POSTS array
+-->
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
+
     <div class="nav-wrapper">
-           <ul class="nav-links" style="align-items: center; display: flex; font-family: 'Inter', sans-serif;">
-        <li><a href="home.html">Home</a></li>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="home.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
         <li><a href="blog.html" class="active">Blog</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
   </nav>
-  <div class="scrollable-content">
-    <main style="margin-top: 0vh;">
-      <section style="padding: 10vh 5vw; color: white;">
-        <div style="display: flex; align-items: flex-start; gap: 3rem;">
-          <div class="timeline-column" style="position: relative; font-family: 'Courier New', Courier, monospace; color: white; font-size: 1rem; padding-left: 2rem; margin-left: -4rem; line-height: 1.6;">
-            <div style="position: absolute; top: 0; bottom: 0; left: 0.2rem; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.1));"></div>
-            <div style="margin-bottom: 1rem; font-weight: 700; font-size: 1.2rem; text-align: right;">2025</div>
-            <div style="margin-left: 0.7rem; font-weight: 500;">07</div>
-            <a href="#markdown-content" style="margin-left: 2rem; position: relative; display: block; text-decoration: none; color: white; padding-left: 0.8rem; transition: color 0.2s ease;">
-              <span style="position: absolute; left: 0; top: 0.45rem; width: 6px; height: 6px; background: white; border-radius: 50%;"></span>06
-            </a>
-            <a href="#markdown-content-2" style="margin-left: 2rem; position: relative; display: block; text-decoration: none; color: white; padding-left: 0.8rem; transition: color 0.2s ease;">
-              <span style="position: absolute; left: 0; top: 0.45rem; width: 6px; height: 6px; background: white; border-radius: 50%;"></span>12
-            </a>
-            <a href="#markdown-content-3" style="margin-left: 2rem; position: relative; display: block; text-decoration: none; color: white; padding-left: 0.8rem; transition: color 0.2s ease;">
-              <span style="position: absolute; left: 0; top: 0.45rem; width: 6px; height: 6px; background: white; border-radius: 50%;"></span>19
-            </a>
-          </div>
-          <div class="card-container masonry">
-            <div class="frosted-block card">
-              <div class="post-header">
-                <h2 class="post-title">The Day I Fell in Love with Claymation</h2>
-                <div class="post-meta">
-                  <span class="post-date">2025-07-06</span>
-                  <span class="post-tags">[Creativity, Animation, Storytelling]</span>
-                </div>
-              </div>
-              <div class="post-divider"></div>
-              <div id="markdown-content"></div>
-            </div>
 
-            <div class="frosted-block card">
-              <div class="post-header">
-                <h2 class="post-title">What Social Media Algorithms Don’t Show You</h2>
-                <div class="post-meta">
-                  <span class="post-date">2025-07-12</span>
-                  <span class="post-tags">[Psychology, Media, Identity]</span>
-                </div>
-              </div>
-              <div class="post-divider"></div>
-              <div id="markdown-content-2"></div>
-            </div>
+  <!-- ── Page Content ── -->
+  <div class="page-wrapper">
+    <div class="page-content">
 
-            <div class="frosted-block card">
-              <div class="post-header">
-                <h2 class="post-title">Why I Started Designing My Own Website</h2>
-                <div class="post-meta">
-                  <span class="post-date">2025-07-19</span>
-                  <span class="post-tags">[Design, Personal Reflection, Web Development]</span>
-                </div>
+      <h1 class="section-heading">Writing</h1>
+
+      <div class="blog-layout">
+
+        <!-- ── Timeline Sidebar (hidden on mobile via CSS) ── -->
+        <nav class="timeline-col" aria-label="Post timeline">
+          <p class="timeline-year">2025</p>
+
+          <!-- Each entry links to its post card by anchor -->
+          <a class="timeline-entry" href="#post-1">
+            <span class="timeline-dot"></span>Jul 06
+          </a>
+          <a class="timeline-entry" href="#post-2">
+            <span class="timeline-dot"></span>Jul 12
+          </a>
+          <a class="timeline-entry" href="#post-3">
+            <span class="timeline-dot"></span>Jul 19
+          </a>
+        </nav>
+
+        <!-- ── Posts Column ── -->
+        <div class="card-col" style="flex:1; min-width:0;">
+
+          <!-- Post 1 -->
+          <div id="post-1" class="card post-card">
+            <div class="post-header">
+              <h2 class="post-title">The Day I Fell in Love with Claymation</h2>
+              <div class="post-meta">
+                <span class="post-date">2025-07-06</span>
+                <span class="post-tags">Creativity · Animation · Storytelling</span>
               </div>
-              <div class="post-divider"></div>
-              <div id="markdown-content-3"></div>
             </div>
+            <div class="post-divider"></div>
+            <!-- Markdown body injected by blog.js — id must match POSTS[0].bodyId -->
+            <div id="post-body-1" class="post-body"></div>
           </div>
-        </div>
-        <div id="bottom-anchor"></div>
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-        <script src="assets/js/blog.js"></script>
-      </section>
-  </main>
-  <a href="#bottom-anchor" class="newest-button">Newest ↓</a>
-  </div>
-  <script>
-    function extractDate(text) {
-      const match = text.match(/Date:\s*(\d{4})-(\d{2})-\d{2}/);
-      return match ? `${match[1]}/${match[2]}` : 'Unknown';
-    }
-  </script>
+
+          <!-- Post 2 -->
+          <div id="post-2" class="card post-card">
+            <div class="post-header">
+              <h2 class="post-title">What Social Media Algorithms Don't Show You</h2>
+              <div class="post-meta">
+                <span class="post-date">2025-07-12</span>
+                <span class="post-tags">Psychology · Media · Identity</span>
+              </div>
+            </div>
+            <div class="post-divider"></div>
+            <div id="post-body-2" class="post-body"></div>
+          </div>
+
+          <!-- Post 3 -->
+          <div id="post-3" class="card post-card">
+            <div class="post-header">
+              <h2 class="post-title">Why I Started Designing My Own Website</h2>
+              <div class="post-meta">
+                <span class="post-date">2025-07-19</span>
+                <span class="post-tags">Design · Personal Reflection · Web Development</span>
+              </div>
+            </div>
+            <div class="post-divider"></div>
+            <div id="post-body-3" class="post-body"></div>
+          </div>
+
+        </div><!-- /.card-col -->
+
+      </div><!-- /.blog-layout -->
+
+      <!-- Bottom anchor for "Newest" button -->
+      <div id="bottom-anchor"></div>
+
+    </div><!-- /.page-content -->
+  </div><!-- /.page-wrapper -->
+
+  <!-- Scroll shortcut to newest post -->
+  <a href="#bottom-anchor" class="newest-button" aria-label="Jump to newest post">Newest ↓</a>
+
+  <script defer src="assets/js/main.js"></script>
+  <script defer src="assets/js/blog.js"></script>
 </body>
 </html>

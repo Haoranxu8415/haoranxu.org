@@ -1,467 +1,1202 @@
-﻿/* ============================================
-   Global CSS Variables & Base Element Styles
-   ============================================ */
-/* Aligns content to the right side and adjusts padding and color */
-.right {
-  flex: 1;
-  text-align: right;
-  padding-right: 2rem;
-  color: #666;
+/* ============================================================
+   Design System: Emerald × Champagne Gold — v2.1
+   haoranxu.org
+
+   Sections:
+   1.  Tokens
+   2.  Reset
+   3.  Top Bar
+   4.  Navbar
+   5.  Animations  (gentle fade — no spring/bounce)
+   6.  Home Page   — two-row no-scroll layout
+   7.  Home Page   — Hero (name · divider · info · photo)
+   8.  Home Page   — Bottom Panels
+   9.  Inner Pages — Page Wrapper (72 vw)
+   10. Shared Cards
+   11. Gallery Page (masonry)
+   12. Lightbox
+   13. Works Index
+   14. Works Detail
+   15. Notes Page
+   16. Contact Page
+   17. Responsive  (tablet ≤900 px / mobile ≤480 px)
+   ============================================================ */
+
+
+/* ── 1. Tokens ────────────────────────────────────────────── */
+:root {
+  /* backgrounds */
+  --bg-base:    #0A1C16;
+  --bg-surface: #122419;
+  --bg-lift:    #1E3D31;
+  --bg-high:    #2A5445;
+
+  /* champagne gold */
+  --gold:           #C9A96E;
+  --gold-light:     #E8D5A3;
+  --gold-border:    rgba(201,169,110,.10);
+  --gold-border-em: rgba(201,169,110,.38);
+  --gold-glow:      rgba(201,169,110,.12);
+
+  /* text hierarchy */
+  --text-primary:   #BDD5CB;
+  --text-secondary: #8DBDA8;
+  --text-muted:     #4D7A6A;
+  --text-dim:       #2D5044;
+
+  /* typography */
+  --font-display: 'Cormorant Garamond', serif;
+  --font-ui:      'DM Sans', sans-serif;
+
+  /* radii */
+  --r-btn:   6px;
+  --r-card:  8px;
+  --r-panel: 14px;
+
+  /* layout */
+  --topbar-h:  2.5px;
+  --nav-h:     50px;
+  --side-pad:  14vw;   /* results in 72 vw content */
 }
 
-/* Typography styles for headers and paragraphs */
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+
+/* ── 2. Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+  /* 'touch' enables momentum scrolling on iOS; 'auto' would disable it */
+  -webkit-overflow-scrolling: touch;
 }
 
-p {
-  font-size: 1.2rem;
-  color: #555;
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.7;
 }
 
-/* Styles for navbar on other pages only */
-body.other-page nav.navbar {
+a    { color: inherit; text-decoration: none; }
+img  { display: block; max-width: 100%; }
+ul   { list-style: none; }
+
+
+/* ── 3. Top Bar ───────────────────────────────────────────── */
+/*
+  The site's "eyebrow" gradient line — 2.5 px, champagne fade.
+  Appears on every page above the navbar.
+*/
+.top-bar {
   position: fixed;
-  top: 1rem;
-  right: 2rem;
-  left: 2rem;
-  padding: 0.75rem 2rem;
-  background-color: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 2em;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: linear-gradient(90deg, #0A1C16 0%, #C9A96E 45%, #152B24 100%);
+  opacity: .65;
+  z-index: 1100;
+  pointer-events: none;
+}
+
+
+/* ── 4. Navbar ────────────────────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: var(--topbar-h);
+  left: 0; right: 0;
+  height: var(--nav-h);
   display: flex;
-  justify-content: space-between; /* changed from flex-end */
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--side-pad);
+  background: var(--bg-base);
+  border-bottom: 0.5px solid rgba(201,169,110,.08);
   z-index: 1000;
-  transition: opacity 0.3s ease;
+  transition: transform .3s ease, opacity .3s ease;
 }
 
-body.other-page nav.navbar .page-label {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #333;
-}
+.navbar.hidden { transform: translateY(-120%); }
 
-body.other-page nav.navbar ul.nav-links {
+/* Logo — only display typeface for identity text */
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: .03em;
+  transition: color .2s ease;
+}
+.nav-logo:hover { color: var(--gold-light); }
+
+/* Link list */
+.nav-links {
   display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: clamp(1rem, 3vw, 2rem);
+  gap: 22px;
+  align-items: center;
 }
-
-body.other-page nav.navbar ul.nav-links li a {
-  text-decoration: none;
-  font-weight: 500;
-  color: #333;
-  transition: color 0.3s ease, transform 0.3s ease;
+.nav-links a {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: .02em;
+  transition: color .2s ease;
 }
+.nav-links a:hover,
+.nav-links a.active { color: var(--gold); }
 
-body.other-page nav.navbar ul.nav-links li a:hover {
-  color: #000;
-}
-
-body.other-page nav.navbar ul.nav-links li a.active {
-  color: #a95e00; /* Darker amber */
-  font-weight: 600;
-  border-bottom: 2px solid #a95e00;
-}
-
-/* Hamburger toggle hidden on desktop */
-body.other-page nav.navbar .menu-toggle {
+/* Hamburger — visible only on mobile (see responsive section) */
+.menu-toggle {
   display: none;
   flex-direction: column;
-  gap: 4px;
+  justify-content: center;
+  gap: 5px;
   background: transparent;
   border: none;
   cursor: pointer;
+  padding: 6px;
+}
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--gold);
+  transform-origin: center;
+  transition: transform .25s ease, opacity .2s ease;
+}
+/* Animate to × when nav is open */
+.menu-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.menu-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
-body.other-page nav.navbar .menu-toggle span {
-  width: 24px;
-  height: 2px;
-  background-color: #333;
+
+/* ── 5. Animations ────────────────────────────────────────── */
+/*
+  Single entrance animation: quiet opacity + 6 px rise.
+  Duration 0.5 s, plain ease-out — no bounce, no spring.
+  Matches the "暗夜美术馆" tone.
+*/
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
-
-/* Styles for call-to-action buttons */
-.visit-button {
-  display: inline-block;
-  margin-top: 2em;
-  padding: 0.75em 1.5em;
-  background-color: #d9a15f;
-  color: white;
-  text-decoration: none;
-  border-radius: 2em;
-  font-weight: 600;
-  font-size: 1em;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+/* Mobile nav dropdown entrance */
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.visit-button:hover {
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: scale(1.05);
-  transition: transform 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Fade transitions and keyframe animations */
+/* JS adds this class before navigating away */
 body.fade-out {
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity .18s ease-in;
 }
 
-.fade-in {
-  animation: fadeIn 1.2s ease-in-out;
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ============================================
-   Home Page Hero Section & Background
-   ============================================ */
-body.index-page {
+/* ── 6. Home Page — Two-Row Layout ───────────────────────── */
+/*
+  Desktop: entire page fits in one viewport, no scroll.
+  body.page-home locks overflow; .home-layout splits height 55/45.
+*/
+body.page-home {
+  overflow: hidden;
   height: 100vh;
-  margin: 0;
+}
+
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--nav-h) - var(--topbar-h));
+  margin-top: calc(var(--nav-h) + var(--topbar-h));
+  padding: 0 var(--side-pad);
+  animation: pageIn .5s ease-out both;
+}
+
+/* Top row: 75 % — hero gets most of the viewport */
+.home-hero {
+  flex: 75;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  border-bottom: 0.5px solid var(--gold-border);
+}
+
+/* Bottom row: 25 % — panels centered between the two dividers */
+.home-panels {
+  flex: 25;
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  padding: 14px 0 14px;
   overflow: hidden;
 }
 
-body.index-page {
-  background-image: url('../images/Other_bkg.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* Footer bar — slim copyright line at the very bottom of the home layout */
+.home-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0 10px;
+  border-top: 0.5px solid var(--gold-border);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: .05em;
 }
 
-.index-hero {
-  height: 100vh;
+
+/* ── 7. Home Page — Hero ──────────────────────────────────── */
+
+/* Left block: eyebrow + name */
+.hero-name-block {
+  flex-shrink: 0;
+  min-width: 260px;
+  padding-right: 56px;
+  margin-left: 32px;
+}
+
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(44px, 5vw, 76px);
+  line-height: 1.05;
+  color: var(--gold);
+}
+.hero-name em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+/* Vertical rule separator — 24px gaps (was 32px) closes the left gap on info text */
+.hero-divider {
+  width: 0.5px;
+  background: var(--gold-border);
+  align-self: stretch;
+  margin: 14px 24px;
+  flex-shrink: 0;
+}
+
+/* Right info block: about · status · tags */
+.hero-info-block {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
+  padding-left: 48px;
+}
+
+.hero-about {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin-bottom: 16px;
+}
+
+/* Status line with live-looking dot */
+.hero-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: .02em;
+  margin-bottom: 14px;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  box-shadow: 0 0 5px rgba(201,169,110,.5);
+}
+
+/* Identity tags */
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--gold);
+  border: 0.5px solid var(--gold-border-em);
+  border-radius: 4px;
+  padding: 3px 10px;
+}
+
+/* Portrait photo — height-driven 2:3, right edge of hero.
+   Height is a percentage of the hero row (itself 75% of .home-layout's
+   explicit height), so 72% fills most of the hero without overflow.
+   Width derives from aspect-ratio — no manual width needed. */
+.hero-photo {
+  flex-shrink: 0;
+  height: clamp(180px, 72%, 440px); /* height-driven; width auto via aspect-ratio */
+  width: auto;
+  aspect-ratio: 2 / 3;
+  align-self: center;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--gold-border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-left: 48px;                /* clear visual gap from info block */
+  margin-right: 32px;               /* breathing room from right edge */
+  /* Replace placeholder with real photo:
+     style="background-image:url('assets/images/portrait.jpg');
+            background-size:cover; background-position:center top;" */
+}
+
+
+/* ── 8. Home Page — Bottom Panels ────────────────────────── */
+
+/* Shared panel card — compact padding to fit the 25% row */
+.panel {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--gold-border);
+  border-radius: var(--r-panel);
+  padding: 10px 14px 10px 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: border-color .25s ease;
+}
+/* Left accent bar on each panel */
+.panel::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--bg-lift);
+  border-radius: 0;
+}
+.panel:hover { border-color: rgba(201,169,110,.25); }
+
+/* Panel header row: label + link */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 7px;
+  flex-shrink: 0;
+}
+.panel-label {
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .75;
+}
+.panel-link {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: .03em;
+  transition: color .2s ease;
+}
+.panel-link:hover { color: var(--gold); }
+
+/* Gallery panel takes 2× the flex share; Works + Notes each take 1× */
+.home-panels .panel:first-child { flex: 2; }
+
+/* ─ Gallery strip: 4 portrait (2:3) photos in a row ─ */
+.gallery-strip {
+  display: flex;
+  gap: 7px;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+.photo-thumb {
+  flex: 1;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  background: var(--bg-lift);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 0.5px solid var(--gold-border);
+  transition: border-color .2s ease, opacity .2s ease;
+  /* Real photo: add style="background-image:url(...);background-size:cover" */
+}
+.photo-thumb:hover { border-color: rgba(201,169,110,.3); opacity: .9; }
+.photo-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* ─ Works panel entries ─ */
+.works-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+}
+.works-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 9px;
+  background: var(--bg-lift);
+  border-radius: var(--r-card);
+  border: 0.5px solid transparent;
+  transition: border-color .2s ease;
+}
+.works-entry:hover { border-color: var(--gold-border-em); }
+.works-entry-tag {
+  font-size: 9px;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .7;
+}
+.works-entry-row {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
+.works-entry-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.works-arrow {
+  color: var(--text-dim);
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: transform .2s ease, color .2s ease;
+}
+.works-entry:hover .works-arrow {
+  transform: translateX(3px);
+  color: var(--gold);
+}
 
-/* ============================================
-   Other Page Background and Top Header
-   ============================================ */
-body.other-page {
-  background-image: url("../images/Other_bkg.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+/* ─ Notes panel entries: title ···· date ─ */
+.notes-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+}
+.notes-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  overflow: hidden;
+  min-width: 0;
+  transition: color .2s ease;
+}
+.notes-entry:hover .notes-entry-title { color: var(--gold); }
+.notes-entry-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+  transition: color .2s ease;
+}
+/* Dot leader — fills remaining space between title and date */
+.notes-entry-dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--text-dim);
+  margin: 0 8px;
+  position: relative;
+  top: -3px;
+  min-width: 16px;
+  flex-shrink: 0;
+}
+.notes-entry-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 
-/* ============================================
-   Scrollable Content Grid for Card Layout
-   ============================================ */
-.scrollable-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  padding-top: 6rem; /* adjust top padding if needed */
-  margin-top: 0.5rem; /* 为导航栏留出更紧凑的空间 */
-  height: calc(100vh); /* 可视高度减去导航栏 */
+/* ── 9. Inner Pages — Page Wrapper ────────────────────────── */
+/*
+  For all non-home pages (gallery, works, notes, contact).
+  Scrollable region beneath the fixed navbar.
+  Content width = 72 vw via side padding.
+*/
+/*
+  .page-wrapper must use `height` (not `min-height`) to create a bounded
+  scroll container. With only `min-height` the element grows freely and
+  `overflow-y: auto` never activates — no scrolling occurs.
+*/
+.page-wrapper {
+  margin-top: calc(var(--nav-h) + var(--topbar-h));
+  height: calc(100vh - var(--nav-h) - var(--topbar-h));
   overflow-y: auto;
-  padding: 2rem;
-  max-width: 100vw;
-  box-sizing: border-box;
   overscroll-behavior: none;
-  -webkit-overflow-scrolling: auto;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-}
-.scrollable-content.fade-in-up {
-  transform: translateY(20px);
-  opacity: 0;
-  animation: fadeInUp 0.8s ease forwards;
-}
-.project-section {
-  padding: 5vh 5vw;
-  color: white;
+  -webkit-overflow-scrolling: touch;  /* iOS momentum scroll */
+  animation: pageIn .5s ease-out both;
 }
 
-/* Frosted content card styling for grid display */
-.frosted-block {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.08);
-  border-radius: 1.5rem;
-  padding: 2rem 2.5rem;
-  margin-bottom: 2rem;
-  color: #333;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  /* Removed height or min-height */
-  flex: 1 1 calc(33% - 2rem); /* New: allow 2–3 per row with wrapping */
-  min-width: 240px;
-  max-width: 480px;
-  max-width: 100vw;
-  box-sizing: border-box;
+.page-content {
+  padding: 32px var(--side-pad) 56px;
 }
 
-/* Hover and internal styles for frosted content blocks */
-.frosted-block:hover {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
-  transform: translateY(-4px);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(22px, 2.5vw, 34px);
+  color: var(--gold-light);
+  line-height: 1.2;
+  margin-bottom: 24px;
 }
 
-.frosted-block h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #4A3B2A;
+
+/* ── 10. Shared Cards ─────────────────────────────────────── */
+.card {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--gold-border);
+  border-radius: var(--r-card);
+  padding: 14px 16px 14px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s ease, background .25s ease;
+}
+/* 2 px accent bar */
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--bg-lift);
+}
+.card:hover {
+  border-color: rgba(201,169,110,.28);
+  background: var(--bg-lift);
 }
 
-.frosted-block p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #444;
+.card-tag {
+  font-size: 9px;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .75;
+  margin-bottom: 5px;
 }
-
-/* Ensure consistent sizing and wrapping */
-.scrollable-content,
-.frosted-block,
-.page-wrapper,
-.about-container {
-  max-width: 100vw;
-  box-sizing: border-box;
+.card h2 {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
-
-/* Limit all elements to screen width */
-* {
-  max-width: 100vw;
-  box-sizing: border-box;
+.card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 6px;
 }
+.card p:last-child { margin-bottom: 0; }
 
-/* Force white text on frosted blocks */
-.frosted-block, .frosted-block * {
-  color: white !important;
-}
+.entry { margin-bottom: 10px; }
+.entry:last-child { margin-bottom: 0; }
+.entry strong { display: block; font-size: 12px; font-weight: 400; color: var(--text-primary); margin-bottom: 2px; }
+.entry span { font-size: 12px; color: var(--text-muted); }
 
-.card-container {
+.card-grid { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.card-col { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 180px; }
+/* Notes page overrides card-col gap to give posts more breathing room */
+.blog-layout .card-col { gap: 20px; }
+
+
+/* ── 11. Gallery Page — Photo strip (Option A) ────────────── */
+/*
+  All photos display at a fixed height; width derives from the photo's
+  own aspect ratio (no cropping, no distortion).
+  Landscape (3:2) → wider cell; portrait (2:3) → narrower cell.
+  Border sits on <img> directly so it hugs the photo, not empty space.
+  Photos wrap left-to-right; rows fill naturally.
+*/
+.masonry-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
   justify-content: center;
+  gap: 12px;
   align-items: flex-start;
 }
 
-/* Remove height constraints for masonry blocks */
-.card-container.masonry .frosted-block {
-  /* Removed fixed height */
-  min-width: 200px;
-  margin-bottom: 2rem;
-  color: white;
+.masonry-item {
+  flex: none;
+  cursor: zoom-in;
 }
 
-/* Generic card styling with blur and glow */
-.card {
-  flex: 1 1 300px;
-  padding: 2rem;
-  border-radius: 20px;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  /* Removed any height or min-height */
+.masonry-item img {
+  height: 260px;                        /* all photos same height */
+  width: auto;                          /* width from natural ratio */
+  display: block;
+  border-radius: var(--r-card);
+  border: 0.5px solid var(--gold-border);
+  transition: border-color .25s ease, opacity .25s ease;
 }
 
-/* Slide animation utility classes */
-.slide-in-left {
-  animation: slideFromLeft 0.6s ease both;
-}
-.slide-in-right {
-  animation: slideFromRight 0.6s ease both;
+.masonry-item:hover img {
+  border-color: rgba(201,169,110,.30);
+  opacity: .88;
 }
 
-.slide-left {
-  animation: slideFromRight 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+/* ── 12. Lightbox ─────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 22, 14, .94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease;
+}
+.lightbox.open {
+  opacity: 1;
+  pointer-events: all;
 }
 
-.slide-right {
-  animation: slideFromLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* Image fills up to 88 vh / 92 vw */
+.lightbox-img {
+  max-height: 88vh;
+  max-width: 92vw;
+  object-fit: contain;
+  border-radius: var(--r-card);
+  border: 0.5px solid var(--gold-border);
+  display: block;
 }
 
-/* Slide-in keyframe definitions */
-@keyframes slideFromRight {
-  0% {
-    transform: translateX(120%);
-    opacity: 0;
-  }
-  60% {
-    transform: translateX(4%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* Close button */
+.lightbox-close {
+  position: absolute;
+  top: 20px; right: 24px;
+  background: transparent;
+  border: 0.5px solid var(--gold-border);
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  width: 32px; height: 32px;
+  border-radius: var(--r-btn);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color .2s ease, border-color .2s ease;
+}
+.lightbox-close:hover { color: var(--gold); border-color: var(--gold-border-em); }
+
+/* Prev / next arrows */
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0.5px solid var(--gold-border);
+  color: var(--text-muted);
+  font-size: 20px;
+  width: 36px; height: 36px;
+  border-radius: var(--r-btn);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color .2s ease, border-color .2s ease;
+}
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+.lightbox-prev:hover,
+.lightbox-next:hover { color: var(--gold); border-color: var(--gold-border-em); }
+
+
+/* ── 13. Works Index ──────────────────────────────────────── */
+/*
+  Grid of work entries: tag · title · excerpt · arrow link.
+  Flex-wrap so it adjusts from 2-col to 1-col on narrow screens.
+*/
+.works-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-@keyframes slideFromLeft {
-  0% {
-    transform: translateX(-120%);
-    opacity: 0;
-  }
-  60% {
-    transform: translateX(-4%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+.work-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  /* Generous padding to match the large display title */
+  padding: 32px 24px 32px 28px;
+}
+/* Thicker accent bar for works cards — more presence than base .card */
+.work-card::before { width: 3px; background: var(--bg-high); }
+
+.work-card-body { flex: 1; min-width: 0; }
+.work-card-meta {
+  font-size: 9px;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .7;
+  margin-bottom: 5px;
+}
+/* Title — the hero of each work card.
+   Specificity must beat .card h2 (tag+class), so we use .card .work-card-title */
+.card .work-card-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(26px, 2.8vw, 40px);
+  color: var(--text-primary);
+  line-height: 1.05;
+  margin-bottom: 12px;
+}
+/* Excerpt recedes — smaller and muted so the title dominates */
+.work-card-excerpt {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+/* Header row inside work card: meta tag left, timestamp right */
+.work-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
-html, body {
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: auto;
+/* Timestamp — e.g. "2025" or "2024 – 2025" */
+.work-card-date {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: .04em;
+  white-space: nowrap;
 }
 
-@keyframes fadeInUp {
-  from {
-    transform: translateY(80px);
-  }
-  to {
-    transform: translateY(0);
-  }
+.work-card-arrow {
+  font-size: 18px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  padding-top: 4px;
+  transition: transform .2s ease, color .2s ease;
+}
+.work-card:hover .work-card-arrow {
+  transform: translateX(4px);
+  color: var(--gold);
 }
 
-@keyframes fadeInDown {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-80px);
-  }
+
+/* ── 14. Works Detail ─────────────────────────────────────── */
+.project-card { padding: 20px 20px 20px 24px; }
+.project-card h2 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(22px, 2.8vw, 36px);
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 14px;
 }
+.project-card > p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.project-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.project-images img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: var(--r-card);
+  border: 0.5px solid var(--gold-border);
+  transition: border-color .25s ease;
+}
+.project-images img:hover { border-color: var(--gold-border-em); }
+
+/* Back link inside work detail pages */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: .04em;
+  margin-bottom: 20px;
+  transition: color .2s ease;
+}
+.back-link:hover { color: var(--gold); }
+
+
+/* ── 15. Notes Page ───────────────────────────────────────── */
+.blog-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Sticky date sidebar */
+.timeline-col {
+  width: 52px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding-top: 2px;
+}
+.timeline-col::before {
+  content: '';
+  position: absolute;
+  top: 20px; bottom: -16px; left: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold-border-em), transparent);
+  pointer-events: none;
+}
+.timeline-year {
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  padding-left: 18px;
+}
+.timeline-entry {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  transition: color .2s ease;
+}
+.timeline-entry:hover { color: var(--gold); }
+.timeline-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  flex-shrink: 0;
+  margin-left: 6px;
+  transition: background .2s ease;
+}
+.timeline-entry:hover .timeline-dot { background: var(--gold); }
+
+/* Post cards — stronger gold border than base .card, champagne accents */
+.post-card {
+  padding: 16px 18px 16px 22px;
+  border-color: rgba(201,169,110,.22);  /* more visible than base 10% */
+}
+.post-card:hover {
+  border-color: rgba(201,169,110,.40);
+}
+
+/* Title — champagne gold, clearly dominant over body text.
+   Specificity must beat .card h2 (tag+class), so we use .card .post-title */
+.card .post-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(24px, 2.5vw, 36px);
+  color: var(--gold-light);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+/* Date + tags — DM Sans, muted supporting role */
+.post-meta {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.post-divider {
+  height: 0.5px;
+  background: var(--gold-border);
+  margin-bottom: 14px;
+}
+/* Post body — DM Sans, comfortable long-form reading size */
+.post-body {
+  font-family: var(--font-ui);
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+.post-body h1,.post-body h2,.post-body h3 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: var(--gold-light);
+  margin: 20px 0 10px;
+  line-height: 1.2;
+}
+.post-body p { margin-bottom: 10px; }
+.post-body a {
+  color: var(--gold);
+  border-bottom: 0.5px solid var(--gold-border);
+  transition: border-color .2s ease;
+}
+.post-body a:hover { border-color: var(--gold); }
 
 .newest-button {
   position: fixed;
-  bottom: 1rem;
-  right: 0.6rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 0.3rem 0.6rem;
-  font-family: 'Inter', sans-serif;
-  font-weight: bold;
-  font-size: 0.85rem;
-  color: white;
-  text-decoration: none;
+  bottom: 20px; right: 16px;
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 0.5px solid var(--gold-border);
+  border-radius: var(--r-btn);
+  padding: 5px 10px;
   z-index: 999;
-  transition: background-color 0.3s ease;
+  transition: color .25s ease, border-color .25s ease;
 }
+.newest-button:hover { color: var(--gold); border-color: var(--gold-border-em); }
 
-.newest-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
 
-.post-header {
-  margin-bottom: 1rem;
-}
+/* ── 16. Contact Page ─────────────────────────────────────── */
 
-.post-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
-}
-
-.post-meta {
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.7);
-  font-family: 'Courier New', monospace;
+/* Modifier class for pages that should be vertically centered in viewport.
+   Used only on contact.html — does not affect other pages. */
+/*
+  Contact page: heading stays at the normal top position (same as all other pages).
+  The contact-grid below it is pushed to the vertical center of the remaining space
+  by making .page-content a flex column and letting the grid auto-margin.
+*/
+.page-wrapper--centered .page-content {
   display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.page-wrapper--centered .contact-grid {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/*
+  Contact layout: two rows stacked, max-width constrained and centered.
+    Row 1 — identity + email side by side
+    Row 2 — social icons centered full-width
+*/
+.contact-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Top row: identity + email 50/50 */
+.contact-row-top {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.contact-card {
+  flex: 1;
+  padding: 44px 32px 44px 40px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contact-card h2 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 28px;
+  color: var(--gold-light);
+  margin-bottom: 16px;
+}
+.contact-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 6px; }
+.email-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.email-row i { color: var(--text-dim); font-size: 13px; flex-shrink: 0; }
+.email-row a { font-size: 14px; color: var(--text-secondary); transition: color .2s ease; }
+.email-row a:hover { color: var(--gold); }
+
+/* Bottom row: social icons, full width, centered */
+.social-card {
+  flex-direction: row;
   flex-wrap: wrap;
-  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  padding: 44px 32px;
+  min-height: 120px;
 }
-
-.post-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
-  margin: 1rem 0;
-  border-radius: 2px;
+.social-card a {
+  font-size: 42px;
+  color: var(--text-muted);
+  transition: color .25s ease, transform .25s ease;
 }
+.social-card a:hover { color: var(--gold); transform: scale(1.1); }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  body.other-page nav.navbar {
-    padding: 0.5rem 1rem;
+
+/* ── 17. Responsive ───────────────────────────────────────── */
+
+/* ─ Tablet portrait ≤ 900 px ─ */
+@media (max-width: 900px) {
+  :root {
+    --side-pad: 24px;  /* switch from 14 vw to fixed padding */
   }
 
-  body.other-page nav.navbar .menu-toggle {
-    display: flex;
-  }
+  /* Home page becomes scrollable on tablet/mobile */
+  body.page-home { overflow: auto; height: auto; }
 
-  body.other-page nav.navbar .nav-wrapper {
-    position: absolute;
-    top: 100%;
-    left: 1rem;
-    right: 1rem;
-    background-color: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 1rem;
-    display: none;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  body.other-page nav.navbar .nav-wrapper.open {
-    display: flex;
-  }
-
-  body.other-page nav.navbar ul.nav-links {
-    flex-direction: row;
-    gap: 1rem;
-  }
-
-  .contact-container {
-    flex-direction: column;
-    padding: 2rem;
-  }
-
-  .contact-block {
+  .home-layout {
     height: auto;
+    overflow: visible;
+    padding-bottom: 24px;
   }
-
-  .timeline-column {
-    display: none;
+  .home-hero {
+    flex: none;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 28px 0 24px;
+    border-bottom: 0.5px solid var(--gold-border);
   }
-
-  .project-images {
+  .home-panels {
+    flex: none;
     flex-direction: column;
+    padding: 20px 0;
+    overflow: visible;
+  }
+  .home-footer { display: none; }
+
+  /* Panel photo strip: 2×2 grid on tablet/mobile */
+  .gallery-strip { flex-wrap: wrap; align-items: flex-start; }
+  .photo-thumb { flex: 1 1 calc(50% - 4px); height: auto; width: auto; aspect-ratio: 2 / 3; }
+
+  /* Timeline sidebar hidden below 900px */
+  .timeline-col { display: none; }
+
+  /* Works / contact stack */
+  .contact-grid { flex-direction: column; }
+  .contact-row-top { flex-direction: column; }
+  .contact-card { padding: 28px 24px; }
+
+  /* Tablet: slightly shorter photo height */
+  .masonry-item img { height: 200px; }
+
+  /* Hamburger visible */
+  .menu-toggle { display: flex; }
+
+  /* Mobile nav dropdown */
+  .nav-wrapper {
+    display: none;
+    position: absolute;
+    top: calc(var(--nav-h) + var(--topbar-h));
+    left: 0; right: 0;
+    background: var(--bg-surface);
+    border-bottom: 0.5px solid var(--gold-border);
+    z-index: 999;
+  }
+  .nav-wrapper.open {
+    display: block;
+    animation: dropIn .2s ease-out both;
+  }
+
+  /* Full-width stacked links */
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .nav-links li {
+    border-bottom: 0.5px solid var(--gold-border);
+  }
+  .nav-links li:last-child { border-bottom: none; }
+
+  /* Entire row is the tap target */
+  .nav-links a {
+    display: flex;
     align-items: center;
+    width: 100%;
+    padding: 15px var(--side-pad);
+    font-size: 13px;
+    letter-spacing: .04em;
+    color: var(--text-muted);
+    position: relative;
+    transition: color .2s ease, background .2s ease;
   }
+  /* Gold left indicator bar */
+  .nav-links a::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .nav-links a:hover {
+    color: var(--gold-light);
+    background: rgba(201,169,110,.04);
+  }
+  .nav-links a:hover::before,
+  .nav-links a.active::before { opacity: 1; }
+  .nav-links a.active { color: var(--gold); }
 
-  .frosted-block {
-    flex: 1 1 100%;
-  }
-  /* Reduced spacing for project page on small screens */
-  .page-projects .scrollable-content {
-    padding: 1rem;
-    gap: 1rem;
-  }
-  .page-projects section {
-    padding: 2vh 3vw;
-  }
-  .page-projects .frosted-block {
-    padding: 1rem 1.5rem;
-    margin-bottom: 1rem;
-  }
+  /* Navbar links hidden on mobile until toggle */
+  .navbar .nav-links { display: none; }
+  .navbar .nav-wrapper.open .nav-links { display: flex; }
+}
 
+/* ─ Mobile ≤ 480 px ─ */
+@media (max-width: 480px) {
+
+  /* Hero: stack photo above text */
+  .home-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-photo {
+    height: auto;
+    width: 72px;       /* override height-based sizing on mobile */
+    align-self: flex-end;
+    margin-top: -100px; /* pull up beside name block */
+    margin-left: 0;
+  }
+  .hero-divider { display: none; }
+  .hero-about { max-width: 100%; }
+
+  /* Mobile: full width, natural height */
+  .masonry-item img { height: 160px; }
+
+  /* Gallery strip: 2×2 on phone */
+  .photo-thumb { flex: 1 1 calc(50% - 4px); }
+
+  /* Card columns stack */
+  .card-grid { flex-direction: column; }
+  .card-col { min-width: unset; width: 100%; }
 }

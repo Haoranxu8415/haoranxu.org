@@ -1,45 +1,93 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Projects</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Haoran Xu</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <script defer src="assets/js/main.js"></script>
 </head>
-<body class="beige-background other-page page-projects">
-  <nav class="navbar" style="display: flex; align-items: center;">
-    <div class="page-label" style="font-weight: bold; font-size: 2rem; padding-left: 2rem; font-family: 'Inter', sans-serif;">Projects</div>
-    <button class="menu-toggle" aria-label="Toggle navigation">
+
+<!--
+  projects.html — Project showcase
+  Each project lives in a .card.project-card block.
+  To add a new project: copy an existing .card.project-card div,
+  update the heading, description, and image src attributes.
+  Images are loaded from GitHub Pages CDN for consistency with deployment.
+-->
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
+
     <div class="nav-wrapper">
-            <ul class="nav-links" style="align-items: center; display: flex; font-family: 'Inter', sans-serif;">
-        <li><a href="home.html" class="js-scroll-to-home">Home</a></li>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="home.html">About</a></li>
         <li><a href="projects.html" class="active">Projects</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
   </nav>
-<div class="scrollable-content">
-  <main style="margin-top: 6vh;">
-    <section class="project-section">
-      <div class="frosted-block" style="width: 100%; margin: 0 auto;">
-        <h2 style="margin-top: 1rem; font-size: 2rem;">Algorithm Mirror</h2>
-        <p style="font-size: 1.2rem;">
-          Algorithm Mirror is an interactive web-based prototype that simulates the inner workings of social media recommendation algorithms. Users can swipe through short-form video content, with their interactions — including likes, skips, dwell time, and interest selections — being logged and analyzed in real time. Based on this behavior, the system generates a personalized summary at the end of the session, visualizing the algorithm’s “understanding” of the user’s preferences. The project explores how seemingly neutral data tracking can influence self-perception, highlighting the psychological and ethical dimensions of algorithmic personalization. This simulation was developed using HTML, CSS, and vanilla JavaScript, with a backend-ready design for behavior logging. The UI reflects a minimalist Apple-style aesthetic, aiming to be both elegant and immersive.
+
+  <!-- ── Page Content ── -->
+  <div class="page-wrapper">
+    <div class="page-content">
+
+      <h1 class="section-heading">Projects</h1>
+
+      <!-- ── Project: Algorithm Mirror ── -->
+      <div class="card project-card">
+        <p class="card-tag">Web · Interaction Design · Psychology</p>
+        <h2>Algorithm Mirror</h2>
+        <p>
+          An interactive web-based prototype that simulates the inner workings of social media
+          recommendation algorithms. Users swipe through short-form video content, with their
+          interactions — likes, skips, dwell time, interest selections — logged and analysed in
+          real time. The system generates a personalised summary at session end, visualising the
+          algorithm's "understanding" of the user's preferences.
         </p>
-        <div class="project-images" style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
-          <img src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj1.jpg" alt="Algorithm Mirror Screenshot 1" style="width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: transform 0.3s ease;" />
-          <img src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj2.jpg" alt="Algorithm Mirror Screenshot 2" style="width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: transform 0.3s ease;" />
-          <img src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj3.jpg" alt="Algorithm Mirror Screenshot 3" style="width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: transform 0.3s ease;" />
+        <p>
+          The project explores how seemingly neutral data tracking influences self-perception,
+          highlighting the psychological and ethical dimensions of algorithmic personalisation.
+          Built with HTML, CSS, and vanilla JavaScript; UI reflects a minimalist aesthetic aiming
+          to be both elegant and immersive.
+        </p>
+
+        <!-- Project screenshots -->
+        <div class="project-images">
+          <img
+            src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj1.jpg"
+            alt="Algorithm Mirror — screen 1"
+          />
+          <img
+            src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj2.jpg"
+            alt="Algorithm Mirror — screen 2"
+          />
+          <img
+            src="https://Haoranxu8415.github.io/haoranxu.org/assets/images/proj3.jpg"
+            alt="Algorithm Mirror — screen 3"
+          />
         </div>
       </div>
-    </section>
-  </main>
-</div>
+
+      <!--
+        ── Add more projects below ──
+        Copy the block above, change card-tag / h2 / p / img src accordingly.
+      -->
+
+    </div><!-- /.page-content -->
+  </div><!-- /.page-wrapper -->
+
+  <script defer src="assets/js/main.js"></script>
 </body>
 </html>

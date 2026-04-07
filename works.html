@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Works — Haoran Xu</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<!--
+  works.html — Works index
+  ─────────────────────────────────────────────────
+  Each project is a .card.work-card linking to its detail page
+  inside the works/ subdirectory.
+
+  To add a new project:
+    1. Create works/your-project.html  (copy algorithm-mirror.html as template)
+    2. Add a new .card.work-card block below
+    3. Add the matching entry in the home panel (index.html)
+-->
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="works.html" class="active">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Page Content ── -->
+  <div class="page-wrapper">
+    <div class="page-content">
+
+      <h1 class="section-heading">Works</h1>
+
+      <div class="works-grid">
+
+        <!-- ── Algorithm Mirror ── -->
+        <a href="works/algorithm-mirror.html" class="card work-card">
+          <div class="work-card-body">
+            <div class="work-card-header">
+              <p class="work-card-meta">Design · Web</p>
+              <span class="work-card-date">2025</span>
+            </div>
+            <h2 class="work-card-title">Information Bubbles</h2>
+            <p class="work-card-excerpt">
+              An interactive prototype that simulates social media recommendation
+              algorithms — letting users experience how their behaviour shapes the
+              content they see, and what it reveals about them.
+            </p>
+          </div>
+          <span class="work-card-arrow">→</span>
+        </a>
+
+        <!-- ── Through the Lens ── -->
+        <a href="works/through-the-lens.html" class="card work-card">
+          <div class="work-card-body">
+            <div class="work-card-header">
+              <p class="work-card-meta">Photography</p>
+              <span class="work-card-date">2024 – 2025</span>
+            </div>
+            <h2 class="work-card-title">Through the Lens</h2>
+            <p class="work-card-excerpt">
+              A curated selection of photographs shot during competitions,
+              club activities, and personal explorations — light, geometry, and
+              the quiet life of everyday objects.
+            </p>
+          </div>
+          <span class="work-card-arrow">→</span>
+        </a>
+
+        <!-- ── Economics & Strategy ── -->
+        <a href="works/economics-strategy.html" class="card work-card">
+          <div class="work-card-body">
+            <div class="work-card-header">
+              <p class="work-card-meta">Business · Research</p>
+              <span class="work-card-date">2024 – 2025</span>
+            </div>
+            <h2 class="work-card-title">Economics &amp; Strategy</h2>
+            <p class="work-card-excerpt">
+              Research papers, competition case studies, and strategy analyses
+              produced across the International Economics Olympiad, CNEC, and
+              the Student Investment Challenge.
+            </p>
+          </div>
+          <span class="work-card-arrow">→</span>
+        </a>
+
+      </div><!-- /.works-grid -->
+
+    </div>
+  </div>
+
+  <script defer src="assets/js/main.js"></script>
+</body>
+</html>

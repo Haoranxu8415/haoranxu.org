@@ -1,148 +1,109 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Haoran Xu</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <script defer src="assets/js/main.js"></script>
 </head>
-<body class="beige-background other-page page-contact">
-  <nav class="navbar" style="display: flex; align-items: center;">
-        <div class="page-label" style="font-weight: bold; font-size: 2rem; padding-left: 2rem; font-family: 'Inter', sans-serif;">Contact</div>
-    <button class="menu-toggle" aria-label="Toggle navigation">
+
+<!--
+  contact.html — Contact & social links
+  ─────────────────────────────────────────────────────────────
+  Three-column .contact-grid (stacks vertically on mobile):
+    col 1 — Identity: name, location, timezone
+    col 2 — Emails
+    col 3 — Social icon links
+
+  To add / change an email: edit the .email-row blocks in col 2.
+  To add / change a social: edit the <a> tags in .social-card.
+-->
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
+
     <div class="nav-wrapper">
-     <ul class="nav-links" style="align-items: center; display: flex; font-family: 'Inter', sans-serif;">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
         <li><a href="contact.html" class="active">Contact</a></li>
       </ul>
     </div>
   </nav>
-  <div class="scrollable-content">
-    <main style="margin-top: -1vh;"></main>
-    <main class="contact-container">
-      <section class="contact-block glass">
-        <h2>Haoran Xu</h2>
-        <p>UTC+8 (China Standard Time)</p>
-        <p>Based in Hefei, China</p>
-      </section>
 
-      <section class="contact-block glass email-block">
-        <h2>Emails</h2>
-        <p><i class="fas fa-envelope"></i> <a href="mailto:x_haoran@icloud.com">x-haoran@icloud.com</a></p>
-        <p><i class="fas fa-envelope"></i> <a href="mailto:e1718502489@outlook.com">e1718502489@outlook.com</a></p>
-        <p><i class="fas fa-envelope"></i> <a href="mailto:haoranxu8415@gmail.com">haoranxu8415@gmail.com</a></p>
-      </section>
+  <!-- ── Page Content ── -->
+  <div class="page-wrapper page-wrapper--centered">
+    <div class="page-content">
 
-      <section class="contact-block glass social-icons">
-        <a href="https://github.com/Haoranxu8415" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://x.com/xiayu8415" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
-        <a href="https://instagram.com/haoran8415" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-      </section>
-    </main>
+      <h1 class="section-heading">Get in touch</h1>
+
+      <!--
+        Contact layout: 2-row grid
+          Row 1 — identity card + email card side by side
+          Row 2 — social icons full-width centered
+      -->
+      <div class="contact-grid">
+
+        <!-- Row 1: Identity + Email -->
+        <div class="contact-row-top">
+
+          <!-- Identity -->
+          <div class="card contact-card">
+            <h2>Haoran Xu</h2>
+            <p>UTC+8 · China Standard Time</p>
+            <p>Based in Hefei, China</p>
+            <p style="margin-top:10px; color:var(--text-muted); font-size:12px;">
+              Incoming @ UBC Sauder · 2026
+            </p>
+          </div>
+
+          <!-- Email -->
+          <div class="card contact-card">
+            <p class="card-tag">Email</p>
+            <h2>Reach me at</h2>
+            <div class="email-row">
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+              <a href="mailto:hx8415@student.ubc.ca">hx8415@student.ubc.ca</a>
+            </div>
+            <div class="email-row">
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+              <a href="mailto:haoranxu8415@gmail.com">haoranxu8415@gmail.com</a>
+            </div>
+          </div>
+
+        </div><!-- /.contact-row-top -->
+
+        <!-- Row 2: Social icons — full width, centered -->
+        <div class="card contact-card social-card">
+          <a href="https://github.com/Haoranxu8415" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://x.com/xiayu8415" target="_blank" rel="noopener" aria-label="X / Twitter">
+            <i class="fab fa-x-twitter"></i>
+          </a>
+          <a href="https://instagram.com/haoran8415" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+
+      </div><!-- /.contact-grid -->
+
+    </div>
   </div>
-  <style>
-    .contact-container {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      flex-wrap: nowrap;
-      gap: 2rem;
-      padding: 5vh clamp(2rem, 6vw, 6rem);
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
 
-    .contact-block {
-      flex: 1 1 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 2rem 2.5rem;
-      border-radius: 1rem;
-      color: white;
-      font-size: 1.1rem;
-      text-align: left;
-      height: 300px;
-      min-width: 0;
-    }
-
-    .contact-block h2 {
-      color: white;
-    }
-
-    .contact-block p, .contact-block a {
-      color: #e0e0e0;
-    }
-
-    .email-block a {
-      color: #cccccc;
-      text-decoration: none;
-    }
-
-    .email-block a:hover {
-      color: white;
-    }
-
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      font-size: 2.8rem;
-      flex-direction: row;
-      width: 100%;
-    }
-
-    .social-icons a {
-      color: #cccccc;
-      transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    .social-icons a:hover {
-      color: white;
-      transform: scale(1.3);
-    }
-
-    .glass {
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Responsive layout for tablets and phones */
-    @media (max-width: 1024px) {
-      .scrollable-content {
-        height: calc(100vh - 4rem);
-        padding-top: 5rem;
-        gap: 1rem;
-      }
-
-      .contact-container {
-        flex-direction: column;
-        padding: 0 2rem;
-        height: 100%;
-      }
-
-      .contact-block {
-        flex: 1;
-        height: auto;
-        font-size: 0.95rem;
-        padding: 1.2rem;
-      }
-
-      .social-icons {
-        font-size: 2.2rem;
-      }
-    }
-  </style>
+  <script defer src="assets/js/main.js"></script>
 </body>
 </html>

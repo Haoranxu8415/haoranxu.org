@@ -1,53 +1,213 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Haoran Xu | personal website</title>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haoran Xu</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- Cormorant Garamond: display/identity only · DM Sans: all UI text -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="preload" as="image" href="../haoranxu.org/assets/images/Other_bkg.png">
 </head>
-<body class="index-page">
-  <div class="index-hero">
-    <main>
-      <div style="text-align: center; margin-top: -5vh;">
-        <h1 style="font-size: 5em; font-weight: bold; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Haoran Xu</h1>
-        <p style="font-size: 2em; color: #fefae0; margin-top: 0.5em;">personal website</p>
-        <a href="home.html?from=visit" class="visit-button js-scroll-to-home" style="display: inline-block; margin-top: 3em; padding: 0.4em 2em; background-color: rgba(255, 255, 255, 0.15); color: white; text-decoration: none; border-radius: 2em; font-weight: 600; font-size: 1.5em; transition: background-color 0.3s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">Visit my website</a>
-      </div>
-    </main>
-    <footer style="
-      text-align: center;
-      margin-top: auto;
-      padding: 2vh 0;
-      color: #b0b0b0;
-      font-size: 0.9em;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-      position: absolute;
-      bottom: 2vh;
-      width: 100%;
-      left: 0;
-      z-index: 10;
-    ">
-    © 2025 Haoran Xu. All rights reserved.
-  </footer>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.body.classList.add("fade-in");
-    });
 
-    document.querySelectorAll('.js-scroll-to-home').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.body.classList.remove('fade-in');
-        document.body.classList.add('fade-out');
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 400);
-      });
-    });
-  </script>
+<!--
+  index.html — Home (single-page, no-scroll on desktop)
+  ─────────────────────────────────────────────────────
+  Layout: two rows inside .home-layout
+    Top  55 % — .home-hero  : name card (eyebrow · name · divider · info · photo)
+    Bot  45 % — .home-panels: 3 preview panels (Gallery · Works · Notes)
+
+  To swap in a real portrait photo, replace .hero-photo with:
+    <div class="hero-photo"
+         style="background-image:url('assets/images/portrait.jpg');
+                background-size:cover; background-position:center top;">
+    </div>
+
+  Gallery strip photos: set background-image on each .photo-thumb
+  or add an <img> inside each .photo-thumb element.
+-->
+<body class="page-home">
+
+  <!-- Signature gradient eyebrow -->
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="index.html"   class="active">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══ Two-row home layout ══ -->
+  <div class="home-layout">
+
+    <!-- ── TOP ROW: Hero ── -->
+    <section class="home-hero" aria-label="Introduction">
+
+      <!-- Name block (left) -->
+      <div class="hero-name-block">
+        <p class="hero-eyebrow">crafting ideas into texture</p>
+        <h1 class="hero-name">
+          Haoran<br>
+          <em>Xu</em>
+        </h1>
+      </div>
+
+      <!-- Vertical rule -->
+      <div class="hero-divider" aria-hidden="true"></div>
+
+      <!-- Info block (center) -->
+      <div class="hero-info-block">
+        <p class="hero-about">
+          I'm an incoming student at UBC Sauder. I build things at the intersection of
+          business, design, and technology. I think in systems and feel in textures —
+          always looking for the moment when an idea stops being abstract and becomes
+          something you can hold.
+        </p>
+        <p class="hero-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          Incoming @ UBC Sauder · Bachelor of Commerce · 2026
+        </p>
+        <div class="hero-tags" aria-label="Interests">
+          <span class="tag">Photography</span>
+          <span class="tag">Research</span>
+          <span class="tag">Design</span>
+          <span class="tag">Business</span>
+        </div>
+      </div>
+
+      <!-- Portrait photo placeholder (far right) -->
+      <!-- 2:3 portrait ratio — add real photo via style attribute above -->
+      <div class="hero-photo" style="background-image:url('assets/images/portrait.jpeg'); background-size:cover; background-position:center top;"></div>
+
+    </section>
+
+    <!-- ── BOTTOM ROW: Three panels ── -->
+    <div class="home-panels">
+
+      <!-- Panel 1: Gallery preview -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">From the Gallery</span>
+          <a href="gallery.html" class="panel-link">Browse all →</a>
+        </div>
+        <!--
+          Photo strip: 4 thumbnail slots, 3:2 aspect ratio.
+          Add photos by either:
+            (a) <img src="assets/images/gallery/your-photo.jpg" alt="..." /> inside .photo-thumb
+            (b) style="background-image:url(...);background-size:cover" on .photo-thumb
+        -->
+        <div class="gallery-strip">
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 1">
+            <img src="assets/images/gallery/photo2.JPG" alt="Trees and Roadmark" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 2">
+            <img src="assets/images/gallery/photo3.JPG" alt="<Maple Leaves>" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 3">
+            <img src="assets/images/gallery/photo5.JPG" alt="Cutting Bamboo" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 4">
+            <img src="assets/images/gallery/photo9.JPG" alt="Stone in the River" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 5">
+            <img src="assets/images/gallery/photo15.jpeg" alt="Abstract Branches" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Panel 2: Works — keep newest first -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Works</span>
+          <a href="works.html" class="panel-link">All works →</a>
+        </div>
+        <div class="works-entries">
+
+          <a href="works/algorithm-mirror.html" class="works-entry">
+            <div class="works-entry-tag">Design · Web</div>
+            <div class="works-entry-row">
+              <span class="works-entry-title">Information Bubbles</span>
+              <span class="works-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="works/through-the-lens.html" class="works-entry">
+            <div class="works-entry-tag">Photography</div>
+            <div class="works-entry-row">
+              <span class="works-entry-title">Through the Lens</span>
+              <span class="works-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="works/economics-strategy.html" class="works-entry">
+            <div class="works-entry-tag">Business · Research</div>
+            <div class="works-entry-row">
+              <span class="works-entry-title">Economics &amp; Strategy</span>
+              <span class="works-arrow">→</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Panel 3: Notes — same structure as Works; keep newest first -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Notes</span>
+          <a href="notes.html" class="panel-link">All notes →</a>
+        </div>
+        <div class="works-entries">
+
+          <a href="notes.html#post-3" class="works-entry">
+            <div class="works-entry-tag">Jul 19</div>
+            <div class="works-entry-row">
+              <span class="works-entry-title">Why I Started Designing My Own Website</span>
+              <span class="works-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="notes.html#post-2" class="works-entry">
+            <div class="works-entry-tag">Jul 12</div>
+            <div class="works-entry-row">
+              <span class="works-entry-title">What Social Media Algorithms Don't Show You</span>
+              <span class="works-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="notes.html#post-1" class="works-entry">
+            <div class="works-entry-tag">Jul 06</div>
+            <div class="works-entry-row">
+              <span class="works-entry-title">The Day I Fell in Love with Claymation</span>
+              <span class="works-arrow">→</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+    </div><!-- /.home-panels -->
+
+    <!-- ── Footer: copyright footnotes ── -->
+    <footer class="home-footer">
+      <span>© 2026 Haoran Xu</span>
+      <span>haoranxu.org</span>
+    </footer>
+
+  </div><!-- /.home-layout -->
+
+  <script defer src="assets/js/main.js"></script>
 </body>
 </html>
