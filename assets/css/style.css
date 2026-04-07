@@ -663,6 +663,38 @@ body.page-home {
   opacity: .88;
 }
 
+/* Gallery page copyright footer */
+.gallery-footer {
+  margin-top: 80px;
+  padding: 32px 0 60px;
+  border-top: 0.5px solid var(--gold-border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--gold);
+  opacity: .7;
+  letter-spacing: .05em;
+  line-height: 1.8;
+}
+.gallery-footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.gallery-footer-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 4px;
+  vertical-align: middle;
+  opacity: .6;
+}
+.gallery-footer-icons img {
+  height: 12px;
+  width: auto;
+  border: none;
+  border-radius: 0;
+}
+
 
 /* ── 12. Lightbox ─────────────────────────────────────────── */
 .lightbox {
@@ -1093,9 +1125,9 @@ body.page-home {
   }
   .home-footer { display: none; }
 
-  /* Panel photo strip: 2×2 grid on tablet/mobile */
-  .gallery-strip { flex-wrap: wrap; align-items: flex-start; }
-  .photo-thumb { flex: 1 1 calc(50% - 4px); height: auto; width: auto; aspect-ratio: 2 / 3; }
+  /* Panel photo strip: single row of 5 on tablet/mobile */
+  .gallery-strip { flex-wrap: nowrap; align-items: stretch; }
+  .photo-thumb { flex: 1; height: auto; width: auto; aspect-ratio: 2 / 3; min-width: 0; }
 
   /* Timeline sidebar hidden below 900px */
   .timeline-col { display: none; }
@@ -1175,26 +1207,37 @@ body.page-home {
 /* ─ Mobile ≤ 480 px ─ */
 @media (max-width: 480px) {
 
-  /* Hero: stack photo above text */
+  /* Hero: two rows — name+photo side by side on top, info below */
   .home-hero {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 16px;
   }
-  .hero-photo {
-    height: auto;
-    width: 72px;       /* override height-based sizing on mobile */
-    align-self: flex-end;
-    margin-top: -100px; /* pull up beside name block */
+  /* Name block becomes a flex row: eyebrow+name on left, photo on right */
+  .hero-name-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-right: 0;
     margin-left: 0;
   }
+  .hero-photo {
+    position: static;
+    height: auto;
+    width: clamp(70px, 22vw, 100px);
+    margin: 0;
+    margin-right: 0;
+    align-self: flex-end;
+    flex-shrink: 0;
+  }
   .hero-divider { display: none; }
+  .hero-info-block { padding-left: 0; }
   .hero-about { max-width: 100%; }
 
   /* Mobile: full width, natural height */
   .masonry-item img { height: 160px; }
 
-  /* Gallery strip: 2×2 on phone */
-  .photo-thumb { flex: 1 1 calc(50% - 4px); }
+  /* Gallery strip: single row of 5 on phone (inherits from tablet rule) */
 
   /* Card columns stack */
   .card-grid { flex-direction: column; }

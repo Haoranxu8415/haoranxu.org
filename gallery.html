@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 <body>
 
@@ -37,78 +39,116 @@
 
       <div class="masonry-grid" id="masonry-grid">
 
+        <!--
+          Thumbnail / full-res setup:
+          - src        → compressed thumbnail (put in assets/images/gallery/thumbs/ once created)
+          - data-full  → full-resolution version opened by the lightbox
+          First 3 items use loading="eager" (above fold); rest use loading="lazy".
+          To activate thumbnails: create thumbs/ folder, then change src to thumbs/photoX.JPG.
+        -->
+
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo6.JPG" alt=""
+          <img src="assets/images/gallery/photo6.JPG"
+               data-full="assets/images/gallery/photo6.JPG"
+               alt="" loading="eager"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo7.JPG" alt=""
+          <img src="assets/images/gallery/photo7.JPG"
+               data-full="assets/images/gallery/photo7.JPG"
+               alt="" loading="eager"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item portrait">
-          <img src="assets/images/gallery/photo2.JPG" alt=""
+          <img src="assets/images/gallery/photo2.JPG"
+               data-full="assets/images/gallery/photo2.JPG"
+               alt="" loading="eager"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo8.JPG" alt=""
+          <img src="assets/images/gallery/photo8.JPG"
+               data-full="assets/images/gallery/photo8.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo9.JPG" alt=""
+          <img src="assets/images/gallery/photo9.JPG"
+               data-full="assets/images/gallery/photo9.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item portrait">
-          <img src="assets/images/gallery/photo3.JPG" alt=""
+          <img src="assets/images/gallery/photo3.JPG"
+               data-full="assets/images/gallery/photo3.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo1.jpg" alt=""
+          <img src="assets/images/gallery/photo1.jpg"
+               data-full="assets/images/gallery/photo1.jpg"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo10.JPG" alt=""
+          <img src="assets/images/gallery/photo10.JPG"
+               data-full="assets/images/gallery/photo10.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item portrait">
-          <img src="assets/images/gallery/photo4.jpeg" alt=""
+          <img src="assets/images/gallery/photo4.jpeg"
+               data-full="assets/images/gallery/photo4.jpeg"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo11.JPG" alt=""
+          <img src="assets/images/gallery/photo11.JPG"
+               data-full="assets/images/gallery/photo11.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo12.JPG" alt=""
+          <img src="assets/images/gallery/photo12.JPG"
+               data-full="assets/images/gallery/photo12.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item portrait">
-          <img src="assets/images/gallery/photo5.JPG" alt=""
+          <img src="assets/images/gallery/photo5.JPG"
+               data-full="assets/images/gallery/photo5.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo13.JPG" alt=""
+          <img src="assets/images/gallery/photo13.JPG"
+               data-full="assets/images/gallery/photo13.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item">
-          <img src="assets/images/gallery/photo14.JPG" alt=""
+          <img src="assets/images/gallery/photo14.JPG"
+               data-full="assets/images/gallery/photo14.JPG"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
         <div class="masonry-item portrait">
-          <img src="assets/images/gallery/photo15.jpeg" alt=""
+          <img src="assets/images/gallery/photo15.jpeg"
+               data-full="assets/images/gallery/photo15.jpeg"
+               alt="" loading="lazy"
                onerror="this.closest('.masonry-item').style.display='none'" />
         </div>
 
@@ -125,16 +165,16 @@
         Photos coming soon.
       </p>
 
-      <footer style="margin-top: 80px; padding-bottom: 60px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 32px; text-align: center;">
-        <p style="font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; line-height: 1.8;">
+      <footer class="gallery-footer">
+        <p>
           &copy; 2026 Haoran Xu. All Rights Reserved.<br>
-          This work is licensed under 
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener" style="color: inherit; text-decoration: underline;">CC BY-NC-SA 4.0</a>
-          <span style="display: inline-flex; align-items: center; margin-left: 4px; vertical-align: middle; gap: 3px; opacity: 0.6;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="height: 12px; width: auto;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="height: 12px; width: auto;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="height: 12px; width: auto;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="height: 12px; width: auto;">
+          This work is licensed under
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a>
+          <span class="gallery-footer-icons">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="">
           </span>
         </p>
       </footer>
