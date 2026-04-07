@@ -664,19 +664,23 @@ body.page-home {
   opacity: .88;
 }
 
-/* Gallery page copyright footer */
-.gallery-footer {
-  margin-top: 80px;
-  padding: 32px 0 60px;
-  border-top: 0.5px solid var(--gold-border);
-  text-align: center;
-  font-size: 11px;
-  color: var(--gold);
-  opacity: .7;
-  letter-spacing: .05em;
-  line-height: 1.8;
+/* Gallery heading row: title left, license right */
+.gallery-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24px;
 }
-.gallery-footer a {
+.gallery-header .section-heading {
+  margin-bottom: 0;
+}
+.gallery-license {
+  font-size: 10px;
+  color: var(--gold);
+  opacity: .6;
+  letter-spacing: .04em;
+}
+.gallery-license a {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -685,12 +689,12 @@ body.page-home {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  margin-left: 4px;
+  margin-left: 3px;
   vertical-align: middle;
-  opacity: .6;
+  opacity: .7;
 }
 .gallery-footer-icons img {
-  height: 12px;
+  height: 11px;
   width: auto;
   border: none;
   border-radius: 0;
