@@ -854,7 +854,7 @@ body.page-home {
   font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(26px, 2.8vw, 40px);
-  color: var(--text-primary);
+  color: var(--gold-light);
   line-height: 1.05;
   margin-bottom: 12px;
 }
