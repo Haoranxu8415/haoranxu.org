@@ -160,25 +160,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ── 5. Gallery image entrance (runs on all pages, no-op if no items) ── */
 /*
-  IntersectionObserver fires .visible on each .masonry-item as it
-  enters the viewport. CSS handles the fade+rise transition.
-  Stagger delay is based on position within a visual row of ~4 items.
+  Reveals .masonry-item elements in strict DOM order (= visual row order)
+  and only after each image has actually finished downloading.
+
+  Fast load  → items appear left-to-right, top-to-bottom, 70 ms apart.
+  Slow load  → items queue up behind any slow image; reveal as soon as
+               the blocker finishes. Error images never block the chain.
 */
 (function () {
-  const items = document.querySelectorAll('.masonry-item');
+  const items = [...document.querySelectorAll('.masonry-item')];
   if (!items.length) return;
+
+  // loaded[i] becomes true once item i's image is ready (or errored)
+  const loaded   = new Array(items.length).fill(false);
+  let nextReveal = 0;
+  // initialised so the very first item gets delay = 0
+  let lastSchedAt = performance.now() - 70;
+
+  function tryFlush() {
+    while (nextReveal < items.length && loaded[nextReveal]) {
+      const item  = items[nextReveal];
+      const now   = performance.now();
+      // guarantee at least 70 ms between successive reveals
+      const delay = Math.max(0, lastSchedAt + 70 - now);
+      lastSchedAt = now + delay;
+      ;(function (el, d) {
+        setTimeout(() => el.classList.add('visible'), d);
+      })(item, delay);
+      nextReveal++;
+    }
+  }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // fire once per item
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const idx  = items.indexOf(entry.target);
+      const img  = entry.target.querySelector('img');
+      const mark = () => { loaded[idx] = true; tryFlush(); };
+      // If browser already has the image (cache hit), reveal immediately
+      if (img.complete) mark();
+      else {
+        img.addEventListener('load',  mark, { once: true });
+        img.addEventListener('error', mark, { once: true }); // broken img won't block chain
       }
     });
   }, { threshold: 0.08 });
 
-  items.forEach((item, i) => {
-    item.style.transitionDelay = `${(i % 4) * 60}ms`; // stagger within row
-    observer.observe(item);
-  });
+  items.forEach(item => observer.observe(item));
 }());
