@@ -690,6 +690,11 @@ body.page-home {
   opacity: 1;
   transform: translateY(0);
 }
+/* JS disabled: show all items immediately */
+.no-js .masonry-item {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 .masonry-item img {
   height: 260px;
