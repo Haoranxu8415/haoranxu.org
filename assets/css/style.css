@@ -1296,3 +1296,35 @@ body.page-home {
   .card-grid { flex-direction: column; }
   .card-col { min-width: unset; width: 100%; }
 }
+
+
+/* ── Touch device: disable hover effects ─────────────────── */
+/*
+  On touch screens there is no mouseout, so :hover states get
+  "stuck" after a tap. @media (hover: none) targets any device
+  that cannot hover — phones, tablets, etc.
+*/
+@media (hover: none) {
+  .card:hover,
+  .panel:hover,
+  .works-entry:hover,
+  .post-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--gold-border);
+    background: var(--bg-surface);
+  }
+
+  .masonry-item:hover img {
+    border-color: transparent;
+    opacity: 1;
+  }
+
+  .nav-links a:hover,
+  .back-link:hover,
+  .email-row a:hover,
+  .not-found-link:hover {
+    color: inherit;
+    border-color: var(--gold-border);
+  }
+}
