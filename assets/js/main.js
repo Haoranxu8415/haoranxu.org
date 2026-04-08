@@ -119,3 +119,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+
+/* ── 5. Gallery image entrance (runs on all pages, no-op if no items) ── */
+/*
+  IntersectionObserver fires .visible on each .masonry-item as it
+  enters the viewport. CSS handles the fade+rise transition.
+  Stagger delay is based on position within a visual row of ~4 items.
+*/
+(function () {
+  const items = document.querySelectorAll('.masonry-item');
+  if (!items.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // fire once per item
+      }
+    });
+  }, { threshold: 0.08 });
+
+  items.forEach((item, i) => {
+    item.style.transitionDelay = `${(i % 4) * 60}ms`; // stagger within row
+    observer.observe(item);
+  });
+}());
