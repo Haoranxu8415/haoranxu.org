@@ -10,12 +10,49 @@
 document.addEventListener('DOMContentLoaded', () => {
 
 
+  /* ── 0. Progress Bar ─────────────────────────────────────── */
+  /*
+    pbStart()    — called on link click: bar appears at 2 % then crawls toward 75 %
+    pbComplete() — called on page arrival: snaps to 100 % then fades out
+    Fast load  → bar flashes gold and disappears (~0.5 s total)
+    Slow load  → bar crawls on departure, then completes on arrival
+  */
+  const _pb = document.createElement('div');
+  _pb.className = 'progress-bar';
+  document.body.prepend(_pb);
+
+  function pbStart() {
+    _pb.style.transition = 'none';
+    _pb.style.opacity    = '1';
+    _pb.style.transform  = 'scaleX(0.02)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      _pb.style.transition = 'transform 2.5s cubic-bezier(0.08, 0.04, 0.2, 1)';
+      _pb.style.transform  = 'scaleX(0.75)';
+    }));
+  }
+
+  function pbComplete() {
+    _pb.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+    _pb.style.opacity    = '1';
+    _pb.style.transform  = 'scaleX(1)';
+    setTimeout(() => {
+      _pb.style.transition = 'opacity 0.35s ease';
+      _pb.style.opacity    = '0';
+      setTimeout(() => { _pb.style.transform = 'scaleX(0)'; }, 400);
+    }, 200);
+  }
+
+  // Complete bar on every page arrival
+  pbComplete();
+
+
   /* ── 1. Page Transitions ─────────────────────────────────── */
   document.querySelectorAll('.nav-links a, .back-link, .panel-link, .works-entry, .btn-cta').forEach(el => {
     el.addEventListener('click', e => {
       const href = el.getAttribute('href') || el.closest('a')?.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
       e.preventDefault();
+      pbStart();
       document.body.classList.add('fade-out');
       setTimeout(() => { window.location.href = href; }, 200);
     });
