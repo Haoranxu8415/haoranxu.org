@@ -128,68 +128,18 @@
           <span class="panel-label">Works</span>
           <a href="works.html" class="panel-link">All works →</a>
         </div>
-        <div class="works-entries">
-
-          <a href="works/algorithm-mirror.html" class="works-entry">
-            <div class="works-entry-tag">Design · Web</div>
-            <div class="works-entry-row">
-              <span class="works-entry-title">Information Bubbles</span>
-              <span class="works-arrow">→</span>
-            </div>
-          </a>
-
-          <a href="works/through-the-lens.html" class="works-entry">
-            <div class="works-entry-tag">Photography</div>
-            <div class="works-entry-row">
-              <span class="works-entry-title">Through the Lens</span>
-              <span class="works-arrow">→</span>
-            </div>
-          </a>
-
-          <a href="works/economics-strategy.html" class="works-entry">
-            <div class="works-entry-tag">Business · Research</div>
-            <div class="works-entry-row">
-              <span class="works-entry-title">Economics &amp; Strategy</span>
-              <span class="works-arrow">→</span>
-            </div>
-          </a>
-
-        </div>
+        <!-- Populated by home.js from data.js -->
+        <div class="works-entries" id="home-works-list"></div>
       </div>
 
-      <!-- Panel 3: Notes — same structure as Works; keep newest first -->
+      <!-- Panel 3: Notes — populated by home.js from data.js -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-label">Notes</span>
           <a href="notes.html" class="panel-link">All notes →</a>
         </div>
-        <div class="works-entries">
-
-          <a href="notes.html#post-3" class="works-entry">
-            <div class="works-entry-tag">Jul 19</div>
-            <div class="works-entry-row">
-              <span class="works-entry-title">Why I Started Designing My Own Website</span>
-              <span class="works-arrow">→</span>
-            </div>
-          </a>
-
-          <a href="notes.html#post-2" class="works-entry">
-            <div class="works-entry-tag">Jul 12</div>
-            <div class="works-entry-row">
-              <span class="works-entry-title">What Social Media Algorithms Don't Show You</span>
-              <span class="works-arrow">→</span>
-            </div>
-          </a>
-
-          <a href="notes.html#post-1" class="works-entry">
-            <div class="works-entry-tag">Jul 06</div>
-            <div class="works-entry-row">
-              <span class="works-entry-title">The Day I Fell in Love with Claymation</span>
-              <span class="works-arrow">→</span>
-            </div>
-          </a>
-
-        </div>
+        <!-- Populated by home.js from data.js -->
+        <div class="works-entries" id="home-notes-list"></div>
       </div>
 
     </div><!-- /.home-panels -->
@@ -202,6 +152,8 @@
 
   </div><!-- /.home-layout -->
 
+  <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/home.js"></script>
   <script defer src="assets/js/main.js"></script>
 </body>
 </html>

@@ -62,60 +62,11 @@
 
       <div class="blog-layout">
 
-        <!-- ── Timeline sidebar (hidden on mobile) ── -->
-        <nav class="timeline-col" aria-label="Post timeline">
-          <p class="timeline-year">2025</p>
+        <!-- ── Timeline sidebar — populated by notes.js ── -->
+        <nav class="timeline-col" aria-label="Post timeline"></nav>
 
-          <!-- Each entry anchors to its post card by id -->
-          <a class="timeline-entry" href="#post-1">
-            <span class="timeline-dot"></span>Jul 06
-          </a>
-          <a class="timeline-entry" href="#post-2">
-            <span class="timeline-dot"></span>Jul 12
-          </a>
-          <a class="timeline-entry" href="#post-3">
-            <span class="timeline-dot"></span>Jul 19
-          </a>
-        </nav>
-
-        <!-- ── Posts column ── -->
-        <div class="card-col" style="flex:1; min-width:0;">
-
-          <!-- Post 1 -->
-          <div id="post-1" class="card post-card">
-            <h2 class="post-title">The Day I Fell in Love with Claymation</h2>
-            <div class="post-meta">
-              <span>2025-07-06</span>
-              <span>Creativity · Animation · Storytelling</span>
-            </div>
-            <div class="post-divider"></div>
-            <!-- Markdown body injected by notes.js — id must match POSTS[0].bodyId -->
-            <div id="post-body-1" class="post-body"></div>
-          </div>
-
-          <!-- Post 2 -->
-          <div id="post-2" class="card post-card">
-            <h2 class="post-title">What Social Media Algorithms Don't Show You</h2>
-            <div class="post-meta">
-              <span>2025-07-12</span>
-              <span>Psychology · Media · Identity</span>
-            </div>
-            <div class="post-divider"></div>
-            <div id="post-body-2" class="post-body"></div>
-          </div>
-
-          <!-- Post 3 -->
-          <div id="post-3" class="card post-card">
-            <h2 class="post-title">Why I Started Designing My Own Website</h2>
-            <div class="post-meta">
-              <span>2025-07-19</span>
-              <span>Design · Personal Reflection · Web Development</span>
-            </div>
-            <div class="post-divider"></div>
-            <div id="post-body-3" class="post-body"></div>
-          </div>
-
-        </div><!-- /.card-col -->
+        <!-- ── Posts column — populated by notes.js ── -->
+        <div class="card-col" style="flex:1; min-width:0;"></div>
 
       </div><!-- /.blog-layout -->
 
@@ -127,6 +78,7 @@
   <!-- Scroll to newest -->
   <a href="#bottom-anchor" class="newest-button" aria-label="Jump to newest note">Newest ↓</a>
 
+  <script defer src="assets/js/data.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/notes.js"></script>
 </body>
