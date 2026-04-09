@@ -59,25 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  /* ── 2. Navbar Hide / Show ───────────────────────────────── */
-  const navbar = document.querySelector('.navbar');
-
-  // Inner pages use .page-wrapper for scroll; home page uses window
-  const scrollEl = document.querySelector('.page-wrapper') || window;
-  let lastY = 0;
-
-  const onScroll = () => {
-    const y = scrollEl === window ? window.scrollY : scrollEl.scrollTop;
-    const delta = y - lastY;
-    if (delta > 6 && y > 40) {
-      navbar?.classList.add('hidden');
-    } else if (delta < -6) {
-      navbar?.classList.remove('hidden');
-    }
-    lastY = Math.max(0, y);
-  };
-
-  scrollEl.addEventListener('scroll', onScroll, { passive: true });
+  /* ── 2. Navbar — always visible ─────────────────────────── */
 
 
   /* ── 3. Mobile Hamburger ─────────────────────────────────── */

@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
           a.className = 'timeline-entry';
           a.href      = `#${p.id}`;
           a.innerHTML = `<span class="timeline-dot"></span>${label}`;
+          a.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.getElementById(p.id);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
           timeline.appendChild(a);
         });
     });
