@@ -70,6 +70,7 @@
 html, body {
   height: 100%;
   overscroll-behavior: none;
+  /* 'touch' enables momentum scrolling on iOS; 'auto' would disable it */
   -webkit-overflow-scrolling: touch;
 }
 
