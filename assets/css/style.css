@@ -984,7 +984,7 @@ body.page-home {
   width: 72px;
   flex-shrink: 0;
   position: sticky;
-  top: 50%;
+  top: 50vh;
   transform: translateY(-50%);
   font-size: 11px;
   color: var(--text-muted);
