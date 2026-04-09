@@ -624,7 +624,7 @@ body.page-home {
 }
 .card:hover {
   border-color: rgba(201,169,110,.28);
-  background: var(--bg-lift);
+  background: var(--bg-base);
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(201,169,110,.08);
 }
@@ -1322,6 +1322,10 @@ body.page-home {
   .card-grid { flex-direction: column; }
   .card-col { min-width: unset; width: 100%; }
 }
+
+
+/* ── Hover delay — 80 ms on enter only, instant exit ──────── */
+.card:hover, .panel:hover, .works-entry:hover { transition-delay: 80ms; }
 
 
 /* ── Touch device: disable hover effects ─────────────────── */
