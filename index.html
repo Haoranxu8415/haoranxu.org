@@ -22,10 +22,8 @@
 
 <body class="page-home">
 
-  <!-- Signature gradient eyebrow -->
   <div class="top-bar" aria-hidden="true"></div>
 
-  <!-- ── Navbar ── -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="nav-logo">Haoran Xu</a>
 
@@ -44,13 +42,11 @@
     </div>
   </nav>
 
-  <!-- ══ Two-row home layout ══ -->
   <div class="home-layout">
 
-    <!-- ── TOP ROW: Hero ── -->
+    <!-- Hero row -->
     <section class="home-hero" aria-label="Introduction">
 
-      <!-- Name block (left) -->
       <div class="hero-name-block">
         <p class="hero-eyebrow">crafting ideas into texture</p>
         <h1 class="hero-name">
@@ -59,10 +55,8 @@
         </h1>
       </div>
 
-      <!-- Vertical rule -->
       <div class="hero-divider" aria-hidden="true"></div>
 
-      <!-- Info block (center) -->
       <div class="hero-info-block">
         <p class="hero-about">
           I'm an incoming student at UBC Sauder. I build things at the intersection of
@@ -82,27 +76,19 @@
         </div>
       </div>
 
-      <!-- Portrait photo placeholder (far right) -->
-      <!-- 2:3 portrait ratio — add real photo via style attribute above -->
       <div class="hero-photo" style="background-image:url('assets/images/portrait.webp'); background-size:cover; background-position:center top;"></div>
 
     </section>
 
-    <!-- ── BOTTOM ROW: Three panels ── -->
+    <!-- Panels row: Gallery · Works · Notes -->
     <div class="home-panels">
 
-      <!-- Panel 1: Gallery preview -->
+      <!-- Gallery panel -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-label">From the Gallery</span>
           <a href="gallery.html" class="panel-link">Browse all →</a>
         </div>
-        <!--
-          Photo strip: 4 thumbnail slots, 3:2 aspect ratio.
-          Add photos by either:
-            (a) <img src="assets/images/gallery/your-photo.jpg" alt="..." /> inside .photo-thumb
-            (b) style="background-image:url(...);background-size:cover" on .photo-thumb
-        -->
         <div class="gallery-strip">
           <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 1">
             <img src="assets/images/gallery/thumbs/photo2.webp" alt="Trees and Roadmark" loading="lazy" />
@@ -122,29 +108,26 @@
         </div>
       </div>
 
-      <!-- Panel 2: Works — keep newest first -->
+      <!-- Works panel — populated by home.js -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-label">Works</span>
           <a href="works.html" class="panel-link">All works →</a>
         </div>
-        <!-- Populated by home.js from data.js -->
         <div class="works-entries" id="home-works-list"></div>
       </div>
 
-      <!-- Panel 3: Notes — populated by home.js from data.js -->
+      <!-- Notes panel — populated by home.js -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-label">Notes</span>
           <a href="notes.html" class="panel-link">All notes →</a>
         </div>
-        <!-- Populated by home.js from data.js -->
         <div class="works-entries" id="home-notes-list"></div>
       </div>
 
     </div><!-- /.home-panels -->
 
-    <!-- ── Footer: copyright footnotes ── -->
     <footer class="home-footer">
       <span>© 2026 Haoran Xu All Rights Reserved</span>
       <span>haoranxu.org</span>

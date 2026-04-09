@@ -1,22 +1,19 @@
 /**
- * main.js — haoranxu.org v2.1
+ * main.js — haoranxu.org
  *
- * 1. Page transitions  — 0.18 s fade-out on leave; CSS handles the 0.5 s fade-in on arrive
- * 2. Navbar auto-hide  — hides on scroll-down, reappears on scroll-up
+ * 0. Progress bar      — gold line on page load/navigate
+ * 1. Page transitions  — 0.18 s fade-out on leave; CSS fade-in on arrive
+ * 2. Navbar            — always visible
  * 3. Mobile nav toggle — hamburger
- * 4. Lightbox          — for gallery.html masonry images
+ * 4. Lightbox          — gallery image viewer (← → / Escape)
+ * 5. Gallery entrance  — reveals .masonry-item in DOM order after load
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ── 0. Progress Bar ─────────────────────────────────────── */
-  /*
-    pbStart()    — called on link click: bar appears at 2 % then crawls toward 75 %
-    pbComplete() — called on page arrival: snaps to 100 % then fades out
-    Fast load  → bar flashes gold and disappears (~0.5 s total)
-    Slow load  → bar crawls on departure, then completes on arrival
-  */
+  // pbStart: crawls to 75% on navigate; pbComplete: snaps to 100% then fades
   const _pb = document.createElement('div');
   _pb.className = 'progress-bar';
   document.body.prepend(_pb);
@@ -42,8 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 200);
   }
 
-  // Complete bar on every page arrival
-  pbComplete();
+  pbComplete(); // complete on every page arrival
 
 
   /* ── 1. Page Transitions ─────────────────────────────────── */
@@ -57,9 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { window.location.href = href; }, 200);
     });
   });
-
-
-  /* ── 2. Navbar — always visible ─────────────────────────── */
 
 
   /* ── 3. Mobile Hamburger ─────────────────────────────────── */
@@ -140,30 +133,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── 5. Gallery image entrance (runs on all pages, no-op if no items) ── */
-/*
-  Reveals .masonry-item elements in strict DOM order (= visual row order)
-  and only after each image has actually finished downloading.
-
-  Fast load  → items appear left-to-right, top-to-bottom, 70 ms apart.
-  Slow load  → items queue up behind any slow image; reveal as soon as
-               the blocker finishes. Error images never block the chain.
-*/
+/* ── 5. Gallery entrance — reveals items in DOM order, 70 ms apart ──── */
 (function () {
   const items = [...document.querySelectorAll('.masonry-item')];
   if (!items.length) return;
 
-  // loaded[i] becomes true once item i's image is ready (or errored)
   const loaded   = new Array(items.length).fill(false);
   let nextReveal = 0;
-  // initialised so the very first item gets delay = 0
-  let lastSchedAt = performance.now() - 70;
+  let lastSchedAt = performance.now() - 70; // offset so first item gets delay = 0
 
   function tryFlush() {
     while (nextReveal < items.length && loaded[nextReveal]) {
       const item  = items[nextReveal];
       const now   = performance.now();
-      // guarantee at least 70 ms between successive reveals
       const delay = Math.max(0, lastSchedAt + 70 - now);
       lastSchedAt = now + delay;
       ;(function (el, d) {
@@ -180,11 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const idx  = items.indexOf(entry.target);
       const img  = entry.target.querySelector('img');
       const mark = () => { loaded[idx] = true; tryFlush(); };
-      // If browser already has the image (cache hit), reveal immediately
-      if (img.complete) mark();
+      if (img.complete) mark(); // cache hit — reveal immediately
       else {
         img.addEventListener('load',  mark, { once: true });
-        img.addEventListener('error', mark, { once: true }); // broken img won't block chain
+        img.addEventListener('error', mark, { once: true }); // errors don't block the chain
       }
     });
   }, { threshold: 0.08 });

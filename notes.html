@@ -20,22 +20,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 
-<!--
-  notes.html — Writing / blog
-  ────────────────────────────────────────────────────────────
-  Layout: sticky date timeline sidebar (desktop) + posts column.
-
-  To add a new note:
-    1. Create posts/post4.md  (frontmatter: title / date / tags)
-    2. Add a .card.post-card block below  (copy an existing one)
-    3. Add a matching .timeline-entry in the sidebar
-    4. Register the post in assets/js/notes.js  POSTS array
--->
 <body>
 
   <div class="top-bar" aria-hidden="true"></div>
 
-  <!-- ── Navbar ── -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="nav-logo">Haoran Xu</a>
 
@@ -54,7 +42,6 @@
     </div>
   </nav>
 
-  <!-- ── Page Content ── -->
   <div class="page-wrapper">
     <div class="page-content">
 
@@ -72,15 +59,11 @@
         </p>
       </div>
 
+      <!-- Timeline + posts — both populated by notes.js -->
       <div class="blog-layout">
-
-        <!-- ── Timeline sidebar — populated by notes.js ── -->
         <nav class="timeline-col" aria-label="Post timeline"></nav>
-
-        <!-- ── Posts column — populated by notes.js ── -->
         <div class="card-col" style="flex:1; min-width:0;"></div>
-
-      </div><!-- /.blog-layout -->
+      </div>
 
       <div id="bottom-anchor"></div>
 
