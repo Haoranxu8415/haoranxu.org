@@ -423,18 +423,18 @@ body.page-home {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 7px;
+  margin-bottom: clamp(4px, 0.8vh, 7px);
   flex-shrink: 0;
 }
 .panel-label {
-  font-size: 9px;
+  font-size: clamp(8px, 0.9vh, 9px);
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--gold);
   opacity: .75;
 }
 .panel-link {
-  font-size: 10px;
+  font-size: clamp(9px, 1vh, 10px);
   color: var(--text-muted);
   letter-spacing: .03em;
   transition: color .2s var(--ease-inout);
@@ -473,15 +473,15 @@ body.page-home {
 .works-entries {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: clamp(3px, 0.6vh, 5px);
   flex: 1;
   min-height: 0;
 }
 .works-entry {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 5px 9px;
+  gap: clamp(1px, 0.3vh, 2px);
+  padding: clamp(3px, 0.6vh, 5px) 9px;
   background: var(--bg-lift);
   border-radius: var(--r-card);
   border: 0.5px solid transparent;
@@ -493,7 +493,7 @@ body.page-home {
   box-shadow: 0 4px 16px rgba(201,169,110,.07);
 }
 .works-entry-tag {
-  font-size: 9px;
+  font-size: clamp(8px, 0.9vh, 9px);
   letter-spacing: .10em;
   text-transform: uppercase;
   color: var(--gold);
@@ -505,7 +505,7 @@ body.page-home {
   align-items: center;
 }
 .works-entry-title {
-  font-size: 12px;
+  font-size: clamp(10px, 1.3vh, 12px);
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -527,7 +527,7 @@ body.page-home {
 .notes-entries {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: clamp(3px, 0.6vh, 5px);
   flex: 1;
   min-height: 0;
 }
@@ -541,7 +541,7 @@ body.page-home {
 }
 .notes-entry:hover .notes-entry-title { color: var(--gold); }
 .notes-entry-title {
-  font-size: 12px;
+  font-size: clamp(10px, 1.3vh, 12px);
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -561,7 +561,7 @@ body.page-home {
   flex-shrink: 0;
 }
 .notes-entry-date {
-  font-size: 11px;
+  font-size: clamp(9px, 1.1vh, 11px);
   color: var(--text-muted);
   white-space: nowrap;
   flex-shrink: 0;
@@ -900,7 +900,7 @@ body.page-home {
   margin-left: auto;
   margin-right: auto;
 }
-.project-card h2 {
+.card.project-card h2 {
   font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(22px, 2.8vw, 36px);
