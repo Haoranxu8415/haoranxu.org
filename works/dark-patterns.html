@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visual Dark Patterns & AI Decision-Making — Works — Haoran Xu</title>
+  <meta name="description" content="An ongoing study into whether visual design in AI-powered shopping interfaces can independently shift model judgement." />
+  <meta property="og:type"        content="article" />
+  <meta property="og:url"         content="https://haoranxu.org/works/dark-patterns.html" />
+  <meta property="og:title"       content="Visual Dark Patterns & AI Decision-Making — Works — Haoran Xu" />
+  <meta property="og:description" content="An ongoing study into whether visual design in AI-powered shopping interfaces can independently shift model judgement." />
+  <meta property="og:image"       content="https://haoranxu.org/assets/images/portrait.webp" />
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" /></noscript>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body>
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../gallery.html">Gallery</a></li>
+        <li><a href="../works.html" class="active">Works</a></li>
+        <li><a href="../notes.html">Notes</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-content">
+
+      <a href="../works.html" class="back-link">← Works</a>
+
+      <div class="card project-card">
+
+        <p class="card-tag">Research · LLM</p>
+        <h2>Visual Dark Patterns &amp; AI Decision-Making</h2>
+
+        <p>
+          It started with Information Bubbles. Building that project made me think seriously,
+          for the first time, about the relationship between algorithms and attention — how
+          platforms quietly make choices on your behalf, through design, through sequencing,
+          through what they choose to show you first.
+        </p>
+        <p>
+          Over the winter break, I found myself thinking one layer deeper. AI shopping agents
+          are now capable of browsing products and generating purchase recommendations on behalf
+          of consumers. These agents are multimodal — they receive text and images simultaneously,
+          just like a human shopper would. That means they are exposed to the same visual tactics
+          that e-commerce platforms have spent years optimising for human psychology: inflated
+          strikethrough prices, countdown timers, artificial scarcity signals.
+        </p>
+        <p>
+          Existing research has shown that text-based price anchoring can influence large language
+          model outputs. But does the visual presentation of that information, independent of its
+          content, produce an additional effect? That question, as far as I can tell, remains
+          unanswered.
+        </p>
+        <p>
+          That is what I set out to investigate: whether visual dark patterns can systematically
+          shift multimodal LLM evaluations under controlled conditions, and whether defensive
+          prompting can meaningfully counter that influence. The research is actively in progress,
+          with plans to submit to an academic journal.
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script defer src="../assets/js/main.js"></script>
+</body>
+</html>

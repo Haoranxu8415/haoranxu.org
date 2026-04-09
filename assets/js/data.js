@@ -21,22 +21,28 @@
 
 const WORKS = [
   {
+    title: 'Visual Dark Patterns &amp; AI Decision-Making',
+    tag:   'Research · LLM',
+    date:  '2026-01-01',
+    href:  'works/dark-patterns.html',
+  },
+  {
     title: 'Information Bubbles',
     tag:   'Design · Web',
     date:  '2025-01-01',
     href:  'works/algorithm-mirror.html',
   },
   {
-    title: 'Through the Lens',
-    tag:   'Photography',
-    date:  '2024-09-01',
-    href:  'works/through-the-lens.html',
+    title: 'WYEF · Shadow Walker',
+    tag:   'Business · Design',
+    date:  '2024-01-01',
+    href:  'works/wyef-shadow-walker.html',
   },
   {
-    title: 'Economics &amp; Strategy',
-    tag:   'Business · Research',
-    date:  '2024-06-01',
-    href:  'works/economics-strategy.html',
+    title: "A Winter's Light",
+    tag:   'Photography',
+    date:  '2023-01-01',
+    href:  'works/kexue-island.html',
   },
 ];
 

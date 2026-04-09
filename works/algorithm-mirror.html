@@ -17,14 +17,6 @@
   <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 
-<!--
-  works/algorithm-mirror.html — Project detail: Information Bubbles
-  ──────────────────────────────────────────────────────────────────
-  Images are loaded from the GitHub Pages CDN path so they resolve
-  correctly both locally and in production.
-
-  To add more screenshots: copy an <img> inside .project-images.
--->
 <body>
 
   <div class="top-bar" aria-hidden="true"></div>
@@ -52,47 +44,52 @@
   <div class="page-wrapper">
     <div class="page-content">
 
-      <!-- Back link to works index -->
       <a href="../works.html" class="back-link">← Works</a>
 
-      <!-- Project card -->
       <div class="card project-card">
 
         <p class="card-tag">Design · Web</p>
         <h2>Information Bubbles</h2>
 
         <p>
-          An interactive web-based prototype that simulates the inner workings of social media
-          recommendation algorithms. Users swipe through short-form video content, with their
-          interactions — likes, skips, dwell time, interest selections — logged and analysed
-          in real time.
+          "Filter bubble" is a phrase that gets used so often it has stopped meaning anything.
+          Everyone knows it exists. Fewer people have actually felt it happening, not as a concept,
+          but as a process, unfolding click by click.
         </p>
         <p>
-          Based on this behaviour, the system generates a personalised summary at session end,
-          visualising the algorithm's "understanding" of the user's preferences. The project
-          explores how seemingly neutral data tracking can influence self-perception, highlighting
-          the psychological and ethical dimensions of algorithmic personalisation.
+          Algorithms do not delete information. They do something quieter: they surround you with
+          what you already like, until that feels like the whole world. They offer comfort, and take
+          away choice. I wanted to make that process visible, so I built this.
         </p>
         <p>
-          Built with HTML, CSS, and vanilla JavaScript; designed with a minimalist aesthetic
-          aiming to be both elegant and immersive.
+          Users enter Information Bubbles and scroll through short-form videos. Every click, every
+          skip, every moment of dwell time is logged in real time. The system adjusts its
+          recommendations accordingly. A few minutes in, the feed looks nothing like it did at the
+          start. At the end, the system generates an algorithmic portrait — its version of who you
+          are, assembled entirely from your behaviour.
+        </p>
+        <p>
+          That moment tends to make people uncomfortable. That discomfort is the point.
+        </p>
+        <p>
+          Built with HTML, CSS, and vanilla JavaScript. I handled the frontend architecture, the
+          full visual design, and was involved in the discussions around the recommendation logic.
         </p>
 
-        <!-- Screenshots -->
         <div class="project-images">
           <img
-            src="../assets/images/proj1.webp"
+            src="../assets/images/bubbles/proj1.webp"
             alt="Information Bubbles — swipe interface"
             loading="eager"
             fetchpriority="high"
           />
           <img
-            src="../assets/images/proj2.webp"
+            src="../assets/images/bubbles/proj2.webp"
             alt="Information Bubbles — interaction tracking"
             loading="lazy"
           />
           <img
-            src="../assets/images/proj3.webp"
+            src="../assets/images/bubbles/proj3.webp"
             alt="Information Bubbles — personalisation summary"
             loading="lazy"
           />

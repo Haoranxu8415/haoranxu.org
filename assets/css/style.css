@@ -894,7 +894,12 @@ body.page-home {
 
 
 /* ── 14. Works Detail ─────────────────────────────────────── */
-.project-card { padding: 20px 20px 20px 24px; }
+.project-card {
+  padding: 20px 20px 20px 24px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .project-card h2 {
   font-family: var(--font-display);
   font-weight: 300;
@@ -904,10 +909,14 @@ body.page-home {
   margin-bottom: 14px;
 }
 .project-card > p {
-  font-size: 13px;
+  font-size: 17px;
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.65;
   margin-bottom: 10px;
+}
+/* On mobile the card is already viewport-width — remove the cap */
+@media (max-width: 900px) {
+  .project-card { max-width: none; }
 }
 .project-images {
   display: flex;
@@ -924,6 +933,23 @@ body.page-home {
   transition: border-color .25s var(--ease-inout);
 }
 .project-images img:hover { border-color: var(--gold-border-em); }
+
+/* kexue-island: portrait height = landscape width, no cropping */
+.kexue-images {
+  align-items: flex-start; /* prevent landscape images from stretching to row height */
+}
+.kexue-images img {
+  width: auto;
+  height: 280px;    /* portrait: height-driven, width = 280 × 2/3 */
+  max-width: none;
+}
+.kexue-images img:nth-child(1),
+.kexue-images img:nth-child(2),
+.kexue-images img:nth-child(3),
+.kexue-images img:nth-child(4) {
+  width: 280px;     /* landscape: width-driven = same 280px, height = 280 × 2/3 */
+  height: auto;
+}
 
 /* Back link inside work detail pages */
 .back-link {
