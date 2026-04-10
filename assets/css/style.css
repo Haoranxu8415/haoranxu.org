@@ -1068,7 +1068,7 @@ body.page-home {
 /* Post body — DM Sans, comfortable long-form reading size */
 .post-body {
   font-family: var(--font-ui);
-  font-size: 18px;
+  font-size: 25px;
   line-height: 1.8;
   color: var(--text-primary);
 }
@@ -1079,7 +1079,7 @@ body.page-home {
   margin: 20px 0 10px;
   line-height: 1.2;
 }
-.post-body p { margin-bottom: 10px; }
+.post-body p { font-size: 17px; margin-bottom: 10px; }
 .post-body a {
   color: var(--gold);
   border-bottom: 0.5px solid var(--gold-border);
