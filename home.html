@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Haoran Xu | Bcom At UBC Sauder</title>
+  <meta name="description" content="Incoming UBC Sauder student building at the intersection of Finance, Design, and Tech." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://haoranxu.org/" />
+  <meta property="og:title"       content="Haoran Xu | Bcom At UBC Sauder" />
+  <meta property="og:description" content="Incoming UBC Sauder student building at the intersection of Finance, Design, and Tech." />
+  <meta property="og:image"       content="https://haoranxu.org/assets/images/portrait.webp" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- Cormorant Garamond: display/identity only · DM Sans: all UI text -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" /></noscript>
+  <link rel="preload" as="image" href="assets/images/portrait.webp" fetchpriority="high" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+
+<body class="page-home">
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="home.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="home.html"   class="active">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="home-layout">
+
+    <!-- Hero row -->
+    <section class="home-hero" aria-label="Introduction">
+
+      <div class="hero-name-block">
+        <p class="hero-eyebrow">crafting ideas into texture</p>
+        <h1 class="hero-name">
+          Haoran<br>
+          <em>Xu</em>
+        </h1>
+      </div>
+
+      <div class="hero-divider" aria-hidden="true"></div>
+
+      <div class="hero-info-block">
+        <p class="hero-about">
+          I'm an incoming student at UBC Sauder. I build things at the intersection of
+          business, design, and technology. I think in systems and feel in textures —
+          always looking for the moment when an idea stops being abstract and becomes
+          something you can hold.
+        </p>
+        <p class="hero-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          Incoming @ UBC Sauder · Bachelor of Commerce · 2026
+        </p>
+        <div class="hero-tags" aria-label="Interests">
+          <span class="tag">Photography</span>
+          <span class="tag">Research</span>
+          <span class="tag">Design</span>
+          <span class="tag">Business</span>
+        </div>
+      </div>
+
+      <div class="hero-photo" style="background-image:url('assets/images/portrait.webp'); background-size:cover; background-position:center top;"></div>
+
+    </section>
+
+    <!-- Panels row: Gallery · Works · Notes -->
+    <div class="home-panels">
+
+      <!-- Gallery panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">From the Gallery</span>
+          <a href="gallery.html" class="panel-link">Browse all →</a>
+        </div>
+        <div class="gallery-strip">
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 1">
+            <img src="assets/images/gallery/thumbs/photo2.webp" alt="Trees and Roadmark" loading="lazy" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 2">
+            <img src="assets/images/gallery/thumbs/photo3.webp" alt="Maple Leaves" loading="lazy" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 3">
+            <img src="assets/images/gallery/thumbs/photo5.webp" alt="Cutting Bamboo" loading="lazy" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 4">
+            <img src="assets/images/gallery/thumbs/photo9.webp" alt="Stone in the River" loading="lazy" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 5">
+            <img src="assets/images/gallery/thumbs/photo15.webp" alt="Abstract Branches" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Works panel — populated by home.js -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Works</span>
+          <a href="works.html" class="panel-link">All works →</a>
+        </div>
+        <div class="works-entries" id="home-works-list"></div>
+      </div>
+
+      <!-- Notes panel — populated by home.js -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Notes</span>
+          <a href="notes.html" class="panel-link">All notes →</a>
+        </div>
+        <div class="works-entries" id="home-notes-list"></div>
+      </div>
+
+    </div><!-- /.home-panels -->
+
+    <footer class="home-footer">
+      <span>© 2026 Haoran Xu All Rights Reserved</span>
+      <span>haoranxu.org</span>
+    </footer>
+
+  </div><!-- /.home-layout -->
+
+  <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/home.js"></script>
+  <script defer src="assets/js/main.js"></script>
+</body>
+</html>

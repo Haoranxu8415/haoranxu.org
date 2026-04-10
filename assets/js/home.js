@@ -1,5 +1,5 @@
 /**
- * home.js — populates Works and Notes preview panels on index.html
+ * home.js — populates Works and Notes preview panels on home.html
  * Depends on: data.js  (WORKS + POSTS globals, loaded before this script)
  *
  * Both panels show the 3 most recent entries sorted by date.

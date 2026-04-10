@@ -22,7 +22,7 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 ## Project Structure
 
 ```
-index.html              Home
+home.html              Home
 gallery.html            Photography gallery with lightbox
 works.html              Works index
 notes.html              Writing, rendered from Markdown
@@ -87,7 +87,7 @@ assets/
           onerror="this.closest('.masonry-item').style.display='none'" />
    </div>
    ```
-4. Optionally add the thumbnail to the home page gallery strip in `index.html`.
+4. Optionally add the thumbnail to the home page gallery strip in `home.html`.
 
 ## Deployment
 
