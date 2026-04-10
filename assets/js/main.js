@@ -5,8 +5,9 @@
  * 1. Page transitions  — 0.18 s fade-out on leave; CSS fade-in on arrive
  * 2. Navbar            — always visible
  * 3. Mobile nav toggle — hamburger
- * 4. Lightbox          — gallery image viewer (← → / Escape)
- * 5. Gallery entrance  — reveals .masonry-item in DOM order after load
+ * 4. Latest button     — scrolls .page-wrapper to top (mobile-safe)
+ * 5. Lightbox          — gallery image viewer (← → / Escape)
+ * 6. Gallery entrance  — reveals .masonry-item in DOM order after load
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -74,7 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  /* ── 4. Lightbox ─────────────────────────────────────────── */
+  /* ── 4. Latest button — scrolls .page-wrapper to top ───────── */
+  const latestBtn = document.querySelector('.newest-button');
+  if (latestBtn) {
+    latestBtn.addEventListener('click', e => {
+      e.preventDefault();
+      const pw = document.querySelector('.page-wrapper');
+      if (pw) pw.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+
+  /* ── 5. Lightbox ─────────────────────────────────────────── */
   /*
     Collects all .masonry-item img elements on the page.
     Click → open lightbox at that index.
@@ -133,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── 5. Gallery entrance — reveals items in DOM order, 70 ms apart ──── */
+/* ── 6. Gallery entrance — reveals items in DOM order, 70 ms apart ──── */
 (function () {
   const items = [...document.querySelectorAll('.masonry-item')];
   if (!items.length) return;
