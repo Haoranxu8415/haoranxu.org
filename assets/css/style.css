@@ -484,6 +484,7 @@ body.page-home {
 .works-entry {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: clamp(1px, 0.3vh, 2px);
   padding: clamp(3px, 0.6vh, 5px) 9px;
   background: var(--bg-lift);
@@ -537,7 +538,8 @@ body.page-home {
 }
 .notes-entry {
   display: flex;
-  align-items: baseline;
+  flex: 1;
+  align-items: center;
   gap: 0;
   overflow: hidden;
   min-width: 0;
