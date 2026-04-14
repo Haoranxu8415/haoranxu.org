@@ -49,9 +49,9 @@
   --font-ui:      'DM Sans', sans-serif;
 
   /* radii */
-  --r-btn:   6px;
-  --r-card:  8px;
-  --r-panel: 14px;
+  --r-btn:   9px;
+  --r-card:  12px;
+  --r-panel: 18px;
 
   /* layout */
   --topbar-h:  2.5px;
@@ -485,8 +485,9 @@ body.page-home {
   display: flex;
   flex-direction: column;
   flex: 1;
+  justify-content: center;
   gap: clamp(1px, 0.3vh, 2px);
-  padding: clamp(3px, 0.6vh, 5px) 9px;
+  padding: clamp(3px, 0.6vh, 5px) 9px clamp(3px, 0.6vh, 5px) 13px;
   background: var(--bg-lift);
   border-radius: var(--r-card);
   border: 0.5px solid transparent;
@@ -543,6 +544,7 @@ body.page-home {
   gap: 0;
   overflow: hidden;
   min-width: 0;
+  padding-left: 4px;
   transition: color .2s var(--ease-inout);
 }
 .notes-entry:hover .notes-entry-title { color: var(--gold); }
@@ -595,7 +597,7 @@ body.page-home {
 }
 
 .page-content {
-  padding: 32px var(--side-pad) 56px;
+  padding: 32px var(--side-pad) calc(56px + env(safe-area-inset-bottom, 0px));
 }
 
 
@@ -1197,7 +1199,7 @@ body.page-home {
   .home-layout {
     height: auto;
     overflow: visible;
-    padding-bottom: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
   .home-hero {
     flex: none;
