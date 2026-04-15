@@ -202,6 +202,170 @@ body.fade-out {
   transition: opacity .18s ease-in;
 }
 
+/* ── 5b. Advanced Animations ─────────────────────────────── */
+/*
+  Three layers of motion, each fully isolated:
+
+  Direction 1 — clip-path hero reveal (editorial wipe from bottom).
+    Applies only inside @supports (clip-path) + prefers-reduced-motion: no-preference.
+    Overrides the whole-layout pageIn so the two don't stack.
+
+  Direction 2 — stagger entrance on cards / entries.
+    Uses --stagger-i custom property set by JS.
+    Plain opacity + translateY; no @supports needed.
+
+  Direction 5 — scroll-driven parallax (CSS native).
+    Uses individual `translate` property — independent of `transform`
+    so it never fights the entrance transition on .masonry-item.
+    Gated behind @supports (animation-timeline: scroll()).
+
+  Reduced-motion safety net at the bottom resets all three unconditionally.
+*/
+
+/* Keyframes ─────────────────────────────────────────────── */
+
+/* D1: text/block wipes upward from a hidden state */
+@keyframes clipReveal {
+  from { clip-path: inset(0 0 100% 0); opacity: 0; }
+  to   { clip-path: inset(0 0   0% 0); opacity: 1; }
+}
+
+/* D2: list items and cards rise into view */
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* D5: gallery images drift through the viewport (uses `translate`, not `transform`) */
+@keyframes galleryParallax {
+  from { translate: 0 28px;  }
+  to   { translate: 0 -28px; }
+}
+
+/* D5: post-card settles into position as it enters the scroll container */
+@keyframes cardEntrySlide {
+  from { translate: 0 16px; }
+  to   { translate: 0 0;    }
+}
+
+
+/* Direction 1 — Hero clip-path ──────────────────────────── */
+/*
+  @supports gates out browsers that can't animate clip-path (IE, very old mobile).
+  Inside the block, .home-layout animation is silenced so we don't get
+  a double-fade (whole layout + individual elements both fading from 0).
+  Fallback: browser ignores the @supports block; .home-layout pageIn runs as before.
+*/
+@supports (clip-path: inset(0 0 0 0)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .home-layout      { animation: none; }
+
+    .hero-eyebrow {
+      animation: clipReveal 1.1s var(--ease-out) both;
+    }
+    .hero-name {
+      animation: clipReveal 1.4s var(--ease-out) both;
+      animation-delay: .18s;
+    }
+    .hero-info-block {
+      animation: clipReveal 1.1s var(--ease-out) both;
+      animation-delay: .40s;
+    }
+    .hero-photo {
+      /* background-image div — clip-path works, reveals portrait from bottom */
+      animation: clipReveal 1.2s var(--ease-out) both;
+      animation-delay: .52s;
+    }
+  }
+}
+
+
+/* Direction 2 — Stagger entrance ────────────────────────── */
+/*
+  JS sets style="--stagger-i: N" (0-based) on each card / entry.
+  The base offset (150 ms for cards, 200 ms for entries) lets the
+  page-wrapper pageIn finish before cards cascade in.
+  No @supports needed — opacity + transform are universally available.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .work-card,
+  .post-card {
+    animation: staggerIn .5s var(--ease-out) both;
+    animation-delay: calc(var(--stagger-i, 0) * 90ms + 150ms);
+  }
+  .works-entry,
+  .notes-entry {
+    animation: staggerIn .45s var(--ease-out) both;
+    animation-delay: calc(var(--stagger-i, 0) * 80ms + 200ms);
+  }
+}
+
+
+/* Direction 5 — Scroll-driven parallax ──────────────────── */
+/*
+  Only Chrome 115+ / Safari 18+ reach this block.
+  `translate` (individual transform property) is orthogonal to `transform`,
+  so it composes additively with the entrance transition on .masonry-item
+  without any conflict.
+  post-card runs two animations simultaneously:
+    1. staggerIn   — document timeline (auto)
+    2. cardEntrySlide — view() timeline (scroll-linked)
+  animation-delay / animation-timeline / animation-range use parallel
+  comma-separated values to bind each animation independently.
+*/
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .masonry-item {
+      animation: galleryParallax linear both;
+      animation-timeline: view(block);
+      animation-range: entry 0% exit 100%;
+    }
+
+    .post-card {
+      animation: staggerIn .5s var(--ease-out) both,
+                 cardEntrySlide linear both;
+      animation-delay:    calc(var(--stagger-i, 0) * 90ms + 150ms), 0s;
+      animation-timeline: auto, view(block);
+      animation-range:    auto, entry 0% cover 50%;
+    }
+  }
+}
+
+
+/* Reduced-motion safety net ─────────────────────────────── */
+/*
+  Unconditionally strips every new effect — clip-path, stagger, parallax.
+  !important overrides @supports and @media blocks above.
+  .masonry-item also needs transition: none so the JS entrance is instant.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow,
+  .hero-name,
+  .hero-info-block,
+  .hero-photo {
+    animation: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+  }
+  .work-card,
+  .post-card,
+  .works-entry,
+  .notes-entry {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+  }
+  .masonry-item {
+    animation: none !important;
+    transition: none !important;
+    translate: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+
 /* ── Progress Bar ─────────────────────────────────────────── */
 /*
   Thin 2 px champagne-gold line fixed at the very top.
@@ -473,37 +637,50 @@ body.page-home {
   object-fit: cover;
 }
 
-/* ─ Works panel entries ─ */
+/* ─ Works panel entries — minimal rule lines, no nested cards ─ */
 .works-entries {
   display: flex;
   flex-direction: column;
-  gap: clamp(3px, 0.6vh, 5px);
   flex: 1;
   min-height: 0;
 }
 .works-entry {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
   justify-content: center;
   gap: clamp(1px, 0.3vh, 2px);
-  padding: clamp(3px, 0.6vh, 5px) 9px clamp(3px, 0.6vh, 5px) 13px;
-  background: var(--bg-lift);
-  border-radius: var(--r-card);
-  border: 0.5px solid transparent;
-  transition: border-color .2s var(--ease-inout), transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+  padding: 0 8px 0 12px;
+  /* No background, no border-radius, no border box */
+  transition: color .2s var(--ease-inout);
 }
-.works-entry:hover {
-  border-color: var(--gold-border-em);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(201,169,110,.07);
+/* Divider between entries — not on first child */
+.works-entry + .works-entry {
+  border-top: 0.5px solid var(--gold-border);
+}
+/* Left gold bar — slides in from 0 height on hover */
+.works-entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  width: 2px;
+  height: 0;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: height .22s var(--ease-out), top .22s var(--ease-out);
+}
+.works-entry:hover::before {
+  top: 15%;
+  height: 70%;
 }
 .works-entry-tag {
   font-size: clamp(8px, 0.9vh, 9px);
   letter-spacing: .10em;
   text-transform: uppercase;
   color: var(--gold);
-  opacity: .7;
+  opacity: .6;
 }
 .works-entry-row {
   display: flex;
@@ -516,7 +693,9 @@ body.page-home {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color .2s var(--ease-inout);
 }
+.works-entry:hover .works-entry-title { color: var(--text-primary); }
 .works-arrow {
   color: var(--text-dim);
   font-size: 11px;
@@ -529,25 +708,43 @@ body.page-home {
   color: var(--gold);
 }
 
-/* ─ Notes panel entries: title ···· date ─ */
+/* ─ Notes panel entries: title ···· date — same rule-line approach ─ */
 .notes-entries {
   display: flex;
   flex-direction: column;
-  gap: clamp(3px, 0.6vh, 5px);
   flex: 1;
   min-height: 0;
 }
 .notes-entry {
+  position: relative;
   display: flex;
   flex: 1;
   align-items: center;
   gap: 0;
   overflow: hidden;
   min-width: 0;
-  padding-left: 4px;
+  padding: 0 8px 0 12px;
   transition: color .2s var(--ease-inout);
 }
-.notes-entry:hover .notes-entry-title { color: var(--gold); }
+.notes-entry + .notes-entry {
+  border-top: 0.5px solid var(--gold-border);
+}
+.notes-entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  width: 2px;
+  height: 0;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: height .22s var(--ease-out), top .22s var(--ease-out);
+}
+.notes-entry:hover::before {
+  top: 15%;
+  height: 70%;
+}
+.notes-entry:hover .notes-entry-title { color: var(--text-primary); }
 .notes-entry-title {
   font-size: clamp(10px, 1.3vh, 12px);
   color: var(--text-secondary);
@@ -564,8 +761,8 @@ body.page-home {
   border-bottom: 1px dotted var(--text-dim);
   margin: 0 8px;
   position: relative;
-  top: -3px;
-  min-width: 16px;
+  top: -2px;
+  min-width: 12px;
   flex-shrink: 0;
 }
 .notes-entry-date {
@@ -1349,13 +1546,18 @@ body.page-home {
 @media (hover: none) {
   .card:hover,
   .panel:hover,
-  .works-entry:hover,
   .post-card:hover {
     transform: none;
     box-shadow: none;
     border-color: var(--gold-border);
     background: var(--bg-surface);
   }
+  /* Entry hover bar: keep hidden on touch — no mouseout to reset it */
+  .works-entry:hover::before,
+  .notes-entry:hover::before { height: 0; }
+  .works-entry:hover .works-entry-title,
+  .notes-entry:hover .notes-entry-title { color: var(--text-secondary); }
+  .works-entry:hover .works-arrow { transform: none; color: var(--text-dim); }
 
   .masonry-item:hover img {
     border-color: transparent;

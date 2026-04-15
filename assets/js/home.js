@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const worksList = document.getElementById('home-works-list');
   if (worksList && typeof WORKS !== 'undefined') {
     const sorted = [...WORKS].sort((a, b) => new Date(b.date) - new Date(a.date));
-    sorted.slice(0, 3).forEach(w => {
+    sorted.slice(0, 3).forEach((w, i) => {
       const a = document.createElement('a');
       a.href      = w.href;
       a.className = 'works-entry';
+      a.style.setProperty('--stagger-i', i);
       a.innerHTML =
         `<div class="works-entry-tag">${w.tag}</div>` +
         `<div class="works-entry-row">` +
@@ -31,13 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const notesList = document.getElementById('home-notes-list');
   if (notesList && typeof POSTS !== 'undefined') {
     const sorted = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
-    sorted.slice(0, 3).forEach(p => {
+    sorted.slice(0, 3).forEach((p, i) => {
       const label = new Date(p.date).toLocaleDateString('en-US', {
         month: 'short', day: 'numeric',
       });
       const a = document.createElement('a');
       a.href      = `notes.html#${p.id}`;
       a.className = 'works-entry';
+      a.style.setProperty('--stagger-i', i);
       a.innerHTML =
         `<div class="works-entry-tag">${label}</div>` +
         `<div class="works-entry-row">` +

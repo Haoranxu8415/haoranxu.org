@@ -3,7 +3,7 @@
  *
  * 0. Progress bar      — gold line on page load/navigate
  * 1. Page transitions  — 0.18 s fade-out on leave; CSS fade-in on arrive
- * 2. Navbar            — always visible
+ * 2. Stagger entrance  — assigns --stagger-i to .work-card and .post-card
  * 3. Mobile nav toggle — hamburger
  * 4. Latest button     — scrolls .page-wrapper to top (mobile-safe)
  * 5. Lightbox          — gallery image viewer (← → / Escape)
@@ -53,6 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add('fade-out');
       setTimeout(() => { window.location.href = href; }, 200);
     });
+  });
+
+
+  /* ── 2. Stagger entrance ─────────────────────────────────── */
+  // Sets --stagger-i (0-based index) so CSS animation-delay cascades each item.
+  // Covers static card lists (works.html, notes.html); home panel entries are
+  // handled in home.js which creates them dynamically.
+  [
+    [...document.querySelectorAll('.work-card')],
+    [...document.querySelectorAll('.post-card')],
+  ].forEach(list => {
+    list.forEach((el, i) => el.style.setProperty('--stagger-i', i));
   });
 
 
