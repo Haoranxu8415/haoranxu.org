@@ -65,14 +65,21 @@
         <p>
           Existing research has shown that text-based price anchoring can influence large language
           model outputs. But does the visual presentation of that information, independent of its
-          content, produce an additional effect? That question, as far as I can tell, remains
+          content, produce an additional effect? That question, as far as I could tell, remained
           unanswered.
         </p>
         <p>
-          That is what I set out to investigate: whether visual dark patterns can systematically
-          shift multimodal LLM evaluations under controlled conditions, and whether defensive
-          prompting can meaningfully counter that influence. The research is actively in progress,
-          with plans to submit to an academic journal.
+          The study tested five models across 4,800 API calls, collecting 4,619 valid observations
+          after cleaning. The core finding was consistent across all eight products and all five
+          models: visual dark patterns suppressed model evaluations in every case. Defensive
+          prompting partially worked — effective on deal scores in most cases, but largely
+          ineffective on recommendation scores. A notable cultural divergence emerged between
+          Western and Chinese models under dark-pattern conditions. One model stood as the sole
+          exception, producing a positive effect in the opposite direction.
+        </p>
+        <p>
+          The preprint and dataset are <a href="https://doi.org/10.5281/zenodo.20201437" target="_blank" rel="noopener noreferrer" style="color:var(--gold-light);text-decoration:none;">available at Zenodo</a>.
+          The paper is currently being prepared for submission to an academic journal.
         </p>
 
       </div>
