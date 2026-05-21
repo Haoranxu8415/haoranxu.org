@@ -13,8 +13,9 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" /></noscript>
-  <!-- marked.js for Markdown rendering — loaded once in <head> -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- marked.js: defer keeps it non-blocking; deferred scripts run in document order,
+       so it still executes before data.js / notes.js which appear later in the body -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -51,18 +52,23 @@
           © 2026 Haoran Xu ·
           <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a>
           <span class="gallery-footer-icons">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="Creative Commons">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="Attribution">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NonCommercial">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="ShareAlike">
           </span>
         </p>
       </div>
 
-      <!-- Timeline + posts — both populated by notes.js -->
+      <!-- Timeline + posts — both populated by notes.js.
+           Skeleton cards are shown until JS replaces them (cardCol.innerHTML = ''). -->
       <div class="blog-layout">
         <nav class="timeline-col" aria-label="Post timeline"></nav>
-        <div class="card-col" style="flex:1; min-width:0;"></div>
+        <div class="card-col" style="flex:1; min-width:0;">
+          <div class="card skeleton-card" aria-hidden="true"></div>
+          <div class="card skeleton-card" aria-hidden="true"></div>
+          <div class="card skeleton-card" aria-hidden="true"></div>
+        </div>
       </div>
 
       <div id="bottom-anchor"></div>

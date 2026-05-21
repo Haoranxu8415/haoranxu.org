@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>404 — Haoran Xu</title>
+  <meta name="description" content="Page not found — Haoran Xu" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" /></noscript>
@@ -58,16 +59,21 @@
   <div class="top-bar" aria-hidden="true"></div>
 
   <nav class="navbar" role="navigation" aria-label="Main navigation">
-    <a href="home.html" class="nav-logo" aria-label="Home">Haoran Xu</a>
-    <ul class="nav-links">
-      <li><a href="works.html">Works</a></li>
-      <li><a href="notes.html">Notes</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <a href="home.html" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
   </nav>
 
   <main class="not-found">
