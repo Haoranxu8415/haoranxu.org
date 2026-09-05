@@ -298,6 +298,15 @@ body.fade-out {
     animation: staggerIn .65s var(--ease-out) both;
     animation-delay: calc(var(--stagger-i, 0) * 110ms + 600ms);
   }
+  .contact-card,
+  .social-card {
+    animation: staggerIn .5s var(--ease-out) both;
+    animation-delay: calc(var(--stagger-i, 0) * 100ms + 150ms);
+  }
+  .page-content .section-heading {
+    animation: staggerIn .6s var(--ease-out) both;
+    animation-delay: .1s;
+  }
 }
 
 
@@ -350,11 +359,18 @@ body.fade-out {
   .work-card,
   .post-card,
   .works-entry,
-  .notes-entry {
+  .notes-entry,
+  .contact-card,
+  .social-card {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
     translate: none !important;
+  }
+  .page-content .section-heading {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
   .masonry-item {
     animation: none !important;
@@ -708,13 +724,6 @@ body.page-home {
   color: var(--gold);
 }
 
-/* ─ Notes panel entries: title ···· date — same rule-line approach ─ */
-.notes-entries {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
 .notes-entry {
   position: relative;
   display: flex;
@@ -817,19 +826,26 @@ body.page-home {
   padding: 14px 16px 14px 20px;
   position: relative;
   overflow: hidden;
-  transition: border-color .25s var(--ease-inout), background .25s var(--ease-inout), transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+  transition: border-color .25s var(--ease-inout), transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
 }
 /* 2 px accent bar */
 .card::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; bottom: 0;
+  left: 0;
+  top: 20%;
   width: 2px;
-  background: var(--bg-lift);
+  height: 0;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: height .22s var(--ease-out), top .22s var(--ease-out);
+}
+.card:hover::before {
+  top: 15%;
+  height: 70%;
 }
 .card:hover {
-  border-color: rgba(201,169,110,.28);
-  background: var(--bg-base);
+  border-color: rgba(201,169,110,.32);
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(201,169,110,.08);
 }
@@ -911,7 +927,8 @@ body.page-home {
 }
 
 .masonry-item:hover img {
-  border-color: rgba(201,169,110,.30);
+  border-color: rgba(201,169,110,.65);
+  box-shadow: 0 0 0 1px rgba(201,169,110,.18);
   opacity: .88;
 }
 
@@ -1012,6 +1029,7 @@ body.page-home {
   border-radius: var(--r-card);
   border: 0.5px solid var(--gold-border);
   display: block;
+  transition: opacity .18s ease;
 }
 
 /* Close button */
@@ -1076,7 +1094,7 @@ body.page-home {
   padding: 32px 24px 32px 28px;
 }
 /* Thicker accent bar for works cards — more presence than base .card */
-.work-card::before { width: 3px; background: var(--bg-high); }
+.work-card::before { width: 3px; background: var(--gold); }
 
 .work-card-body { flex: 1; min-width: 0; }
 .work-card-meta {
@@ -1568,7 +1586,7 @@ body.page-home {
 
 
 /* ── Hover delay — 80 ms on enter only, instant exit ──────── */
-.card:hover, .panel:hover, .works-entry:hover { transition-delay: 80ms; }
+.panel:hover, .works-entry:hover { transition-delay: 80ms; }
 
 
 /* ── Touch device: disable hover effects ─────────────────── */

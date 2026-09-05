@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   [
     [...document.querySelectorAll('.work-card')],
     [...document.querySelectorAll('.post-card')],
+    [...document.querySelectorAll('.contact-card, .social-card')],
   ].forEach(list => {
     list.forEach((el, i) => el.style.setProperty('--stagger-i', i));
   });
@@ -84,6 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
         toggle.setAttribute('aria-expanded', false);
       });
     });
+  }
+
+
+  /* ── 4a. Navbar auto-hide on scroll ─────────────────────── */
+  const navbar = document.querySelector('.navbar');
+  if (navbar) {
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      // Don't hide when the mobile menu is open
+      if (wrapper?.classList.contains('open')) return;
+      const y = window.scrollY;
+      navbar.classList.toggle('hidden', y > lastScrollY && y > 80);
+      lastScrollY = y;
+    }, { passive: true });
   }
 
 
@@ -118,18 +133,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openAt(idx) {
     current = (idx + imgs.length) % imgs.length;
-    // Use data-full for hi-res, fall back to src
-    lbImg.src = imgs[current].dataset.full || imgs[current].src;
-    lbImg.alt = imgs[current].alt || '';
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    const src = imgs[current].dataset.full || imgs[current].src;
+    const alt = imgs[current].alt || '';
+
+    function loadAndShow() {
+      lbImg.alt = alt;
+      lbImg.src = src;
+      const restore = () => requestAnimationFrame(() => { lbImg.style.opacity = '1'; });
+      // Cached images may already be complete before onload fires
+      if (lbImg.complete && lbImg.naturalWidth) restore();
+      else {
+        lbImg.addEventListener('load',  restore, { once: true });
+        lbImg.addEventListener('error', restore, { once: true });
+      }
+    }
+
+    if (!lightbox.classList.contains('open')) {
+      // First open — fade in overlay, image appears after load
+      lbImg.style.opacity = '0';
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      loadAndShow();
+    } else {
+      // Already open — crossfade between images
+      lbImg.style.opacity = '0';
+      setTimeout(loadAndShow, 180);
+    }
   }
 
   function close() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
-    // Clear src after transition so browser doesn't keep image in memory
-    setTimeout(() => { lbImg.src = ''; }, 250);
+    setTimeout(() => { lbImg.src = ''; lbImg.style.opacity = '0'; }, 250);
   }
 
   // Attach click to each thumbnail
