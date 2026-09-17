@@ -1585,6 +1585,65 @@ body.page-home {
 }
 
 
+/* ─ Tablet mid-range 721 – 900 px ─────────────────────────── */
+/*
+  Between the two hero breakpoints the photo still uses desktop sizing
+  and squeezes the info-block to ~100 px of usable width.
+  Fix: shrink the photo to a compact column so info gets full flex space.
+*/
+@media (min-width: 721px) and (max-width: 900px) {
+  .hero-photo {
+    height: 150px;
+    width: auto;
+    margin-left: 20px;
+    margin-right: 0;
+  }
+  .hero-info-block { padding-left: 20px; }
+}
+
+
+/* ─ Fold inner / square / iPad mini  ≤ 720 px ─────────────── */
+/*
+  Galaxy Z Fold inner screen (~717 px), square viewports, and iPad mini
+  all land here. Apply the same compact hero layout as ≤ 480 px:
+  name + thumbnail photo on one row, info text below.
+*/
+@media (max-width: 720px) {
+  .home-hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .hero-name-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-right: 0;
+    margin-left: 0;
+  }
+  .hero-photo {
+    position: static;
+    height: auto;
+    width: clamp(72px, 22vw, 110px);
+    margin: 0;
+    align-self: flex-end;
+    flex-shrink: 0;
+  }
+  .hero-divider { display: none; }
+  .hero-info-block { padding-left: 0; }
+  .hero-about { max-width: 100%; }
+}
+
+
+/* ─ Ultra-narrow ≤ 360 px (Fold cover / compact phones) ────── */
+@media (max-width: 360px) {
+  :root { --side-pad: 16px; }
+  .masonry-item img { height: 130px; }
+  .hero-about { font-size: 13px; line-height: 1.65; }
+  .hero-name  { font-size: clamp(36px, 10vw, 52px); }
+}
+
+
 /* ── Hover delay — 80 ms on enter only, instant exit ──────── */
 .panel:hover, .works-entry:hover { transition-delay: 80ms; }
 
