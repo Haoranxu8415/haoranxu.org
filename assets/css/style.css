@@ -556,7 +556,7 @@ body.page-home {
    Width derives from aspect-ratio — no manual width needed. */
 .hero-photo {
   flex-shrink: 0;
-  height: clamp(180px, 72%, 440px); /* height-driven; width auto via aspect-ratio */
+  height: clamp(160px, 64%, 380px); /* height-driven; width auto via aspect-ratio */
   width: auto;
   aspect-ratio: 2 / 3;
   align-self: center;
