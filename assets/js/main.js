@@ -74,16 +74,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const wrapper = document.querySelector('.nav-wrapper');
 
   if (toggle && wrapper) {
-    toggle.addEventListener('click', () => {
-      const open = wrapper.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', open);
-    });
-    // Close when a link is tapped
-    wrapper.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
+    function setMenuOpen(open) {
+      if (!open && wrapper.classList.contains('open')) {
+        // Animate links back down before fading the overlay
+        wrapper.classList.add('closing');
         wrapper.classList.remove('open');
-        toggle.setAttribute('aria-expanded', false);
-      });
+        setTimeout(() => wrapper.classList.remove('closing'), 320);
+      } else {
+        wrapper.classList.remove('closing');
+        wrapper.classList.toggle('open', open);
+      }
+      toggle.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    toggle.addEventListener('click', () => setMenuOpen(!wrapper.classList.contains('open')));
+
+    // Close on link tap or Escape
+    wrapper.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => setMenuOpen(false))
+    );
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && wrapper.classList.contains('open')) setMenuOpen(false);
     });
   }
 
@@ -127,14 +139,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbPrev  = document.getElementById('lightbox-prev');
   const lbNext  = document.getElementById('lightbox-next');
 
-  // Collect all gallery images in DOM order
-  const imgs = [...document.querySelectorAll('.masonry-item img')];
+  // All gallery images (DOM order, constant)
+  const allImgs = [...document.querySelectorAll('.masonry-item img')];
+  // Visual order snapshot — rebuilt each time the lightbox opens
+  let sortedImgs = [];
   let current = 0;
 
+  // Sort by screen position: top→bottom, then left→right (row-major visual order)
+  function buildVisualOrder() {
+    sortedImgs = [...allImgs].sort((a, b) => {
+      const ra = a.closest('.masonry-item').getBoundingClientRect();
+      const rb = b.closest('.masonry-item').getBoundingClientRect();
+      if (Math.abs(ra.top - rb.top) > 30) return ra.top - rb.top;
+      return ra.left - rb.left;
+    });
+  }
+
   function openAt(idx) {
-    current = (idx + imgs.length) % imgs.length;
-    const src = imgs[current].dataset.full || imgs[current].src;
-    const alt = imgs[current].alt || '';
+    current = (idx + sortedImgs.length) % sortedImgs.length;
+    const src = sortedImgs[current].dataset.full || sortedImgs[current].src;
+    const alt = sortedImgs[current].alt || '';
 
     function loadAndShow() {
       lbImg.alt = alt;
@@ -167,9 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { lbImg.src = ''; lbImg.style.opacity = '0'; }, 250);
   }
 
-  // Attach click to each thumbnail
-  imgs.forEach((img, i) => {
-    img.closest('.masonry-item').addEventListener('click', () => openAt(i));
+  // Attach click to each thumbnail — build visual order on open
+  allImgs.forEach((img) => {
+    img.closest('.masonry-item').addEventListener('click', () => {
+      buildVisualOrder();
+      openAt(sortedImgs.indexOf(img));
+    });
   });
 
   lbClose.addEventListener('click', close);
@@ -192,18 +219,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── 6. Gallery entrance — reveals items in DOM order, 70 ms apart ──── */
+/* ── 6. Gallery entrance — reveals items in visual row-major order, 70 ms apart ──── */
+/*
+  CSS columns flows top→bottom per column (DOM order), but the user sees
+  items left→right across each row. We sort by visual position (top then
+  left, with a 30 px threshold for "same row") after layout so the stagger
+  sweeps across each row rather than down each column.
+*/
 (function () {
   const items = [...document.querySelectorAll('.masonry-item')];
   if (!items.length) return;
 
-  const loaded   = new Array(items.length).fill(false);
-  let nextReveal = 0;
-  let lastSchedAt = performance.now() - 70; // offset so first item gets delay = 0
+  const loadedSet = new Set();
+  let sortedItems = null;   // populated after first rAF paint
+  let nextReveal  = 0;
+  let lastSchedAt = performance.now() - 70;
 
   function tryFlush() {
-    while (nextReveal < items.length && loaded[nextReveal]) {
-      const item  = items[nextReveal];
+    if (!sortedItems) return;
+    while (nextReveal < sortedItems.length && loadedSet.has(sortedItems[nextReveal])) {
+      const item  = sortedItems[nextReveal];
       const now   = performance.now();
       const delay = Math.max(0, lastSchedAt + 70 - now);
       lastSchedAt = now + delay;
@@ -218,16 +253,26 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       observer.unobserve(entry.target);
-      const idx  = items.indexOf(entry.target);
       const img  = entry.target.querySelector('img');
-      const mark = () => { loaded[idx] = true; tryFlush(); };
-      if (img.complete) mark(); // cache hit — reveal immediately
+      const mark = () => { loadedSet.add(entry.target); tryFlush(); };
+      if (img.complete) mark();
       else {
         img.addEventListener('load',  mark, { once: true });
-        img.addEventListener('error', mark, { once: true }); // errors don't block the chain
+        img.addEventListener('error', mark, { once: true });
       }
     });
   }, { threshold: 0.08 });
 
   items.forEach(item => observer.observe(item));
+
+  // After two rAF cycles the browser has painted and getBoundingClientRect is accurate
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    sortedItems = [...items].sort((a, b) => {
+      const ra = a.getBoundingClientRect();
+      const rb = b.getBoundingClientRect();
+      if (Math.abs(ra.top - rb.top) > 30) return ra.top - rb.top;
+      return ra.left - rb.left;
+    });
+    tryFlush();
+  }));
 }());

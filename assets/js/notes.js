@@ -83,7 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(md => {
         const el = document.getElementById(bodyId);
-        if (el) el.innerHTML = marked.parse(stripFrontmatter(md));
+        const cleaned = stripFrontmatter(md);
+        if (el) {
+          el.innerHTML = marked.parse(cleaned);
+          // Inject reading time into post-meta
+          const wordCount = cleaned.replace(/[#*`[\]()>_~-]/g, '').split(/\s+/).filter(Boolean).length;
+          const mins = Math.max(1, Math.ceil(wordCount / 200));
+          const metaEl = card.querySelector('.post-meta');
+          if (metaEl) {
+            const span = document.createElement('span');
+            span.className = 'read-time';
+            span.textContent = `${mins} min read`;
+            metaEl.appendChild(span);
+          }
+        }
       })
       .catch(err => {
         const el = document.getElementById(bodyId);
