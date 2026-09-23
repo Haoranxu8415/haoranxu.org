@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (notesList && typeof POSTS !== 'undefined') {
     const sorted = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
     sorted.slice(0, 3).forEach((p, i) => {
-      const label = new Date(p.date).toLocaleDateString('en-US', {
-        month: 'short', day: 'numeric',
-      });
+      const _d = new Date(p.date);
+      const label = _d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                  + ' ' + _d.getFullYear();
       const a = document.createElement('a');
       a.href      = `notes.html#${p.id}`;
       a.className = 'works-entry';
