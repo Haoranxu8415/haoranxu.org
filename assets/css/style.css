@@ -1080,6 +1080,21 @@ body.page-home {
 .lightbox-prev:hover,
 .lightbox-next:hover { color: var(--gold); border-color: var(--gold-border-em); }
 
+.lightbox-counter {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .22s ease;
+  white-space: nowrap;
+}
+.lightbox.open .lightbox-counter { opacity: 1; }
+
 
 
 /* ── 13. Works Index ──────────────────────────────────────── */

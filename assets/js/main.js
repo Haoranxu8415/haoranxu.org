@@ -130,20 +130,23 @@ document.addEventListener('DOMContentLoaded', () => {
     Collects all .masonry-item img elements on the page.
     Click → open lightbox at that index.
     Arrow buttons / keyboard ← → to navigate; Escape or click-outside to close.
+    Touch: drag preview (live translate) · pinch to zoom · swipe to navigate/close.
   */
   const lightbox  = document.getElementById('lightbox');
   if (!lightbox) return;  // not on gallery page — bail early
 
-  const lbImg   = document.getElementById('lightbox-img');
-  const lbClose = document.getElementById('lightbox-close');
-  const lbPrev  = document.getElementById('lightbox-prev');
-  const lbNext  = document.getElementById('lightbox-next');
+  const lbImg     = document.getElementById('lightbox-img');
+  const lbClose   = document.getElementById('lightbox-close');
+  const lbPrev    = document.getElementById('lightbox-prev');
+  const lbNext    = document.getElementById('lightbox-next');
+  const lbCounter = document.getElementById('lightbox-counter');
 
   // All gallery images (DOM order, constant)
   const allImgs = [...document.querySelectorAll('.masonry-item img')];
   // Visual order snapshot — rebuilt each time the lightbox opens
   let sortedImgs = [];
   let current = 0;
+  let _scale = 1;  // current pinch-zoom level
 
   // Sort by screen position: top→bottom, then left→right (row-major visual order)
   function buildVisualOrder() {
@@ -160,11 +163,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const src = sortedImgs[current].dataset.full || sortedImgs[current].src;
     const alt = sortedImgs[current].alt || '';
 
+    if (lbCounter) lbCounter.textContent = `${current + 1} / ${sortedImgs.length}`;
+
+    // Preload adjacent images
+    [-1, 1].forEach(d => {
+      const i = (current + d + sortedImgs.length) % sortedImgs.length;
+      new Image().src = sortedImgs[i].dataset.full || sortedImgs[i].src;
+    });
+
     function loadAndShow() {
+      _scale = 1;
+      lbImg.style.transition = '';
+      lbImg.style.transform  = '';
       lbImg.alt = alt;
       lbImg.src = src;
       const restore = () => requestAnimationFrame(() => { lbImg.style.opacity = '1'; });
-      // Cached images may already be complete before onload fires
       if (lbImg.complete && lbImg.naturalWidth) restore();
       else {
         lbImg.addEventListener('load',  restore, { once: true });
@@ -173,19 +186,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!lightbox.classList.contains('open')) {
-      // First open — fade in overlay, image appears after load
       lbImg.style.opacity = '0';
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
       loadAndShow();
     } else {
-      // Already open — crossfade between images
+      lbImg.style.transition = '';
+      lbImg.style.transform  = '';
       lbImg.style.opacity = '0';
       setTimeout(loadAndShow, 180);
     }
   }
 
   function close() {
+    _scale = 1;
+    lbImg.style.transition = '';
+    lbImg.style.transform  = '';
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
     setTimeout(() => { lbImg.src = ''; lbImg.style.opacity = '0'; }, 250);
@@ -216,18 +232,82 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight')  openAt(current + 1);
   });
 
-  // Touch swipe: left/right → prev/next  ·  down → close
-  let _tx = 0, _ty = 0;
+  // Touch: drag preview + pinch-to-zoom + swipe-to-navigate/close
+  let _tx = 0, _ty = 0, _pinchDist0 = 0, _scale0 = 1;
+
   lightbox.addEventListener('touchstart', e => {
-    _tx = e.touches[0].clientX;
-    _ty = e.touches[0].clientY;
+    if (e.touches.length === 1) {
+      _tx = e.touches[0].clientX;
+      _ty = e.touches[0].clientY;
+      lbImg.style.transition = 'none';
+    } else if (e.touches.length === 2) {
+      _pinchDist0 = Math.hypot(
+        e.touches[1].clientX - e.touches[0].clientX,
+        e.touches[1].clientY - e.touches[0].clientY
+      );
+      _scale0 = _scale;
+      lbImg.style.transition = 'none';
+    }
   }, { passive: true });
+
+  lightbox.addEventListener('touchmove', e => {
+    if (e.touches.length === 2 && _pinchDist0 > 0) {
+      const dist = Math.hypot(
+        e.touches[1].clientX - e.touches[0].clientX,
+        e.touches[1].clientY - e.touches[0].clientY
+      );
+      _scale = Math.max(0.5, Math.min(4, _scale0 * dist / _pinchDist0));
+      lbImg.style.transform = `scale(${_scale})`;
+    } else if (e.touches.length === 1 && _scale <= 1.05) {
+      // Live drag preview — only when not zoomed in
+      const dx = e.touches[0].clientX - _tx;
+      lbImg.style.transform = `translateX(${dx * 0.6}px)`;
+    }
+  }, { passive: true });
+
   lightbox.addEventListener('touchend', e => {
+    if (e.touches.length === 1 && _pinchDist0 > 0) {
+      // One finger released from pinch — snap back if near 1x, update anchor
+      _pinchDist0 = 0;
+      if (_scale < 1.1) {
+        _scale = 1;
+        lbImg.style.transition = 'transform .25s var(--ease-out)';
+        lbImg.style.transform  = '';
+      }
+      _tx = e.touches[0].clientX;
+      _ty = e.touches[0].clientY;
+      return;
+    }
+    if (e.touches.length > 0) return;
+
+    if (_pinchDist0 > 0) {
+      _pinchDist0 = 0;
+      if (_scale < 1.1) {
+        _scale = 1;
+        lbImg.style.transition = 'transform .25s var(--ease-out)';
+        lbImg.style.transform  = '';
+      }
+      return;
+    }
+
+    // Single-finger swipe completed
     const dx = e.changedTouches[0].clientX - _tx;
     const dy = e.changedTouches[0].clientY - _ty;
-    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 80) { close(); return; }
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+
+    if (_scale > 1.05) {
+      // Zoomed in — restore scale transform, no navigation
+      lbImg.style.transition = 'transform .25s var(--ease-out)';
+      lbImg.style.transform  = `scale(${_scale})`;
+      return;
+    }
+
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 80) {
+      close();
+    } else if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) {
       dx > 0 ? openAt(current - 1) : openAt(current + 1);
+    } else {
+      lbImg.style.transition = 'transform .25s var(--ease-out)';
+      lbImg.style.transform  = '';
     }
   }, { passive: true });
 
