@@ -158,12 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function openAt(idx) {
+  // dir: 1 = forward (next), -1 = backward (prev), 0 = first open
+  function openAt(idx, dir = 0) {
     current = (idx + sortedImgs.length) % sortedImgs.length;
     const src = sortedImgs[current].dataset.full || sortedImgs[current].src;
     const alt = sortedImgs[current].alt || '';
-
-    if (lbCounter) lbCounter.textContent = `${current + 1} / ${sortedImgs.length}`;
 
     // Preload adjacent images
     [-1, 1].forEach(d => {
@@ -173,11 +172,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadAndShow() {
       _scale = 1;
-      lbImg.style.transition = '';
-      lbImg.style.transform  = '';
+      lbImg.style.transition = 'none';
+      // New image starts offset + scaled down; restores with CSS transition
+      lbImg.style.transform = dir !== 0
+        ? `translateX(${dir * 28}px) scale(0.96)`
+        : 'scale(0.96)';
       lbImg.alt = alt;
       lbImg.src = src;
-      const restore = () => requestAnimationFrame(() => { lbImg.style.opacity = '1'; });
+      const restore = () => requestAnimationFrame(() => {
+        lbImg.style.transition = '';   // hand back to CSS (opacity + transform)
+        lbImg.style.opacity    = '1';
+        lbImg.style.transform  = 'scale(1)';
+      });
       if (lbImg.complete && lbImg.naturalWidth) restore();
       else {
         lbImg.addEventListener('load',  restore, { once: true });
@@ -186,25 +192,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!lightbox.classList.contains('open')) {
+      // First open — just set counter text, no tick animation yet
+      if (lbCounter) lbCounter.textContent = `${current + 1} / ${sortedImgs.length}`;
       lbImg.style.opacity = '0';
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
       loadAndShow();
     } else {
-      lbImg.style.transition = '';
-      lbImg.style.transform  = '';
-      lbImg.style.opacity = '0';
+      // Navigating — counter digit slips in, current image slides out
+      if (lbCounter) {
+        lbCounter.classList.remove('tick');
+        void lbCounter.offsetWidth;  // force reflow to restart animation
+        lbCounter.textContent = `${current + 1} / ${sortedImgs.length}`;
+        lbCounter.classList.add('tick');
+      }
+      if (dir !== 0) {
+        lbImg.style.transition = 'opacity .16s ease, transform .16s ease';
+        lbImg.style.transform  = `translateX(${-dir * 28}px) scale(0.96)`;
+        lbImg.style.opacity    = '0';
+      } else {
+        lbImg.style.transition = '';
+        lbImg.style.transform  = '';
+        lbImg.style.opacity    = '0';
+      }
       setTimeout(loadAndShow, 180);
     }
   }
 
   function close() {
     _scale = 1;
-    lbImg.style.transition = '';
-    lbImg.style.transform  = '';
+    if (lbCounter) lbCounter.classList.remove('tick');
+    lbImg.style.transition = 'opacity .18s ease, transform .22s ease';
+    lbImg.style.transform  = 'scale(0.95)';
+    lbImg.style.opacity    = '0';
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(() => { lbImg.src = ''; lbImg.style.opacity = '0'; }, 250);
+    setTimeout(() => {
+      lbImg.src = '';
+      lbImg.style.transition = '';
+      lbImg.style.transform  = '';
+      lbImg.style.opacity    = '0';
+    }, 250);
   }
 
   // Attach click to each thumbnail — build visual order on open
@@ -216,8 +244,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   lbClose.addEventListener('click', close);
-  lbPrev.addEventListener('click',  () => openAt(current - 1));
-  lbNext.addEventListener('click',  () => openAt(current + 1));
+  lbPrev.addEventListener('click',  () => openAt(current - 1, -1));
+  lbNext.addEventListener('click',  () => openAt(current + 1,  1));
 
   // Click the dark backdrop (not the image) to close
   lightbox.addEventListener('click', e => {
@@ -228,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('open')) return;
     if (e.key === 'Escape')      close();
-    if (e.key === 'ArrowLeft')   openAt(current - 1);
-    if (e.key === 'ArrowRight')  openAt(current + 1);
+    if (e.key === 'ArrowLeft')   openAt(current - 1, -1);
+    if (e.key === 'ArrowRight')  openAt(current + 1,  1);
   });
 
   // Touch: drag preview + pinch-to-zoom + swipe-to-navigate/close
@@ -271,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
       _pinchDist0 = 0;
       if (_scale < 1.1) {
         _scale = 1;
-        lbImg.style.transition = 'transform .25s var(--ease-out)';
+        lbImg.style.transition = 'transform .35s var(--spring)';
         lbImg.style.transform  = '';
       }
       _tx = e.touches[0].clientX;
@@ -284,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
       _pinchDist0 = 0;
       if (_scale < 1.1) {
         _scale = 1;
-        lbImg.style.transition = 'transform .25s var(--ease-out)';
+        lbImg.style.transition = 'transform .35s var(--spring)';
         lbImg.style.transform  = '';
       }
       return;
@@ -296,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (_scale > 1.05) {
       // Zoomed in — restore scale transform, no navigation
-      lbImg.style.transition = 'transform .25s var(--ease-out)';
+      lbImg.style.transition = 'transform .35s var(--spring)';
       lbImg.style.transform  = `scale(${_scale})`;
       return;
     }
@@ -304,9 +332,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 80) {
       close();
     } else if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) {
-      dx > 0 ? openAt(current - 1) : openAt(current + 1);
+      dx > 0 ? openAt(current - 1, -1) : openAt(current + 1, 1);
     } else {
-      lbImg.style.transition = 'transform .25s var(--ease-out)';
+      // Snap back with spring overshoot
+      lbImg.style.transition = 'transform .4s var(--spring)';
       lbImg.style.transform  = '';
     }
   }, { passive: true });
