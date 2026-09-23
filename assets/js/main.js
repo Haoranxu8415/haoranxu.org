@@ -216,6 +216,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight')  openAt(current + 1);
   });
 
+  // Touch swipe: left/right → prev/next  ·  down → close
+  let _tx = 0, _ty = 0;
+  lightbox.addEventListener('touchstart', e => {
+    _tx = e.touches[0].clientX;
+    _ty = e.touches[0].clientY;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - _tx;
+    const dy = e.changedTouches[0].clientY - _ty;
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 80) { close(); return; }
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      dx > 0 ? openAt(current - 1) : openAt(current + 1);
+    }
+  }, { passive: true });
+
 });
 
 
