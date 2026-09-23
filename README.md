@@ -1,6 +1,6 @@
 # haoranxu.org
 
-Personal portfolio of Haoran Xu — incoming student at UBC Sauder, building at the intersection of business, design, and technology.
+Personal portfolio of Haoran Xu — student at UBC Sauder BUCS, building at the intersection of business, design, and technology.
 
 **Live site:** [haoranxu.org](https://haoranxu.org)
 
