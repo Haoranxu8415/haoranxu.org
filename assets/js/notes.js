@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!cardCol) return;
   cardCol.innerHTML = '';
 
-  sorted.forEach(p => {
+  const loads = sorted.map(p => {
     const bodyId = `post-body-${p.id.replace('post-', '')}`;
     const card   = document.createElement('div');
     card.id        = p.id;
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cardCol.appendChild(card);
 
     // Fetch and render markdown body
-    fetch(p.file)
+    return fetch(p.file)
       .then(res => {
         if (!res.ok) throw new Error(`${res.status} — ${p.file}`);
         return res.text();
@@ -105,4 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
           `Could not load post. (${err.message})</p>`;
       });
   });
+
+  // Arriving via notes.html#post-N (home panel links): posts above the target
+  // grow as their bodies load and web fonts swap in, so re-align after both.
+  const target = location.hash && document.getElementById(location.hash.slice(1));
+  if (target) {
+    Promise.allSettled([...loads, document.fonts.ready])
+      .then(() => requestAnimationFrame(() => target.scrollIntoView({ block: 'start' })));
+  }
 });

@@ -76,13 +76,15 @@ assets/
 
 ### Add a Gallery Photo
 
-1. Place the full-resolution file in `assets/images/gallery/`.
-2. Create a compressed WebP thumbnail (height 260px) in `assets/images/gallery/thumbs/`.
-3. Add a `.masonry-item` block to `gallery.html`:
+1. Keep the original in `assets/images/gallery/` (archive only — never loaded by the site).
+2. Export two WebP versions (EXIF rotation applied):
+   - `thumbs/photoN.webp` — 720px wide, quality ~78 (masonry grid, home strip)
+   - `large/photoN.webp` — 2400px long edge, quality ~82 (lightbox)
+3. Add a `.masonry-item` block to `gallery.html` (width/height = the thumb's pixel size, prevents layout shift):
    ```html
    <div class="masonry-item">
-     <img src="assets/images/gallery/thumbs/photoN.webp"
-          data-full="assets/images/gallery/photoN.JPG"
+     <img src="assets/images/gallery/thumbs/photoN.webp" width="720" height="480" decoding="async"
+          data-full="assets/images/gallery/large/photoN.webp"
           alt="Description" loading="lazy"
           onerror="this.closest('.masonry-item').style.display='none'" />
    </div>

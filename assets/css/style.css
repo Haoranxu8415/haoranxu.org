@@ -88,7 +88,7 @@ body {
 }
 
 a    { color: inherit; text-decoration: none; }
-img  { display: block; max-width: 100%; }
+img  { display: block; max-width: 100%; height: auto; }
 ul   { list-style: none; }
 
 
@@ -573,9 +573,12 @@ body.page-home {
   overflow: hidden;
   margin-left: 48px;                /* clear visual gap from info block */
   margin-right: 32px;               /* breathing room from right edge */
-  /* Replace placeholder with real photo:
-     style="background-image:url('assets/images/portrait.jpg');
-            background-size:cover; background-position:center top;" */
+}
+.hero-photo img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  object-position: center top;
 }
 
 
@@ -910,18 +913,13 @@ body.page-home {
   width: 100%;
   margin-bottom: 12px;
   cursor: zoom-in;
-  opacity: 0;
-  transform: translateY(8px);
   transition: opacity .45s var(--ease-out), transform .45s var(--ease-out);
 }
-.masonry-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-/* JS disabled: show all items immediately */
-.no-js .masonry-item {
-  opacity: 1;
-  transform: translateY(0);
+/* Hidden for the JS entrance only when JS is running (html.js set inline in <head>);
+   without JS every item is simply visible */
+.js .masonry-item:not(.visible) {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 .masonry-item img {
@@ -1314,6 +1312,7 @@ body.page-home {
 
 /* Post cards — stronger gold border than base .card, champagne accents */
 .post-card {
+  scroll-margin-top: 24px; /* breathing room when opened via notes.html#post-N */
   padding: 16px 18px 16px 22px;
   border-color: rgba(201,169,110,.22);  /* more visible than base 10% */
 }
@@ -1420,7 +1419,8 @@ body.page-home {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 1000px;
+  width: 100%;       /* auto margins in the flex column would otherwise shrink-wrap to content */
+  max-width: 820px;
   margin: 0 auto;
 }
 
@@ -1432,7 +1432,8 @@ body.page-home {
 }
 
 .contact-card {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;      /* equal columns regardless of content length */
   padding: 44px 32px 44px 40px;
   min-height: 160px;
   display: flex;
@@ -1443,15 +1444,18 @@ body.page-home {
   font-family: var(--font-display);
   font-weight: 300;
   font-size: 28px;
+  line-height: 1.2;
   color: var(--gold-light);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  white-space: nowrap;
 }
-.contact-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 6px; }
-.email-list { display: flex; flex-direction: column; gap: 14px; }
-.email-item { display: flex; flex-direction: column; gap: 3px; }
-.email-label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
-.email-item a { font-size: 12px; font-family: 'Courier New', monospace; color: var(--text-secondary); transition: color .2s var(--ease-inout); }
-.email-item a:hover { color: var(--gold); }
+/* Shared label/value list — both top cards use it, so rows sit on the same baselines */
+.contact-list  { display: flex; flex-direction: column; gap: 16px; }
+.contact-item  { display: flex; flex-direction: column; gap: 4px; }
+.contact-label { font-size: 10px; line-height: 1.4; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.contact-value { font-size: 13px; line-height: 1.5; color: var(--text-secondary); overflow-wrap: anywhere; }
+.contact-value a { transition: color .2s var(--ease-inout); }
+.contact-value a:hover { color: var(--gold); }
 
 /* Bottom row: social icons, full width, centered */
 .social-card {
@@ -1459,16 +1463,17 @@ body.page-home {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 48px;
+  gap: clamp(28px, 7vw, 48px);
   padding: 44px 32px;
   min-height: 120px;
 }
 .social-card a {
-  font-size: 42px;
+  font-size: clamp(34px, 9vw, 42px);
   color: var(--text-muted);
   transition: color .25s var(--ease-inout), transform .25s var(--ease-inout);
 }
 .social-card a:hover { color: var(--gold); transform: scale(1.1); }
+.social-card svg { display: block; height: 1em; width: auto; fill: currentColor; }
 
 
 /* ── 17. Responsive ───────────────────────────────────────── */
@@ -1512,7 +1517,7 @@ body.page-home {
   /* Works / contact stack */
   .contact-grid { flex-direction: column; }
   .contact-row-top { flex-direction: column; }
-  .contact-card { padding: 28px 24px; }
+  .contact-card { padding: 28px 24px; flex: none; }  /* stacked: size to content, not 0 basis */
 
   /* Tablet: 3 columns */
   .masonry-grid { columns: 3; }
@@ -1771,7 +1776,7 @@ body.page-home {
 
   .nav-links a:hover,
   .back-link:hover,
-  .email-item a:hover,
+  .contact-value a:hover,
   .not-found-link:hover {
     color: inherit;
     border-color: var(--gold-border);

@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── 1. Page Transitions ─────────────────────────────────── */
   document.querySelectorAll('.nav-links a, .back-link, .panel-link, .works-entry, .btn-cta').forEach(el => {
     el.addEventListener('click', e => {
+      // Let the browser handle new-tab / new-window / download clicks
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || el.target === '_blank') return;
       const href = el.getAttribute('href') || el.closest('a')?.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
       e.preventDefault();
@@ -53,6 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add('fade-out');
       setTimeout(() => { window.location.href = href; }, 200);
     });
+  });
+
+  // Back/forward restores the page from bfcache with .fade-out still applied — undo it
+  window.addEventListener('pageshow', e => {
+    if (!e.persisted) return;
+    document.body.classList.remove('fade-out');
+    pbComplete();
   });
 
 
@@ -122,6 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const pw = document.querySelector('.page-wrapper');
       if (pw) pw.scrollTo({ top: 0, behavior: 'smooth' });
     });
+  }
+
+
+  /* ── 4b. Contact local time — live Vancouver time, PDT/PST switches itself ── */
+  const localTime = document.querySelector('[data-local-time]');
+  if (localTime) {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Vancouver', hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+    });
+    const tick = () => { localTime.textContent = fmt.format(new Date()); };
+    tick();
+    setInterval(tick, 30000);
   }
 
 
@@ -227,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lbImg.style.opacity    = '0';
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
+    if (_returnFocus) { _returnFocus.focus({ preventScroll: true }); _returnFocus = null; }
     setTimeout(() => {
       lbImg.src = '';
       lbImg.style.transition = '';
@@ -235,11 +257,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 250);
   }
 
-  // Attach click to each thumbnail — build visual order on open
+  // Attach click + keyboard (Enter / Space) to each thumbnail — build visual order on open
+  let _returnFocus = null;
   allImgs.forEach((img) => {
-    img.closest('.masonry-item').addEventListener('click', () => {
+    const item = img.closest('.masonry-item');
+    const open = () => {
+      _returnFocus = item;
       buildVisualOrder();
       openAt(sortedImgs.indexOf(img));
+      lbClose.focus({ preventScroll: true });
+    };
+    item.tabIndex = 0;
+    item.setAttribute('role', 'button');
+    item.setAttribute('aria-label', `View photo: ${img.alt}`);
+    item.addEventListener('click', open);
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
     });
   });
 
@@ -255,6 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Keyboard navigation
   document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Tab') {
+      const f = [lbClose, lbPrev, lbNext];
+      const i = f.indexOf(document.activeElement);
+      e.preventDefault();
+      f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+    }
     if (e.key === 'Escape')      close();
     if (e.key === 'ArrowLeft')   openAt(current - 1, -1);
     if (e.key === 'ArrowRight')  openAt(current + 1,  1);
