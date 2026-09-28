@@ -48,7 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
           a.addEventListener('click', e => {
             e.preventDefault();
             const target = document.getElementById(p.id);
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (target) target.scrollIntoView({
+              behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+              block: 'center',
+            });
           });
           timeline.appendChild(a);
         });
@@ -105,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
           `Could not load post. (${err.message})</p>`;
       });
   });
+
+  loads.forEach(p => window.pbTrack?.(p));  // drive the arrival progress bar
 
   // Arriving via notes.html#post-N (home panel links): posts above the target
   // grow as their bodies load and web fonts swap in, so re-align after both.

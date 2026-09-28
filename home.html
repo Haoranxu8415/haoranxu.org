@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- Full hero reveal once per session; later visits get a quiet fade (html.intro-seen) -->
+  <script>try{sessionStorage.getItem('intro')?document.documentElement.classList.add('intro-seen'):sessionStorage.setItem('intro','1')}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Haoran Xu | First-Year BCom at UBC Sauder</title>
   <meta name="description" content="First-year UBC Sauder student building at the intersection of Finance, Design, and Tech." />
@@ -17,6 +19,7 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" /></noscript>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>
 
 <body class="page-home">
