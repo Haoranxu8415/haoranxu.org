@@ -942,17 +942,31 @@ body.page-home {
 .blog-layout .card-col { gap: 20px; }
 
 
-/* ── 11. Gallery Page — Fixed-height flex layout ─────────── */
+/* ── 11. Gallery Page — masonry ──────────────────────────── */
 /*
-  All photos share a fixed height (260px desktop).
-  Width derives from each photo's natural ratio — no cropping.
-  Landscape (3:2) → wider; portrait (2:3) → narrower; same height.
-  Border sits on <img> so it hugs the photo, not empty space.
-  justify-content:center keeps partial rows visually balanced.
+  Equal-width columns, each photo at its natural ratio — no cropping.
+  Border + radius sit on the .masonry-item frame (the photo drifts inside it).
 */
 .masonry-grid {
   columns: 4;
+  --cols: 4;          /* read by main.js — keep in sync with `columns` at each breakpoint */
   column-gap: 12px;
+}
+/*
+  With JS, main.js moves the items into --cols real flex columns (shortest-column-first).
+  CSS multi-column is only the no-JS fallback: WebKit (Safari, all iOS browsers) mispositions
+  animated (opacity/transform) children of multi-column containers — items painted in the
+  wrong column, IntersectionObserver geometry wrong — so the entrance never completed.
+*/
+.masonry-grid.is-split {
+  columns: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.masonry-col {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .masonry-item {
@@ -1598,7 +1612,7 @@ body.page-home {
   .contact-card { padding: 28px 24px; flex: none; }  /* stacked: size to content, not 0 basis */
 
   /* Tablet: 3 columns */
-  .masonry-grid { columns: 3; }
+  .masonry-grid { columns: 3; --cols: 3; }
 
   /* Hamburger visible */
   .menu-toggle { display: flex; }
@@ -1710,7 +1724,7 @@ body.page-home {
   .hero-about { max-width: 100%; }
 
   /* Phone: 2 columns */
-  .masonry-grid { columns: 2; }
+  .masonry-grid { columns: 2; --cols: 2; }
 
   /* Gallery strip: single row of 5 on phone (inherits from tablet rule) */
 
@@ -1820,7 +1834,7 @@ body.page-home {
 /* ─ Ultra-narrow ≤ 360 px (Fold cover / compact phones) ────── */
 @media (max-width: 360px) {
   :root { --side-pad: 16px; }
-  .masonry-grid { columns: 2; }
+  .masonry-grid { columns: 2; --cols: 2; }
   .hero-about { font-size: 13px; line-height: 1.65; }
   .hero-name  { font-size: clamp(36px, 10vw, 52px); }
 }

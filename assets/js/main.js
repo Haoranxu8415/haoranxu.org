@@ -10,7 +10,7 @@
  * 4. Navbar auto-hide · Latest button · Contact local time
  * 5. Lightbox          — zooms from / back to its thumbnail (FLIP), ← → / Escape,
  *                        swipe sideways to navigate, swipe down to close, pinch to zoom
- * 6. Gallery entrance  — reveals .masonry-item in visual order after load
+ * 6. Gallery           — JS masonry columns (WebKit-safe) + staggered entrance
  */
 
 const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)');
@@ -490,60 +490,85 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── 6. Gallery entrance — reveals items in visual row-major order, 70 ms apart ──── */
+/* ── 6. Gallery — masonry columns + entrance (visual row-major order, 70 ms apart) ── */
 /*
-  CSS columns flows top→bottom per column (DOM order), but the user sees
-  items left→right across each row. We sort by visual position (top then
-  left, with a 30 px threshold for "same row") after layout so the stagger
-  sweeps across each row rather than down each column.
+  Items are spread over columns, but the user reads left→right across each
+  row. We sort by visual position (top then left, with a 30 px threshold for
+  "same row") after layout so the stagger sweeps across each row rather than
+  down each column.
 */
 (function () {
   const items = [...document.querySelectorAll('.masonry-item')];
   if (!items.length) return;
 
-  const loadedSet = new Set();
-  let sortedItems = null;   // populated after first rAF paint
-  let nextReveal  = 0;
-  let lastSchedAt = performance.now() - 70;
+  /* Masonry: distribute items into --cols flex columns, each into the currently
+     shortest one (heights from the width/height attributes — no image load needed).
+     Replaces CSS multi-column, which WebKit mis-renders once items animate. */
+  const grid = document.getElementById('masonry-grid');
+  let cols = 0;
+  function split() {
+    const n = parseInt(getComputedStyle(grid).getPropertyValue('--cols'), 10) || 4;
+    if (n === cols) return;
+    cols = n;
+    const columns = Array.from({ length: n }, () => {
+      const c = document.createElement('div');
+      c.className = 'masonry-col';
+      return c;
+    });
+    const heights = new Array(n).fill(0);
+    items.forEach(item => {
+      if (item.style.display === 'none') return;          // failed image (onerror)
+      const img = item.querySelector('img');
+      const ratio = (+img.getAttribute('height') / +img.getAttribute('width')) || 0.67;
+      const i = heights.indexOf(Math.min(...heights));
+      columns[i].appendChild(item);                       // moves the node; listeners stay attached
+      heights[i] += ratio;
+    });
+    grid.replaceChildren(...columns);
+    grid.classList.add('is-split');
+  }
+  split();
+  let resizeRaf = 0;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => { split(); check(); });
+  });
 
-  function tryFlush() {
-    if (!sortedItems) return;
-    while (nextReveal < sortedItems.length && loadedSet.has(sortedItems[nextReveal])) {
-      const item  = sortedItems[nextReveal];
-      const now   = performance.now();
-      const delay = Math.max(0, lastSchedAt + 70 - now);
-      lastSchedAt = now + delay;
-      ;(function (el, d) {
-        setTimeout(() => el.classList.add('visible'), d);
-      })(item, delay);
-      nextReveal++;
-    }
+  /* Entrance: each item fades in once it is on screen and its photo has loaded,
+     staggered 70 ms apart in visual (row-major) order. Items never wait on each
+     other, and visibility comes from getBoundingClientRect on load / scroll —
+     no IntersectionObserver or rAF chain that can stall the whole queue. */
+  const pending = new Set(items);
+  let lastAt = 0;
+
+  function reveal(item) {
+    pending.delete(item);
+    const now = performance.now();
+    const at  = Math.max(now, lastAt + 70);
+    lastAt = at;
+    setTimeout(() => item.classList.add('visible'), at - now);
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      observer.unobserve(entry.target);
-      const img  = entry.target.querySelector('img');
-      const mark = () => { loadedSet.add(entry.target); tryFlush(); };
-      if (img.complete) mark();
-      else {
-        img.addEventListener('load',  mark, { once: true });
-        img.addEventListener('error', mark, { once: true });
-      }
-    });
-  }, { threshold: 0.08 });
+  function check() {
+    if (!pending.size) return;
+    const vh = innerHeight;
+    [...pending]
+      .map(el => [el, el.getBoundingClientRect()])
+      .filter(([el, r]) => r.top < vh && r.bottom > 0 && el.querySelector('img').complete)
+      .sort(([, a], [, b]) => (Math.abs(a.top - b.top) > 30 ? a.top - b.top : a.left - b.left))
+      .forEach(([el]) => reveal(el));
+  }
 
-  items.forEach(item => observer.observe(item));
-
-  // After two rAF cycles the browser has painted and getBoundingClientRect is accurate
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    sortedItems = [...items].sort((a, b) => {
-      const ra = a.getBoundingClientRect();
-      const rb = b.getBoundingClientRect();
-      if (Math.abs(ra.top - rb.top) > 30) return ra.top - rb.top;
-      return ra.left - rb.left;
-    });
-    tryFlush();
-  }));
+  items.forEach(item => {
+    const img = item.querySelector('img');
+    img.addEventListener('load',  check);
+    img.addEventListener('error', () => pending.delete(item));  // onerror hides the item
+  });
+  let scrollRaf = 0;
+  (document.querySelector('.page-wrapper') || window).addEventListener('scroll', () => {
+    cancelAnimationFrame(scrollRaf);
+    scrollRaf = requestAnimationFrame(check);
+  }, { passive: true });
+  window.addEventListener('load', check);
+  check();   // deferred script: styles are applied, layout is readable now
 }());
