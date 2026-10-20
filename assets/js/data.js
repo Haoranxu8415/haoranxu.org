@@ -19,6 +19,13 @@
  *   tags    Tag string shown in meta row
  */
 
+// ISO 'YYYY-MM-DD' → Date at local midnight. new Date('2026-03-29') is UTC midnight,
+// which renders as Mar 28 anywhere west of UTC (e.g. Vancouver).
+function localDate(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
 const WORKS = [
   {
     title: 'Visual Dark Patterns &amp; AI Decision-Making',

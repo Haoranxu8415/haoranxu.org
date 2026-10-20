@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof POSTS === 'undefined') return;
 
   // Newest first
-  const sorted = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sorted = [...POSTS].sort((a, b) => localDate(b.date) - localDate(a.date));
 
   /* ── Timeline sidebar ────────────────────────────────── */
   const timeline = document.querySelector('.timeline-col');
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     timeline.innerHTML = '';
 
     // Group entries by year
-    const years = [...new Set(sorted.map(p => new Date(p.date).getFullYear()))];
+    const years = [...new Set(sorted.map(p => localDate(p.date).getFullYear()))];
     years.forEach(year => {
       const yEl = document.createElement('p');
       yEl.className   = 'timeline-year';
@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
       timeline.appendChild(yEl);
 
       sorted
-        .filter(p => new Date(p.date).getFullYear() === year)
+        .filter(p => localDate(p.date).getFullYear() === year)
         .forEach(p => {
-          const label = new Date(p.date).toLocaleDateString('en-US', {
+          const label = localDate(p.date).toLocaleDateString('en-US', {
             month: 'short', day: 'numeric',
           });
           const a = document.createElement('a');
@@ -63,11 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!cardCol) return;
   cardCol.innerHTML = '';
 
-  const loads = sorted.map(p => {
+  const loads = sorted.map((p, i) => {
     const bodyId = `post-body-${p.id.replace('post-', '')}`;
     const card   = document.createElement('div');
     card.id        = p.id;
     card.className = 'card post-card';
+    card.style.setProperty('--stagger-i', i);
     card.innerHTML =
       `<h2 class="post-title">${p.title}</h2>` +
       `<div class="post-meta">` +

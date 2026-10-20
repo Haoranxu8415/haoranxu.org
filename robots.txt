@@ -1,8 +1,14 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
 
-Disallow: /assets/css/
-Disallow: /assets/js/
+# CSS/JS must stay crawlable: search engines render pages with them, and the
+# home page's Works / Notes lists are built by JS.
+# Note bodies are deliberately kept out of search: notes.html loads them from
+# /posts/, so blocking that folder keeps the article text unindexed.
+Disallow: /posts/
 Disallow: /.github/
 Disallow: /CNAME
 Disallow: /README.md
+Disallow: /TODO.md
+
+Sitemap: https://haoranxu.org/sitemap.xml

@@ -16,12 +16,17 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://haoranxu.org/works/through-the-lens.html</loc>
+    <loc>https://haoranxu.org/works/dark-patterns.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://haoranxu.org/works/economics-strategy.html</loc>
+    <loc>https://haoranxu.org/works/wyef-shadow-walker.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://haoranxu.org/works/kexue-island.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>

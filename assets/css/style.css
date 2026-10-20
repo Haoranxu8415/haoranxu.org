@@ -454,19 +454,20 @@ ul   { list-style: none; }
 
 /* ── 6. Home Page — Two-Row Layout ───────────────────────── */
 /*
-  Desktop: entire page fits in one viewport, no scroll.
-  body.page-home locks overflow; .home-layout splits height 55/45.
+  Desktop: the page fills exactly one viewport, .home-layout splits height 55/45.
+  Below ~640 px of layout height the panels can no longer hold their entries
+  (short laptop windows), so the layout stops shrinking there and the page
+  scrolls instead of clipping the last Works / Notes rows.
 */
 body.page-home {
-  overflow: hidden;
-  height: 100vh;
+  display: flow-root;   /* stop .home-layout's margin-top collapsing through <body> (+52 px of scroll) */
+  overflow-x: hidden;
 }
 
 .home-layout {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--nav-h) - var(--topbar-h));
-  min-height: calc(100vh - var(--nav-h) - var(--topbar-h));
+  height: max(640px, calc(100vh - var(--nav-h) - var(--topbar-h)));
   margin-top: calc(var(--nav-h) + var(--topbar-h));
   padding: 0 var(--side-pad);
   background: var(--bg-base);
@@ -852,6 +853,7 @@ body.page-home {
 .page-wrapper {
   margin-top: var(--topbar-h);
   height: calc(100vh - var(--topbar-h));
+  height: calc(100dvh - var(--topbar-h));  /* iOS Safari: 100vh ignores the toolbar, hiding the bottom */
   padding-top: var(--nav-h);
   scroll-padding-top: var(--nav-h);   /* anchors / scrollIntoView land below the navbar */
   overflow-y: auto;
@@ -1076,6 +1078,7 @@ body.page-home {
 /* ── 12. Lightbox ─────────────────────────────────────────── */
 .lightbox {
   position: fixed;
+  touch-action: none;   /* our pinch / swipe handlers own gestures — no page zoom or scroll behind */
   inset: 0;
   display: flex;
   align-items: center;

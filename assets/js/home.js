@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Works panel ─────────────────────────────────────── */
   const worksList = document.getElementById('home-works-list');
   if (worksList && typeof WORKS !== 'undefined') {
-    const sorted = [...WORKS].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sorted = [...WORKS].sort((a, b) => localDate(b.date) - localDate(a.date));
     sorted.slice(0, 3).forEach((w, i) => {
       const a = document.createElement('a');
       a.href      = w.href;
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Notes panel ─────────────────────────────────────── */
   const notesList = document.getElementById('home-notes-list');
   if (notesList && typeof POSTS !== 'undefined') {
-    const sorted = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sorted = [...POSTS].sort((a, b) => localDate(b.date) - localDate(a.date));
     sorted.slice(0, 3).forEach((p, i) => {
-      const _d = new Date(p.date);
+      const _d = localDate(p.date);
       const label = _d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                   + ' ' + _d.getFullYear();
       const a = document.createElement('a');
