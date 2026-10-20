@@ -11,10 +11,12 @@
   <meta property="og:description" content="Get in touch with Haoran Xu — email, LinkedIn, and other ways to connect." />
   <meta property="og:image"       content="https://haoranxu.org/assets/images/og-portrait.jpg" />
   <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" /></noscript>
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="theme-color" content="#0A1C16" />
+  <meta name="color-scheme" content="dark" />
+  <!-- Self-hosted fonts (see style.css §0); preload the two used above the fold -->
+  <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/style.css" />
   <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -24,7 +26,7 @@
   <div class="top-bar" aria-hidden="true"></div>
 
   <nav class="navbar" role="navigation" aria-label="Main navigation">
-    <a href="home.html" class="nav-logo">Haoran Xu</a>
+    <a href="./" class="nav-logo">Haoran Xu</a>
 
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -32,7 +34,7 @@
 
     <div class="nav-wrapper">
       <ul class="nav-links">
-        <li><a href="home.html">Home</a></li>
+        <li><a href="./">Home</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="works.html">Works</a></li>
         <li><a href="notes.html">Notes</a></li>

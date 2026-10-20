@@ -2,9 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=home.html" />
-  <link rel="canonical" href="home.html" />
-  <title>Haoran Xu</title>
+  <!-- Full hero reveal once per session; later visits get a quiet fade (html.intro-seen) -->
+  <script>try{sessionStorage.getItem('intro')?document.documentElement.classList.add('intro-seen'):sessionStorage.setItem('intro','1')}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Haoran Xu | First-Year BCom at UBC Sauder</title>
+  <meta name="description" content="First-year UBC Sauder student building at the intersection of Finance, Design, and Tech." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://haoranxu.org/" />
+  <link rel="canonical" href="https://haoranxu.org/" />
+  <meta property="og:title"       content="Haoran Xu | First-Year BCom at UBC Sauder" />
+  <meta property="og:description" content="First-year UBC Sauder student building at the intersection of Finance, Design, and Tech." />
+  <meta property="og:image"       content="https://haoranxu.org/assets/images/og-portrait.jpg" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="theme-color" content="#0A1C16" />
+  <meta name="color-scheme" content="dark" />
+  <!-- Self-hosted fonts (see style.css §0); preload the two used above the fold -->
+  <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>
-<body></body>
+
+<body class="page-home">
+
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="./" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <ul class="nav-links">
+        <li><a href="./"   class="active">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="notes.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="home-layout">
+
+    <!-- Hero row -->
+    <section class="home-hero" aria-label="Introduction">
+
+      <div class="hero-name-block">
+        <p class="hero-eyebrow">ideas start as feelings</p>
+        <h1 class="hero-name">
+          Haoran<br>
+          <em>Xu</em>
+        </h1>
+      </div>
+
+      <div class="hero-divider" aria-hidden="true"></div>
+
+      <div class="hero-info-block">
+        <p class="hero-about">
+          I start with the feeling I want to create, then figure out how to build it.
+          Business, technology, and photography are just the languages I happen to speak.
+        </p>
+        <p class="hero-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          First year @ UBC Sauder · BUCS · 2030
+        </p>
+        <div class="hero-tags" aria-label="Interests">
+          <span class="tag">Photography</span>
+          <span class="tag">Research</span>
+          <span class="tag">Design</span>
+          <span class="tag">Business</span>
+        </div>
+      </div>
+
+      <div class="hero-photo">
+        <img src="assets/images/portrait.webp" width="800" height="1200" alt="Portrait of Haoran Xu" fetchpriority="high" decoding="async" />
+      </div>
+
+    </section>
+
+    <!-- Panels row: Gallery · Works · Notes -->
+    <div class="home-panels">
+
+      <!-- Gallery panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">From the Gallery</span>
+          <a href="gallery.html" class="panel-link">Browse all →</a>
+        </div>
+        <div class="gallery-strip">
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 1">
+            <img src="assets/images/gallery/mini/photo2.webp" width="320" height="479" decoding="async" alt="Trees and Roadmark" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 2">
+            <img src="assets/images/gallery/mini/photo3.webp" width="320" height="479" decoding="async" alt="Maple Leaves" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 3">
+            <img src="assets/images/gallery/mini/photo5.webp" width="320" height="479" decoding="async" alt="Cutting Bamboo" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 4">
+            <img src="assets/images/gallery/mini/photo9.webp" width="320" height="213" decoding="async" alt="Stone in the River" />
+          </a>
+          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 5">
+            <img src="assets/images/gallery/mini/photo15.webp" width="320" height="479" decoding="async" alt="Abstract Branches" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Works panel — populated by home.js -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Works</span>
+          <a href="works.html" class="panel-link">All works →</a>
+        </div>
+        <div class="works-entries" id="home-works-list"></div>
+      </div>
+
+      <!-- Notes panel — populated by home.js -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Notes</span>
+          <a href="notes.html" class="panel-link">All notes →</a>
+        </div>
+        <div class="works-entries" id="home-notes-list"></div>
+      </div>
+
+    </div><!-- /.home-panels -->
+
+    <footer class="home-footer">
+      <span>© 2026 Haoran Xu All Rights Reserved</span>
+      <span>haoranxu.org</span>
+    </footer>
+
+  </div><!-- /.home-layout -->
+
+  <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/home.js"></script>
+  <script defer src="assets/js/main.js"></script>
+</body>
 </html>

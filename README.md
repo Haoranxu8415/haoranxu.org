@@ -14,15 +14,16 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 
 - Vanilla HTML / CSS / JavaScript — no frameworks
 - [marked.js](https://marked.js.org) — Markdown rendering for Notes
-- Google Fonts — Cormorant Garamond + DM Sans
-- Font Awesome — contact page icons
+- Cormorant Garamond + DM Sans — self-hosted in `assets/fonts/` (SIL OFL 1.1)
+- Font Awesome brand icons — inlined as SVG on the contact page
 - GitHub Pages — hosting
 - Cloudflare — CDN and DNS
 
 ## Project Structure
 
 ```
-home.html              Home
+index.html              Home (served at /)
+home.html               Redirect to / for old links
 gallery.html            Photography gallery with lightbox
 works.html              Works index
 notes.html              Writing, rendered from Markdown
@@ -32,13 +33,14 @@ works/                  Individual work detail pages
 posts/                  Markdown files for Notes articles
 
 assets/
-  css/style.css         All styles — 17 labelled sections
+  css/style.css         All styles — labelled sections (§0 self-hosted fonts)
+  fonts/                Cormorant Garamond + DM Sans woff2 (latin, latin-ext) + OFL licences
   js/data.js            Single source of truth: WORKS + POSTS arrays
   js/home.js            Populates home page Works + Notes panels
   js/notes.js           Renders Notes timeline and post cards
   js/main.js            Page transitions, progress bar, lightbox, mobile nav
   images/
-    gallery/            Full-res photos + thumbs/ subdirectory
+    gallery/            Originals (archive) + thumbs/ (720w) + large/ (2400) + mini/ (320w, home strip)
     kexue/              Photos for A Winter's Light work page
     bubbles/            Screenshots for Information Bubbles work page
 ```
@@ -80,6 +82,7 @@ assets/
 2. Export two WebP versions (EXIF rotation applied):
    - `thumbs/photoN.webp` — 720px wide, quality ~78 (masonry grid, home strip)
    - `large/photoN.webp` — 2400px long edge, quality ~82 (lightbox)
+   - `mini/photoN.webp` — 320px wide, quality ~72 (only if it goes in the home strip)
 3. Add a `.masonry-item` block to `gallery.html` (width/height = the thumb's pixel size, prevents layout shift):
    ```html
    <div class="masonry-item">
@@ -89,7 +92,7 @@ assets/
           onerror="this.closest('.masonry-item').style.display='none'" />
    </div>
    ```
-4. Optionally add the thumbnail to the home page gallery strip in `home.html`.
+4. Optionally add it to the home page gallery strip in `index.html` (use the `mini/` version).
 
 ## Deployment
 
