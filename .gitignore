@@ -1,0 +1,6 @@
+# macOS
+.DS_Store
+
+# Local editor / tooling config — not part of the site
+.vscode/
+.claude/

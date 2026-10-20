@@ -35,6 +35,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      # Browsers may reuse cached CSS/JS for 10 min (max-age=600) while fetching new
+      # HTML, so right after a deploy returning visitors saw new markup with old styles.
+      # Stamp every CSS/JS reference with this commit so each deploy gets fresh files.
+      - name: Cache-bust CSS/JS references
+        run: |
+          V="${GITHUB_SHA::8}"
+          find . -name '*.html' -not -path './.git/*' -print0 \
+            | xargs -0 sed -i -E "s#(assets/(css|js)/[A-Za-z0-9_-]+\.(css|js))\"#\1?v=${V}\"#g"
+          grep -rhoE 'assets/(css|js)/[^"]+\?v=[0-9a-f]+' --include='*.html' . | sort | uniq -c
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

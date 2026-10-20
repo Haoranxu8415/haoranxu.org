@@ -9,6 +9,5 @@ Disallow: /posts/
 Disallow: /.github/
 Disallow: /CNAME
 Disallow: /README.md
-Disallow: /TODO.md
 
 Sitemap: https://haoranxu.org/sitemap.xml

@@ -94,6 +94,12 @@ assets/
    ```
 4. Optionally add it to the home page gallery strip in `index.html` (use the `mini/` version).
 
+## TODO
+
+**Works**
+- [ ] Add cover images to the work cards on `works.html`
+- [ ] Generate `works.html` cards from `WORKS` in `assets/js/data.js` (add `excerpt` + `cover` fields) so a new work only needs one entry instead of two
+
 ## Deployment
 
 Pushing to `main` triggers the GitHub Actions workflow (`.github/workflows/static.yml`), which deploys the site to GitHub Pages automatically.
