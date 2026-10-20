@@ -528,10 +528,10 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.classList.add('is-split');
   }
   split();
-  let resizeRaf = 0;
+  let resizeTimer = 0;
   window.addEventListener('resize', () => {
-    cancelAnimationFrame(resizeRaf);
-    resizeRaf = requestAnimationFrame(() => { split(); check(); });
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { split(); check(); }, 100);
   });
 
   /* Entrance: each item fades in once it is on screen and its photo has loaded,
@@ -564,11 +564,17 @@ document.addEventListener('DOMContentLoaded', () => {
     img.addEventListener('load',  check);
     img.addEventListener('error', () => pending.delete(item));  // onerror hides the item
   });
-  let scrollRaf = 0;
+  // Throttled on time, not rAF: rAF pauses whenever the page isn't being painted
+  // (background tab, iOS momentum / app switch), which left items stuck invisible.
+  // A trailing call catches whatever settled into view after scrolling stopped.
+  let lastCheck = 0, trailing = 0;
   (document.querySelector('.page-wrapper') || window).addEventListener('scroll', () => {
-    cancelAnimationFrame(scrollRaf);
-    scrollRaf = requestAnimationFrame(check);
+    const now = performance.now();
+    if (now - lastCheck > 100) { lastCheck = now; check(); }
+    clearTimeout(trailing);
+    trailing = setTimeout(check, 150);
   }, { passive: true });
+  document.addEventListener('visibilitychange', check);
   window.addEventListener('load', check);
   check();   // deferred script: styles are applied, layout is readable now
 }());
