@@ -26,6 +26,12 @@ function localDate(iso) {
   return new Date(y, m - 1, d);
 }
 
+// 'YYYY-MM-DD' → 'Mar 29 2026' — the one date format used across the site
+function formatDate(iso) {
+  const d = localDate(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + d.getFullYear();
+}
+
 const WORKS = [
   {
     title: 'Visual Dark Patterns &amp; AI Decision-Making',

@@ -219,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbPrev    = document.getElementById('lightbox-prev');
   const lbNext    = document.getElementById('lightbox-next');
   const lbCounter = document.getElementById('lightbox-counter');
+  const lbCaption = document.getElementById('lightbox-caption');
 
   const allImgs = [...document.querySelectorAll('.masonry-item img')];
   let sortedImgs = [];   // visual order snapshot — rebuilt each time the lightbox opens
@@ -270,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lbImg.style.width  = `${box.width}px`;
     lbImg.style.height = `${box.height}px`;
     lbImg.alt = thumb.alt || '';
+    if (lbCaption) lbCaption.textContent = thumb.alt || '';
     lbImg.src = thumb.currentSrc || thumb.src;
     const full = thumb.dataset.full;
     if (full) {

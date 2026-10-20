@@ -48,10 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
           a.addEventListener('click', e => {
             e.preventDefault();
             const target = document.getElementById(p.id);
-            if (target) target.scrollIntoView({
+            if (!target) return;
+            // Align the post's top (title) under the navbar — 'center' landed mid-article
+            // on any post taller than the screen
+            target.scrollIntoView({
               behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-              block: 'center',
+              block: 'start',
             });
+            history.replaceState(null, '', `#${p.id}`);   // shareable link to this post
           });
           timeline.appendChild(a);
         });
@@ -72,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     card.innerHTML =
       `<h2 class="post-title">${p.title}</h2>` +
       `<div class="post-meta">` +
-        `<span>${p.date}</span>` +
+        `<time datetime="${p.date}">${formatDate(p.date)}</time>` +
         `<span>${p.tags}</span>` +
       `</div>` +
       `<div class="post-divider"></div>` +
