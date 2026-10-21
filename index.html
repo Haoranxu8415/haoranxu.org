@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- Full hero reveal once per session; later visits get a quiet fade (html.intro-seen) -->
-  <script>try{sessionStorage.getItem('intro')?document.documentElement.classList.add('intro-seen'):sessionStorage.setItem('intro','1')}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Haoran Xu | First-Year BCom at UBC Sauder</title>
   <meta name="description" content="First-year UBC Sauder student building at the intersection of Finance, Design, and Tech." />
@@ -17,9 +15,10 @@
   <link rel="apple-touch-icon" href="assets/images/icon.png" />
   <meta name="theme-color" content="#0A1C16" />
   <meta name="color-scheme" content="dark" />
-  <!-- Self-hosted fonts (see style.css §0); preload the two used above the fold -->
+  <!-- Self-hosted fonts (see style.css §0); preload the three used above the fold -->
   <link rel="preload" href="/assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/cormorant-garamond-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-300-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/style.css" />
   <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -36,108 +35,49 @@
     </button>
 
     <div class="nav-wrapper">
+      <p class="nav-index" aria-hidden="true">Index</p>
       <ul class="nav-links">
-        <li><a href="./"   class="active">Home</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="works.html">Works</a></li>
-        <li><a href="notes.html">Notes</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="./" class="active"><span class="nav-label">Home</span><span class="nav-desc" aria-hidden="true">start here</span></a></li>
+        <li><a href="gallery.html"><span class="nav-label">Gallery</span><span class="nav-desc" aria-hidden="true">photographs</span></a></li>
+        <li><a href="works.html"><span class="nav-label">Works</span><span class="nav-desc" aria-hidden="true">research</span></a></li>
+        <li><a href="notes.html"><span class="nav-label">Notes</span><span class="nav-desc" aria-hidden="true">writing</span></a></li>
+        <li><a href="contact.html"><span class="nav-label">Contact</span><span class="nav-desc" aria-hidden="true">say hello</span></a></li>
       </ul>
+      <div class="nav-foot">
+        <a class="mail" href="mailto:me@haoranxu.org">me@haoranxu.org</a>
+        <div class="row">
+          <a href="https://www.linkedin.com/in/ryan-xu-7a6aba396/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Haoranxu8415" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://instagram.com/haoran8415" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <div class="home-layout">
+  <div class="h5-layout">
+    <section class="hero5" id="hero" aria-label="Introduction">
+      <div class="h-top"><p class="edge">ideas start as feelings</p><p class="edge" id="entry"></p></div>
+      <h1 class="h-name" id="name">Haoran<em>Xu</em></h1>
 
-    <!-- Hero row -->
-    <section class="home-hero" aria-label="Introduction">
+      <div class="gear" id="gear" role="list" aria-label="In the bag"></div>
 
-      <div class="hero-name-block">
-        <p class="hero-eyebrow">ideas start as feelings</p>
-        <h1 class="hero-name">
-          Haoran<br>
-          <em>Xu</em>
-        </h1>
+      <figure class="h-self" id="self">
+        <span class="frame"><span class="pic"><img src="assets/images/portrait.webp" width="800" height="1200" alt="Portrait of Haoran Xu" fetchpriority="high" /><span class="stamp" id="stamp"></span></span>
+          <figcaption><span class="k">fig. 00</span><span class="w">the one behind the camera</span></figcaption></span>
+      </figure>
+
+      <div class="h-copy" id="copy">
+        <p class="hero-about">I start with the feeling I want to create, then figure out how to build it.
+          Business, technology, and photography are just the languages I happen to speak.</p>
+        <p class="hero-status"><span class="status-dot" aria-hidden="true"></span>First year @ UBC Sauder · BUCS · 2030</p>
+        <nav class="lt-3" aria-label="Latest" id="lt3"></nav>
       </div>
-
-      <div class="hero-divider" aria-hidden="true"></div>
-
-      <div class="hero-info-block">
-        <p class="hero-about">
-          I start with the feeling I want to create, then figure out how to build it.
-          Business, technology, and photography are just the languages I happen to speak.
-        </p>
-        <p class="hero-status">
-          <span class="status-dot" aria-hidden="true"></span>
-          First year @ UBC Sauder · BUCS · 2030
-        </p>
-        <div class="hero-tags" aria-label="Interests">
-          <span class="tag">Photography</span>
-          <span class="tag">Research</span>
-          <span class="tag">Design</span>
-          <span class="tag">Business</span>
-        </div>
-      </div>
-
-      <div class="hero-photo">
-        <img src="assets/images/portrait.webp" width="800" height="1200" alt="Portrait of Haoran Xu" fetchpriority="high" decoding="async" />
-      </div>
-
     </section>
 
-    <!-- Panels row: Gallery · Works · Notes -->
-    <div class="home-panels">
-
-      <!-- Gallery panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <span class="panel-label">From the Gallery</span>
-          <a href="gallery.html" class="panel-link">Browse all →</a>
-        </div>
-        <div class="gallery-strip">
-          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 1">
-            <img src="assets/images/gallery/mini/photo2.webp" width="320" height="479" decoding="async" alt="Trees and Roadmark" />
-          </a>
-          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 2">
-            <img src="assets/images/gallery/mini/photo3.webp" width="320" height="479" decoding="async" alt="Maple Leaves" />
-          </a>
-          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 3">
-            <img src="assets/images/gallery/mini/photo5.webp" width="320" height="479" decoding="async" alt="Splitting Bamboo" />
-          </a>
-          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 4">
-            <img src="assets/images/gallery/mini/photo9.webp" width="320" height="213" decoding="async" alt="Stone in the River" />
-          </a>
-          <a href="gallery.html" class="photo-thumb" aria-label="Gallery photo 5">
-            <img src="assets/images/gallery/mini/photo15.webp" width="320" height="479" decoding="async" alt="Abstract Branches" />
-          </a>
-        </div>
-      </div>
-
-      <!-- Works panel — populated by home.js -->
-      <div class="panel">
-        <div class="panel-header">
-          <span class="panel-label">Works</span>
-          <a href="works.html" class="panel-link">All works →</a>
-        </div>
-        <div class="works-entries" id="home-works-list"></div>
-      </div>
-
-      <!-- Notes panel — populated by home.js -->
-      <div class="panel">
-        <div class="panel-header">
-          <span class="panel-label">Notes</span>
-          <a href="notes.html" class="panel-link">All notes →</a>
-        </div>
-        <div class="works-entries" id="home-notes-list"></div>
-      </div>
-
-    </div><!-- /.home-panels -->
-
-    <footer class="home-footer">
-      <span>© 2026 Haoran Xu · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a></span>
-      <span>haoranxu.org</span>
-    </footer>
-
-  </div><!-- /.home-layout -->
+    <section class="film" id="film" aria-label="Photographs — drifting strip, hover to stop">
+      <div class="track" id="track"></div>
+    </section>
+  </div>
 
   <script defer src="assets/js/data.js"></script>
   <script defer src="assets/js/home.js"></script>

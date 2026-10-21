@@ -36,9 +36,9 @@ assets/
   css/style.css         All styles — labelled sections (§0 self-hosted fonts)
   fonts/                Cormorant Garamond + DM Sans woff2 (latin, latin-ext) + OFL licences
   js/data.js            Single source of truth: WORKS + POSTS arrays
-  js/home.js            Populates home page Works + Notes panels
+  js/home.js            Home: name/print layout, scattered kit drawings, latest line, film strip
   js/notes.js           Renders Notes timeline and post cards
-  js/main.js            Page transitions, progress bar, lightbox, mobile nav
+  js/main.js            Page transitions, progress bar, lightbox, navbar (ink, frost, mobile index)
   images/
     gallery/            Originals (archive) + thumbs/ (720w) + large/ (2400) + mini/ (320w, home strip)
     kexue/              Photos for A Winter's Light work page
@@ -60,7 +60,7 @@ assets/
      tags:  'Tag One · Tag Two',
    }
    ```
-3. The timeline, post cards, and home preview panel all update automatically.
+3. The timeline, post cards, and the home "Lately writing" line all update automatically.
 
 ### Add a Work
 
@@ -82,7 +82,7 @@ assets/
 2. Export two WebP versions (EXIF rotation applied):
    - `thumbs/photoN.webp` — 720px wide, quality ~78 (masonry grid, home strip)
    - `large/photoN.webp` — 2400px long edge, quality ~82 (lightbox)
-   - `mini/photoN.webp` — 320px wide, quality ~72 (only if it goes in the home strip)
+   - `mini/photoN.webp` — 320px wide, quality ~72 (home film strip)
 3. Add a `.masonry-item` block to `gallery.html` (width/height = the thumb's pixel size, prevents layout shift):
    ```html
    <div class="masonry-item">
@@ -92,7 +92,7 @@ assets/
           onerror="this.closest('.masonry-item').style.display='none'" />
    </div>
    ```
-4. Optionally add it to the home page gallery strip in `index.html` (use the `mini/` version).
+4. Optionally add it to the home film strip (the `P` list in `assets/js/home.js`, uses the `mini/` version).
 
 ## TODO
 

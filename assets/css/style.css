@@ -152,7 +152,7 @@ html, body {
 }
 
 html {
-  background: var(--bg-base); /* fill any gap Opera sidebar causes below .home-layout */
+  background: var(--bg-base); /* fill any gap Opera sidebar causes below the page */
 }
 
 body {
@@ -194,10 +194,31 @@ ul   { list-style: none; }
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--side-pad);
-  background: var(--bg-base);
-  border-bottom: 0.5px solid rgba(201,169,110,.08);
+  border-bottom: 0.5px solid transparent;
   z-index: 1000;
-  transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-inout);
+  transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-inout), border-color .35s var(--ease-inout);
+}
+/* No band: clear at the top, frosted once content scrolls under it (.scrolled, set by main.js).
+   The frost lives on a layer behind the bar — backdrop-filter on .navbar itself would make it
+   the containing block for the fixed phone menu and trap the overlay inside the 50 px bar. */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: rgba(10, 28, 22, .72);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  backdrop-filter: blur(14px) saturate(1.15);
+  opacity: 0;
+  transition: opacity .35s var(--ease-inout);
+}
+.navbar.scrolled { border-bottom-color: rgba(201,169,110,.1); }
+.navbar.scrolled::before { opacity: 1; }
+.navbar:has(.nav-wrapper.open)::before { opacity: 0; }
+.navbar:has(.nav-wrapper.open) { border-bottom-color: transparent; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .navbar::before { background: rgba(10, 28, 22, .95); }
 }
 
 .navbar.hidden { transform: translateY(-120%); }
@@ -212,9 +233,13 @@ ul   { list-style: none; }
   font-size: 17px;
   color: var(--gold);
   letter-spacing: .03em;
-  transition: color var(--dur-fast) var(--ease-inout);
+  transition: color var(--dur-fast) var(--ease-inout), opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
 }
 .nav-logo:hover { color: var(--gold-light); }
+/* Home: the big name is the name; the small one waits until it has scrolled away (main.js) */
+.nav-home .nav-logo { opacity: 0; transform: translateY(4px); pointer-events: none; }
+.nav-home.logo-on .nav-logo,
+.nav-home .navbar:has(.nav-wrapper.open) .nav-logo { opacity: 1; transform: none; pointer-events: auto; }
 
 /* Link list */
 .nav-links {
@@ -229,13 +254,35 @@ ul   { list-style: none; }
   align-items: center;
   height: var(--nav-h);
   padding: 0 11px;
-  font-size: 12px;
-  color: var(--text-muted);
-  letter-spacing: .02em;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: .03em;
   transition: color var(--dur-fast) var(--ease-inout);
 }
-.nav-links a:hover,
+.nav-links a:hover { color: var(--gold-light); }
 .nav-links a.active { color: var(--gold); }
+
+/* Gold ink under the current page: follows hover / focus, settles back, and slides from
+   page to page through the cross-document view transition (placed by main.js) */
+@media (min-width: 901px) { .nav-wrapper { position: relative; } }
+.nav-ink {
+  position: absolute;
+  left: 0;
+  top: calc(50% + 10px);
+  width: 0;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(90deg, rgba(232,213,163,.2), var(--gold) 30%, var(--gold) 70%, rgba(232,213,163,.2));
+  box-shadow: 0 0 6px rgba(201,169,110,.45);
+  transition: transform .5s cubic-bezier(0.16, 1, 0.3, 1), width .5s cubic-bezier(0.16, 1, 0.3, 1), opacity .25s ease;
+  view-transition-name: nav-ink;
+}
+.nav-ink.no-anim { transition: none; }
+::view-transition-group(nav-ink) { animation-duration: .5s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* Phone-menu extras (index label, one-line notes, contact foot) — shown ≤ 900 px only */
+.nav-index, .nav-desc, .nav-foot { display: none; }
 
 /* Hamburger — visible only on mobile (see responsive section) */
 .menu-toggle {
@@ -351,50 +398,6 @@ ul   { list-style: none; }
 }
 
 
-/* Direction 1 — Hero clip-path ──────────────────────────── */
-/*
-  @supports gates out browsers that can't animate clip-path (IE, very old mobile).
-  Inside the block, .home-layout animation is silenced so we don't get
-  a double-fade (whole layout + individual elements both fading from 0).
-  Fallback: browser ignores the @supports block; .home-layout pageIn runs as before.
-*/
-@supports (clip-path: inset(0 0 0 0)) {
-  @media (prefers-reduced-motion: no-preference) {
-    /* .page-home prefix: must outrank the later base .home-layout { animation: pageIn } */
-    .page-home .home-layout { animation: none; }
-
-    .hero-eyebrow {
-      animation: clipReveal .6s var(--ease-out) both;
-    }
-    .hero-name {
-      animation: clipReveal .75s var(--ease-out) both;
-      animation-delay: .08s;
-    }
-    .hero-info-block {
-      animation: clipReveal .6s var(--ease-out) both;
-      animation-delay: .16s;
-    }
-    .hero-photo {
-      /* reveals portrait from bottom */
-      animation: clipReveal .7s var(--ease-out) both;
-      animation-delay: .2s;
-    }
-  }
-}
-
-/* Returning to Home in the same session (html.intro-seen, set inline in index.html):
-   skip the reveal sequence — a quiet fade is enough the second time round */
-.intro-seen .hero-eyebrow,
-.intro-seen .hero-name,
-.intro-seen .hero-info-block,
-.intro-seen .hero-photo,
-.intro-seen .works-entry,
-.intro-seen .notes-entry { animation: none; }
-@media (prefers-reduced-motion: no-preference) {
-  .intro-seen .home-layout { animation: pageIn var(--dur-base) var(--ease-out) both; }
-}
-
-
 /* Direction 2 — Stagger entrance ────────────────────────── */
 /*
   JS sets style="--stagger-i: N" (0-based) on each card / entry.
@@ -407,11 +410,6 @@ ul   { list-style: none; }
   .post-card {
     animation: staggerIn var(--dur-slow) var(--ease-out) both;
     animation-delay: calc(var(--stagger-i, 0) * 90ms + 150ms);
-  }
-  .works-entry,
-  .notes-entry {
-    animation: staggerIn var(--dur-slow) var(--ease-out) both;
-    animation-delay: calc(var(--stagger-i, 0) * 70ms + 300ms);
   }
   .contact-card,
   .social-card {
@@ -453,18 +451,8 @@ ul   { list-style: none; }
   .masonry-item also needs transition: none so the JS entrance is instant.
 */
 @media (prefers-reduced-motion: reduce) {
-  .hero-eyebrow,
-  .hero-name,
-  .hero-info-block,
-  .hero-photo {
-    animation: none !important;
-    clip-path: none !important;
-    opacity: 1 !important;
-  }
   .work-card,
   .post-card,
-  .works-entry,
-  .notes-entry,
   .contact-card,
   .social-card {
     animation: none !important;
@@ -525,397 +513,111 @@ ul   { list-style: none; }
 }
 
 
-/* ── 6. Home Page — Two-Row Layout ───────────────────────── */
+/* ── 6. Home Page — field notes ──────────────────────────── */
 /*
-  Desktop: the page fills exactly one viewport; the panels row takes its content height and the hero gets the rest.
-  Below ~640 px of layout height the panels can no longer hold their entries
-  (short laptop windows), so the layout stops shrinking there and the page
-  scrolls instead of clipping the last Works / Notes rows.
+  A photographer's desk: one print (the portrait, on paper with its label written on the border)
+  that "Haoran" and "Xu" cross with depth; the kit, drawn in gold line, is scattered into the
+  empty space around it (placed by home.js); a strip of film drifts below.
 */
-body.page-home {
-  display: flow-root;   /* stop .home-layout's margin-top collapsing through <body> (+52 px of scroll) */
-  overflow-x: hidden;
-}
+/* Intro copy and status line (home); identity tags (contact, works) */
+.hero-about { font-size: 15px; line-height: 1.75; color: var(--text-secondary); max-width: 520px; margin-bottom: 16px; }
+.hero-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); letter-spacing: .02em; margin-bottom: 14px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; box-shadow: 0 0 5px rgba(201,169,110,.5); }
+.tag { font-size: 11px; letter-spacing: .08em; color: var(--gold); border: 0.5px solid var(--gold-border-em); border-radius: 4px; padding: 3px 10px; }
 
-.home-layout {
-  display: flex;
-  flex-direction: column;
-  height: max(640px, calc(100vh - var(--nav-h) - var(--topbar-h)));
-  margin-top: calc(var(--nav-h) + var(--topbar-h));
-  padding: 0 var(--side-pad);
-  background: var(--bg-base);
-  animation: pageIn var(--dur-slow) var(--ease-out) both;
-}
+:root { --film: #060b08; --gut: clamp(20px, 4.2vw, 64px); --edge: rgba(201,169,110,.5);
+  --stamp: #FF9B50; --paper: #E9E1CF; }
+body.page-home { overflow-x: clip; }
+.h5-layout { animation: pageIn var(--dur-slow) var(--ease-out) both; }
+.edge { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--edge); font-variant-numeric: tabular-nums; }
 
-/* Top row: 75 % — hero gets most of the viewport */
-.home-hero {
-  flex: 1 1 auto;     /* takes whatever the panels leave; the portrait scales with it */
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  overflow: hidden;
-  border-bottom: 0.5px solid var(--gold-border);
-}
+.h5-layout { height: 100svh; min-height: 640px; display: flex; flex-direction: column;
+  padding-top: calc(var(--nav-h) + var(--topbar-h)); }
 
-/* Bottom row: sized by its content, so wrapped two-line titles never get clipped */
-.home-panels {
-  flex: 0 0 auto;
-  display: flex;
-  gap: 0;
-  align-items: stretch;
-  padding: 14px 0 14px;
-  overflow: hidden;
-}
+.hero5 { flex: 1 1 auto; min-height: 0; position: relative;
+  padding: clamp(14px, 2.6vh, 32px) var(--gut) clamp(16px, 2.6vh, 30px); perspective: 1200px; }
+.hero5::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(232,213,163,.07) 1px, transparent 1.3px) 0 0 / 26px 26px;
+  mask-image: linear-gradient(to bottom, #000 55%, transparent); }
+.h-top { position: relative; z-index: 3; display: flex; justify-content: space-between; gap: 16px; }
 
-/* Footer bar — slim copyright line at the very bottom of the home layout */
-.home-footer {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 0 10px;
-  border-top: 0.5px solid var(--gold-border);
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-style: italic;
-  font-size: 13px;
-  color: var(--gold);
-  opacity: .6;
-  letter-spacing: .03em;
-}
-.home-footer a {
-  text-decoration: underline;
-  text-decoration-thickness: .5px;
-  text-underline-offset: 3px;
-}
+.h-name { position: relative; z-index: 4; margin: clamp(4px, 1.5vh, 18px) 0 0 -.04em !important;
+  font-family: var(--font-display); font-weight: 300; color: var(--gold);
+  line-height: .8; letter-spacing: -.012em; pointer-events: none;
+  text-shadow: 0 1px 0 rgba(0,0,0,.18), 0 .06em .1em rgba(4,10,7,.35), 0 .14em .45em rgba(4,10,7,.38);
+  transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+.h-name em { display: block; font-style: italic; color: var(--gold-light); }
 
+.h-copy { position: absolute; z-index: 3; left: var(--gut); bottom: clamp(16px, 2.6vh, 30px); max-width: 520px; }
+.h-copy .hero-about { font-size: clamp(13.5px, 1.02vw, 15.5px); line-height: 1.7; max-width: 46ch; margin: 0 0 12px; }
+.h-copy .hero-status { margin: 0; }
 
-/* ── 7. Home Page — Hero ──────────────────────────────────── */
+/* the one print on the desk: the portrait on paper, with its label written on the border */
+.h-self { position: absolute; z-index: 2; margin: 0; transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+.h-self .frame { position: relative; display: flex; flex-direction: column; padding: 3.2% 3.2% 0; background: var(--paper); border-radius: 1px;
+  transform: rotate(-2deg); box-shadow: 0 30px 50px -22px rgba(0,0,0,.7), 0 2px 5px rgba(0,0,0,.25); }
+.h-self .pic { position: relative; }
+.h-self img { width: 100%; aspect-ratio: 4 / 5; height: auto; object-fit: cover; object-position: 50% 14%; display: block; filter: saturate(.9); }
+.h-self figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  padding: .7em .3em .9em; white-space: nowrap; color: #3d3a32; font-size: var(--cap, 14px); }
+.h-self figcaption .k { font: 500 .62em/1 var(--font-ui); letter-spacing: .16em; text-transform: uppercase; opacity: .7; }
+.h-self figcaption .w { font: italic 300 1.05em/1 var(--font-display); }
+.stamp { position: absolute; right: 5%; bottom: 4%; font: 500 12px/1 var(--font-ui); letter-spacing: .12em;
+  color: var(--stamp); opacity: .9; font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 4px rgba(255,120,40,.6), 0 0 10px rgba(255,100,30,.3); }
 
-/* Left block: eyebrow + name */
-.hero-name-block {
-  flex-shrink: 0;
-  min-width: 260px;
-  padding-right: 56px;
-  margin-left: 32px;
-}
+/* the kit, scattered across the empty desk */
+.gear { position: absolute; inset: 0; z-index: 1; pointer-events: none; transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); }
+.g { position: absolute; left: 0; top: 0; pointer-events: auto; color: var(--gold); opacity: 0; transition: opacity .6s ease, color var(--dur-base) var(--ease-inout); }
+.g.in { opacity: .8; }
+.g svg { display: block; width: 100%; height: 100%; overflow: visible;
+  fill: var(--bg-base); stroke: currentColor; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.g svg * { vector-effect: non-scaling-stroke; }
+.g svg .o { fill: none; } .g svg .d { fill: none; opacity: .45; } .g svg .s { fill: currentColor; stroke: none; opacity: .55; }
+.g .lbl { position: absolute; left: 50%; top: calc(100% + 8px); transform: translateX(-50%); white-space: nowrap; text-align: center;
+  font-size: 9.5px; letter-spacing: .2em; color: var(--edge); }
+.g .lbl b { font: italic 300 13.5px/1 var(--font-display); letter-spacing: 0; color: var(--gold-light);
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-inout); }
+.g:hover { color: var(--gold-light); opacity: 1; }
+.g:hover .lbl b { opacity: 1; }
 
-.hero-eyebrow {
-  font-size: 12px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
+/* V3 — one line that alternates */
+.lt-3 { margin-top: 18px; display: grid; font-size: clamp(16px, 1.3vw, 20px); }
+.lt-3 a { grid-area: 1 / 1; display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 2px; align-items: baseline;
+  opacity: 0; transform: translateY(8px); transition: opacity .5s ease, transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.lt-3 a.on { opacity: 1; transform: none; }
+.lt-3 a:not(.on) { pointer-events: none; }
+.lt-k { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); opacity: .8; white-space: nowrap; }
+.lt-t { font-family: var(--font-display); font-weight: 300; font-style: italic; color: var(--gold-light); }
+.lt-3 a:hover .lt-t { color: #fff3d6; }
 
-.hero-name {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(52px, 6.4vw, 104px);
-  line-height: 1;
-  color: var(--gold);
-}
-.hero-name em {
-  font-style: italic;
-  color: var(--gold-light);
-}
+/* ── Film row (unchanged from v4) ── */
+.film { flex: 0 0 auto; height: clamp(150px, 23svh, 250px); background: var(--film); position: relative;
+  overflow: hidden; border-top: 0.5px solid var(--gold-border); cursor: grab;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.film.dragging { cursor: grabbing; }
+.film::before, .film::after { content: ''; position: absolute; left: 0; right: 0; height: 9px; z-index: 2; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9'%3E%3Crect x='6' y='1' width='11' height='7' rx='1.6' fill='%23E8D5A3' fill-opacity='.13'/%3E%3C/svg%3E") repeat-x; }
+.film::before { top: 8px; } .film::after { bottom: 8px; }
+.track { position: absolute; top: 24px; bottom: 34px; left: 0; display: flex; gap: 12px; will-change: transform; }
+.track a { position: relative; height: 100%; flex: none; display: block; }
+.track img { height: 100%; width: auto; display: block; border-radius: 1px; user-select: none; -webkit-user-drag: none;
+  transition: filter var(--dur-base) var(--ease-inout); }
+.track a:hover img { filter: brightness(1.1); }
+.track .n { position: absolute; left: 0; top: calc(100% + 6px); white-space: nowrap; font-size: 9.5px; }
+.track .ttl { position: absolute; right: 0; top: calc(100% + 5px); font-family: var(--font-display); font-style: italic;
+  font-size: 12.5px; color: var(--gold-light); opacity: 0; white-space: nowrap; transition: opacity var(--dur-base) var(--ease-inout); }
+.track a:hover .ttl { opacity: 1; }
+.track a:hover .n { opacity: 0; }
 
-/* Vertical rule separator — 24px gaps (was 32px) closes the left gap on info text */
-.hero-divider {
-  width: 0.5px;
-  background: var(--gold-border);
-  align-self: stretch;
-  margin: 14px 24px;
-  flex-shrink: 0;
-}
-
-/* Right info block: about · status · tags */
-.hero-info-block {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  padding-left: 48px;
-}
-
-.hero-about {
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--text-secondary);
-  max-width: 520px;
-  margin-bottom: 16px;
-}
-
-/* Status line with live-looking dot */
-.hero-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--text-muted);
-  letter-spacing: .02em;
-  margin-bottom: 14px;
-}
-.status-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-  box-shadow: 0 0 5px rgba(201,169,110,.5);
-}
-
-/* Identity tags */
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.tag {
-  font-size: 11px;
-  letter-spacing: .08em;
-  color: var(--gold);
-  border: 0.5px solid var(--gold-border-em);
-  border-radius: 4px;
-  padding: 3px 10px;
-}
-
-/* Portrait photo — height-driven 2:3, right edge of hero.
-   Height is a percentage of the hero row (whatever the panels leave of .home-layout
-   explicit height), so 72% fills most of the hero without overflow.
-   Width derives from aspect-ratio — no manual width needed. */
-.hero-photo {
-  flex-shrink: 0;
-  height: clamp(160px, 64%, 380px); /* height-driven; width auto via aspect-ratio */
-  width: auto;
-  aspect-ratio: 2 / 3;
-  align-self: center;
-  background: var(--bg-surface);
-  border: 0.5px solid var(--gold-border);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-left: 48px;                /* clear visual gap from info block */
-  margin-right: 32px;               /* breathing room from right edge */
-}
-.hero-photo { position: relative; }
-.hero-photo img {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-  object-position: center top;
-  /* A light touch only: keep the portrait bright, just ease the colour a little */
-  filter: brightness(.96) saturate(.9) contrast(1.03);
-}
-/* Faint edge vignette so the bright backdrop doesn't meet the dark page with a hard edge */
-.hero-photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 95% 85% at 50% 40%, transparent 70%, rgba(10, 28, 22, .22) 100%);
-}
-
-
-/* ── 8. Home Page — Bottom Panels ────────────────────────── */
-
-/* Shared panel card — compact padding to fit the 25% row */
-/* Frameless like the cards: the three panels are divided by vertical hairlines */
-.panel {
-  flex: 1;
-  padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-}
-.home-panels .panel:not(:last-child) { padding-right: 22px; }
-.home-panels .panel + .panel {
-  border-left: 0.5px solid var(--gold-border);
-  padding-left: 22px;
-}
-
-/* Panel header row: label + link */
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: clamp(4px, 0.8vh, 7px);
-  flex-shrink: 0;
-}
-.panel-label {
-  font-size: 11px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .75;
-}
-.panel-link {
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: .03em;
-  transition: color var(--dur-fast) var(--ease-inout);
-}
-.panel-link:hover { color: var(--gold); }
-
-/* Gallery panel takes 2× the flex share; Works + Notes each take 1× */
-.home-panels .panel:first-child { flex: 1.4; }  /* leaves Works / Notes room for full titles */
-
-/* ─ Gallery strip: 4 portrait (2:3) photos in a row ─ */
-.gallery-strip {
-  display: flex;
-  gap: 7px;
-  flex: 1;
-  min-height: 0;
-  align-items: stretch;
-}
-.photo-thumb {
-  flex: 1;
-  height: auto;
-  aspect-ratio: 2 / 3;
-  background: var(--bg-lift);
-  border-radius: 5px;
-  overflow: hidden;
-  border: 0.5px solid var(--gold-border);
-  transition: border-color var(--dur-fast) var(--ease-inout), opacity var(--dur-fast) var(--ease-inout);
-  /* Real photo: add style="background-image:url(...);background-size:cover" */
-}
-.photo-thumb:hover { border-color: rgba(201,169,110,.3); opacity: .9; }
-.photo-thumb img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-
-/* ─ Works panel entries — minimal rule lines, no nested cards ─ */
-.works-entries {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
-.works-entry {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: center;
-  gap: clamp(1px, 0.3vh, 2px);
-  padding: 0 8px 0 12px;
-  /* No background, no border-radius, no border box */
-  transition: color var(--dur-fast) var(--ease-inout);
-}
-/* Divider between entries — not on first child */
-.works-entry + .works-entry {
-  border-top: 0.5px solid var(--gold-border);
-}
-/* Left gold bar — slides in from 0 height on hover */
-.works-entry::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 20%;
-  width: 2px;
-  height: 0;
-  background: var(--gold);
-  border-radius: 1px;
-  transition: height var(--dur-base) var(--ease-out), top var(--dur-base) var(--ease-out);
-}
-.works-entry:hover::before {
-  top: 15%;
-  height: 70%;
-}
-.works-entry-tag {
-  font-size: 11px;
-  letter-spacing: .10em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .6;
-}
-.works-entry-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.works-entry-title {
-  font-size: 13px;
-  line-height: 1.35;
-  color: var(--text-secondary);
-  /* Wrap to a second line rather than cutting titles mid-word; clamp beyond two */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-  transition: color var(--dur-fast) var(--ease-inout);
-}
-.works-entry:hover .works-entry-title { color: var(--text-primary); }
-.works-arrow {
-  color: var(--text-dim);
-  font-size: 11px;
-  flex-shrink: 0;
-  margin-left: 8px;
-  transition: transform var(--dur-fast) var(--ease-inout), color var(--dur-fast) var(--ease-inout);
-}
-.works-entry:hover .works-arrow {
-  transform: translateX(3px);
-  color: var(--gold);
-}
-
-.notes-entry {
-  position: relative;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: 0;
-  overflow: hidden;
-  min-width: 0;
-  padding: 0 8px 0 12px;
-  transition: color var(--dur-fast) var(--ease-inout);
-}
-.notes-entry + .notes-entry {
-  border-top: 0.5px solid var(--gold-border);
-}
-.notes-entry::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 20%;
-  width: 2px;
-  height: 0;
-  background: var(--gold);
-  border-radius: 1px;
-  transition: height var(--dur-base) var(--ease-out), top var(--dur-base) var(--ease-out);
-}
-.notes-entry:hover::before {
-  top: 15%;
-  height: 70%;
-}
-.notes-entry:hover .notes-entry-title { color: var(--text-primary); }
-.notes-entry-title {
-  font-size: 13px;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 1;
-  min-width: 0;
-  transition: color var(--dur-fast) var(--ease-inout);
-}
-/* Dot leader — fills remaining space between title and date */
-.notes-entry-dots {
-  flex: 1;
-  border-bottom: 1px dotted var(--text-dim);
-  margin: 0 8px;
-  position: relative;
-  top: -2px;
-  min-width: 12px;
-  flex-shrink: 0;
-}
-.notes-entry-date {
-  font-size: clamp(9px, 1.1vh, 11px);
-  color: var(--text-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
+@media (max-width: 900px) {
+  .h5-layout { height: auto; min-height: 0; }
+  .hero5 { padding-top: 22px; }
+  .h-top .edge:last-child { display: none; }
+  .h-name { margin-top: 16px !important; }
+  .h-copy { position: relative; left: auto; bottom: auto; max-width: none; }
+  .lt-3 { font-size: 16px; }
+  .film { height: clamp(170px, 30svh, 260px); }
 }
 
 
@@ -1786,42 +1488,6 @@ body.page-home {
     --side-pad: 24px;  /* switch from 14 vw to fixed padding */
   }
 
-  /* Home page becomes scrollable on tablet/mobile */
-  body.page-home { overflow: auto; height: auto; }
-
-  .home-layout {
-    height: auto;
-    overflow: visible;
-    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  }
-  .home-hero {
-    flex: none;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 28px 0 24px;
-    border-bottom: 0.5px solid var(--gold-border);
-  }
-  .home-panels {
-    flex: none;
-    flex-direction: column;
-    padding: 20px 0;
-    overflow: visible;
-  }
-  /* Stacked on narrow screens: horizontal hairlines instead of vertical */
-  .home-panels .panel:not(:last-child) { padding-right: 0; }
-  .home-panels .panel + .panel {
-    border-left: none;
-    padding-left: 0;
-    border-top: 0.5px solid var(--gold-border);
-    padding-top: 18px;
-  }
-
-  .home-footer { display: none; }
-
-  /* Panel photo strip: single row of 5 on tablet/mobile */
-  .gallery-strip { flex-wrap: nowrap; align-items: stretch; }
-  .photo-thumb { flex: 1; height: auto; width: auto; aspect-ratio: 2 / 3; min-width: 0; }
-
   /* Timeline sidebar hidden below 900px */
   .timeline-col { display: none; }
 
@@ -1855,106 +1521,151 @@ body.page-home {
   .menu-toggle,
   .nav-logo { position: relative; z-index: 1000; }
 
-  /* Full-screen overlay — opacity-driven so transitions can play */
+  /* Phone menu: the notebook's index page. The page unrolls from the top, the links rise out
+     of their rows, the rules draw left → right, and the contact line fades in at the foot. */
+  .nav-ink { display: none; }
   .nav-wrapper {
     position: fixed;
     inset: 0;
-    background: var(--bg-base);
     z-index: 999;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0 var(--side-pad) calc(var(--nav-h) * 1.5);
-    opacity: 0;
+    justify-content: flex-start;
+    padding: calc(var(--nav-h) + var(--topbar-h) + 26px) var(--side-pad) calc(26px + env(safe-area-inset-bottom, 0px));
+    background:
+      radial-gradient(circle, rgba(232,213,163,.06) 1px, transparent 1.3px) 0 0 / 26px 26px,
+      var(--bg-base);
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity var(--dur-base) var(--ease-out);
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path .55s cubic-bezier(0.7, 0, 0.2, 1), visibility 0s linear .55s;
   }
   .nav-wrapper.open {
-    opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    clip-path: inset(0 0 0 0);
+    transition: clip-path .55s cubic-bezier(0.7, 0, 0.2, 1), visibility 0s;
   }
+  .nav-wrapper.closing { transition-duration: .32s, 0s; transition-delay: 0s, .32s; }
 
-  /* Large typographic links */
+  .nav-index {
+    display: block;
+    margin-bottom: 14px;
+    font-size: 10.5px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(201,169,110,.5);
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease-out);
+  }
+  .nav-wrapper.open .nav-index { opacity: 1; transition-delay: .2s; }
+
   .nav-links {
+    position: relative;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0;
+    width: 100%;
+    margin-right: 0;
   }
-  .nav-links li {
-    border-bottom: none;
-    overflow: hidden;
+  .nav-links li { position: relative; overflow: hidden; }
+  /* Rules between the rows, drawn in one after another */
+  .nav-links::before,
+  .nav-links li::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 0.5px;
+    background: var(--gold-border-em);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .6s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .nav-links li:last-child { border-bottom: none; }
+  .nav-links::before { top: 0; }
+  .nav-links li::after { bottom: 0; }
+  .nav-wrapper.open .nav-links::before,
+  .nav-wrapper.open .nav-links li::after { transform: none; }
+  .nav-wrapper.open .nav-links::before { transition-delay: .18s; }
+  .nav-wrapper.open .nav-links li:nth-child(1)::after { transition-delay: .24s; }
+  .nav-wrapper.open .nav-links li:nth-child(2)::after { transition-delay: .30s; }
+  .nav-wrapper.open .nav-links li:nth-child(3)::after { transition-delay: .36s; }
+  .nav-wrapper.open .nav-links li:nth-child(4)::after { transition-delay: .42s; }
+  .nav-wrapper.open .nav-links li:nth-child(5)::after { transition-delay: .48s; }
 
   .nav-links a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    height: auto;
+    padding: 12px 0 10px;
     font-family: var(--font-display);
     font-weight: 300;
     font-style: italic;
-    font-size: clamp(38px, 9vw, 58px);
+    font-size: clamp(34px, 9.5vw, 52px);
     letter-spacing: .01em;
-    color: var(--text-muted);  /* ~4.8:1 — text-dim (~2:1) made the menu hard to read */
-    display: block;
-    height: auto;
-    padding: 5px 0;
-    width: auto;
-    background: transparent;
-    position: static;
-    transform: translateY(22px);
+    color: var(--text-secondary);
+    transform: translateY(105%);
     opacity: 0;
     transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-slow) var(--ease-out), color var(--dur-fast) var(--ease-inout);
   }
-  .nav-links a::before { display: none; }
-
-  /* Links sweep up one by one on open */
-  .nav-wrapper.open .nav-links a { transform: translateY(0); opacity: 1; }
-  .nav-wrapper.open .nav-links li:nth-child(1) a { transition-delay: .06s; }
-  .nav-wrapper.open .nav-links li:nth-child(2) a { transition-delay: .12s; }
-  .nav-wrapper.open .nav-links li:nth-child(3) a { transition-delay: .18s; }
-  .nav-wrapper.open .nav-links li:nth-child(4) a { transition-delay: .24s; }
-  .nav-wrapper.open .nav-links li:nth-child(5) a { transition-delay: .30s; }
-
-  .nav-links a:hover  { color: var(--gold-light); background: transparent; }
+  .nav-wrapper.open .nav-links a { transform: none; opacity: 1; }
+  .nav-wrapper.open .nav-links li:nth-child(1) a { transition-delay: .16s; }
+  .nav-wrapper.open .nav-links li:nth-child(2) a { transition-delay: .22s; }
+  .nav-wrapper.open .nav-links li:nth-child(3) a { transition-delay: .28s; }
+  .nav-wrapper.open .nav-links li:nth-child(4) a { transition-delay: .34s; }
+  .nav-wrapper.open .nav-links li:nth-child(5) a { transition-delay: .40s; }
+  .nav-links a:hover  { color: var(--gold-light); }
   .nav-links a.active { color: var(--gold); }
 
-  /* Links always flex inside the overlay (visibility handled by parent opacity) */
-  .navbar .nav-links { display: flex; }
+  /* One line per page, right-aligned like an index entry */
+  .nav-desc {
+    display: inline;
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10.5px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(201,169,110,.5);
+    white-space: nowrap;
+  }
+  .nav-links a.active .nav-desc { color: var(--gold); }
+  .nav-links a.active .nav-desc::before { content: '● '; font-size: 7px; vertical-align: 2px; }
 
-  /* Closing: links sweep back down quickly so animation is visible before overlay fades */
+  /* Contact at the foot of the page */
+  .nav-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: auto;
+    padding-top: 28px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  }
+  .nav-wrapper.open .nav-foot { opacity: 1; transform: none; transition-delay: .5s; }
+  .nav-foot .mail { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 22px; color: var(--gold-light); }
+  .nav-foot .row { display: flex; gap: 22px; font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; }
+  .nav-foot .row a { color: rgba(201,169,110,.65); padding: 6px 0; }
+  .nav-foot .row a:hover { color: var(--gold-light); }
+
+  /* Closing: links sweep back down quickly while the page rolls up */
   .nav-wrapper.closing .nav-links a {
-    transform: translateY(14px) !important;
-    opacity: 0 !important;
-    transition-duration: .18s !important;
-    transition-delay: 0s !important;
+    transform: translateY(14px);
+    opacity: 0;
+    transition-duration: .18s;
+    transition-delay: 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-wrapper, .nav-wrapper.open { clip-path: none; transition: visibility 0s; }
+    .nav-links::before, .nav-links li::after { transform: none; transition: none; }
   }
 }
 
 /* ─ Mobile ≤ 480 px ─ */
 @media (max-width: 480px) {
-
-  /* Hero: two rows — name+photo side by side on top, info below */
-  .home-hero {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-  /* Name block becomes a flex row: eyebrow+name on left, photo on right */
-  .hero-name-block {
-    display: block;
-    padding-right: 0;
-    margin-left: 0;
-  }
-  .hero-photo {
-    position: relative;
-    height: auto;
-    width: clamp(70px, 22vw, 100px);
-    margin: 0;
-    margin-right: 0;
-    align-self: flex-end;
-    flex-shrink: 0;
-  }
-  .hero-divider { display: none; }
-  .hero-info-block { padding-left: 0; }
-  .hero-about { max-width: 100%; }
 
   /* Phone: 2 columns */
   .masonry-grid { columns: 2; --cols: 2; }
@@ -1967,95 +1678,8 @@ body.page-home {
 }
 
 
-/* ─ Tablet mid-range 721 – 900 px ─────────────────────────── */
-/*
-  The 4-column desktop flex (name | divider | info | photo) is too cramped
-  here. Use the same 2-row grid as ≤720px but with a proportionally larger
-  photo so the layout breathes at these wider viewport widths.
-*/
-@media (min-width: 721px) and (max-width: 900px) {
-  .home-hero {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 16px 28px;
-  }
-  .hero-name-block {
-    grid-column: 1 / -1;
-    display: block;   /* eyebrow over name, left-aligned — reads top-down like the rest */
-    padding-right: 0;
-    margin-left: 0;
-  }
-  .hero-divider { display: none; }
-  .hero-info-block {
-    padding-left: 0;
-    grid-column: 1;
-    grid-row: 2;
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-  }
-  .hero-about { max-width: 100%; }
-  .hero-tags { margin-top: auto; }
-  .hero-photo {
-    grid-column: 2;
-    grid-row: 2;
-    position: relative;
-    height: auto;
-    width: clamp(130px, 18vw, 180px);
-    margin: 0;
-    align-self: end;
-  }
-}
-
-
-/* ─ Fold inner / square / iPad mini  ≤ 720 px ─────────────── */
-/*
-  Galaxy Z Fold inner screen (~717 px), square viewports, and iPad mini
-  all land here. Apply the same compact hero layout as ≤ 480 px:
-  name + thumbnail photo on one row, info text below.
-*/
+/* ─ ≤ 720 px ─────────────────────────────────────────────── */
 @media (max-width: 720px) {
-  /* Grid: name spans full width on row 1; info+photo side-by-side on row 2 */
-  .home-hero {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 12px 16px;
-  }
-  .hero-name-block {
-    grid-column: 1 / -1;
-    display: block;   /* eyebrow over name, left-aligned — reads top-down like the rest */
-    padding-right: 0;
-    margin-left: 0;
-  }
-  .hero-divider { display: none; }
-  .hero-info-block {
-    padding-left: 0;
-    grid-column: 1;
-    grid-row: 2;
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-  }
-  .hero-about {
-    max-width: 100%;
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-  /* Push tags to the bottom so they align with the photo's bottom edge */
-  .hero-tags { margin-top: auto; }
-  .hero-photo {
-    grid-column: 2;
-    grid-row: 2;
-    position: relative;
-    height: auto;
-    width: clamp(90px, 26vw, 130px);
-    margin: 0;
-    align-self: end;
-  }
-  /* Compact status line and smaller tags on mobile */
-  .hero-status { font-size: 11px; margin-bottom: 8px; gap: 5px; }
   .tag { font-size: 11px; padding: 2px 8px; }
 }
 
@@ -2064,13 +1688,11 @@ body.page-home {
 @media (max-width: 360px) {
   :root { --side-pad: 16px; }
   .masonry-grid { columns: 2; --cols: 2; }
-  .hero-about { font-size: 13px; line-height: 1.65; }
-  .hero-name  { font-size: clamp(36px, 10vw, 52px); }
 }
 
 
 /* ── Hover delay — 80 ms on enter only, instant exit ──────── */
-.panel:hover, .works-entry:hover { transition-delay: 80ms; }
+.card:hover { transition-delay: 80ms; }
 
 
 /* ── Touch device: disable hover effects ─────────────────── */
@@ -2082,12 +1704,6 @@ body.page-home {
 @media (hover: none) {
   /* No mouseout on touch — keep the accent line from sticking after a tap */
   .card:hover::before { height: 0; }
-  /* Entry hover bar: keep hidden on touch — no mouseout to reset it */
-  .works-entry:hover::before,
-  .notes-entry:hover::before { height: 0; }
-  .works-entry:hover .works-entry-title,
-  .notes-entry:hover .notes-entry-title { color: var(--text-secondary); }
-  .works-entry:hover .works-arrow { transform: none; color: var(--text-dim); }
 
   .masonry-item:hover { border-color: var(--gold-border); box-shadow: none; }
   .masonry-item:hover img { opacity: 1; }

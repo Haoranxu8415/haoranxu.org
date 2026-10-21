@@ -120,8 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── 2. Stagger entrance ─────────────────────────────────── */
   // Sets --stagger-i (0-based index) so CSS animation-delay cascades each item.
-  // Covers static card lists (works.html, notes.html); home panel entries are
-  // handled in home.js which creates them dynamically.
+  // Covers static card lists (works.html, notes.html, contact.html).
   [
     [...document.querySelectorAll('.work-card')],
     [...document.querySelectorAll('.post-card')],
@@ -176,6 +175,53 @@ document.addEventListener('DOMContentLoaded', () => {
       navbar.classList.toggle('hidden', y > lastY && y > 80);
       lastY = y;
     }, { passive: true });
+  }
+
+
+  /* ── 4c. Navbar: frosted once content is under it · gold ink under the current page ── */
+  if (navbar && wrapper) {
+    const getY = () => (scroller ? scroller.scrollTop : window.scrollY);
+    const setScrolled = () => navbar.classList.toggle('scrolled', getY() > 4);
+    (scroller || window).addEventListener('scroll', setScrolled, { passive: true });
+    setScrolled();
+
+    const links  = [...wrapper.querySelectorAll('.nav-links a')];
+    const active = links.find(a => a.classList.contains('active'));
+    const ink = document.createElement('span');
+    ink.className = 'nav-ink no-anim';
+    ink.setAttribute('aria-hidden', 'true');
+    wrapper.appendChild(ink);
+    // Sits under the label text (not the padded hit area); hidden on pages with no active link
+    const place = (a, animate = true) => {
+      if (!a) { ink.style.opacity = '0'; return; }
+      const r = document.createRange();
+      r.selectNodeContents(a.querySelector('.nav-label') || a);
+      const t = r.getBoundingClientRect(), w = wrapper.getBoundingClientRect();
+      ink.classList.toggle('no-anim', !animate);
+      ink.style.opacity = '1';
+      ink.style.width = t.width + 'px';
+      ink.style.transform = `translateX(${t.left - w.left}px)`;
+    };
+    place(active, false);
+    document.fonts?.ready.then(() => place(active, false));
+    window.addEventListener('resize', () => place(active, false));
+    links.forEach(a => {
+      a.addEventListener('pointerenter', () => place(a));
+      a.addEventListener('focus', () => place(a));
+      a.addEventListener('click', () => place(a));   // the ink leaves for the new page
+    });
+    wrapper.querySelector('.nav-links').addEventListener('pointerleave', () => place(active));
+    wrapper.addEventListener('focusout', e => { if (!wrapper.contains(e.relatedTarget)) place(active); });
+  }
+
+  /* ── 4d. Home: the small name appears only once the big one has scrolled away ── */
+  const bigName = document.querySelector('.page-home .h-name');
+  if (navbar && bigName) {
+    document.documentElement.classList.add('nav-home');
+    const checkName = () => document.documentElement.classList.toggle('logo-on',
+      bigName.getBoundingClientRect().bottom < navbar.getBoundingClientRect().bottom);
+    window.addEventListener('scroll', checkName, { passive: true });
+    checkName();
   }
 
 
