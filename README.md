@@ -24,7 +24,7 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 ```
 index.html              Home (served at /)
 home.html               Redirect to / for old links
-gallery.html            Photography gallery with lightbox
+gallery.html            Photography, as rolls (index → rolls of prints) with lightbox
 works.html              Works index
 notes.html              Writing, rendered from Markdown
 contact.html            Contact and social links
@@ -81,18 +81,20 @@ assets/
 
 1. Keep the original in `assets/images/gallery/` (archive only — never loaded by the site).
 2. Export WebP versions (EXIF rotation applied):
-   - `thumbs/photoN.webp` — 720px wide, quality ~78 (masonry grid)
+   - `thumbs/photoN.webp` — 720px wide, quality ~78 (gallery prints)
    - `large/photoN.webp` — 2400px long edge, quality ~82 (lightbox)
    - `mini/photoN.webp` — 320px wide, quality ~72 (home film strip)
-3. Add a `.masonry-item` block to `gallery.html` (width/height = the thumb's pixel size, prevents layout shift):
+3. Add a `.shot` block to its roll's `.roll-frames` in `gallery.html` (width/height = the thumb's pixel size — main.js sets the rows from them), and renumber the `.n` captions after it — numbers run across the whole gallery:
    ```html
-   <div class="masonry-item">
-     <img src="assets/images/gallery/thumbs/photoN.webp" width="720" height="480" decoding="async"
-          data-full="assets/images/gallery/large/photoN.webp"
-          alt="Description" loading="lazy"
-          onerror="this.closest('.masonry-item').style.display='none'" />
+   <div class="shot">
+     <span class="print"><img src="assets/images/gallery/thumbs/photoN.webp" width="720" height="480" decoding="async"
+          data-full="assets/images/gallery/large/photoN.webp" alt="Title" loading="lazy"
+          onerror="this.closest('.shot').style.display='none'" /><span class="exif"><span>105mm</span><span>f/4</span><span>1/125 s</span><span>ISO 100</span></span></span>
+     <span class="cap"><span class="n">19 ▸</span><span class="t">Title</span></span>
    </div>
    ```
+   The `.exif` values come from the original's EXIF (`mdls photoN.JPG` on macOS); leave the span out if it has none.
+   A new roll is a new `<section class="roll">` plus an entry in the `.roll-index` at the top; update the frame / roll counts there and in `.gallery-count`.
 4. Optionally add it to the home film strip (the `P` list in `assets/js/home.js`, uses the `mini/` version).
 
 ### Home page

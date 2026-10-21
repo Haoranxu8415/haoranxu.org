@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- Before first paint: the hero waits for home.js to lay it out (no flash of the unplaced layout),
+       and the small nav name starts hidden on home (main.js reveals it once the big name scrolls away) -->
+  <script>document.documentElement.classList.add('js', 'nav-home')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Haoran Xu | First-Year BCom at UBC Sauder</title>
   <meta name="description" content="First-year UBC Sauder student building at the intersection of Finance, Design, and Tech." />

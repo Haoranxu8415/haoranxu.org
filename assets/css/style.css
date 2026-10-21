@@ -12,7 +12,7 @@
    6.  Home Page   — field notes (name over the print, scattered kit, film strip)
    9.  Inner Pages — Page Wrapper (72 vw)
    10. Shared Cards
-   11. Gallery Page (masonry)
+   11. Gallery Page (rolls, justified rows)
    12. Lightbox
    13. Works Index
    14. Works Detail
@@ -368,7 +368,7 @@ ul   { list-style: none; }
 
   Direction 5 — scroll-driven parallax (CSS native).
     Uses individual `translate` property — independent of `transform`
-    so it never fights the entrance transition on .masonry-item.
+    so it never fights the entrance transition on .shot.
     Gated behind @supports (animation-timeline: scroll()).
 
   Reduced-motion safety net at the bottom resets all three unconditionally.
@@ -388,7 +388,7 @@ ul   { list-style: none; }
   to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* D5: photo drifts inside its (clipped) frame — frames never move, so masonry gaps stay even */
+/* D5: photo drifts inside its (clipped) print — prints never move, so the row gaps stay even */
 @keyframes galleryParallax {
   from { translate: 0 -2.5%; }
   to   { translate: 0  2.5%; }
@@ -425,13 +425,13 @@ ul   { list-style: none; }
   Only browsers with scroll-driven animations reach this block.
   The photo (not the frame) drifts via the individual `translate` / `scale`
   properties, so it never fights the frame's entrance `transform` transition,
-  and the masonry gaps stay fixed.
+  and the row gaps stay fixed.
 */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* Timeline is named on the frame so the clip on .masonry-item doesn't become the scroller */
-    .masonry-item { view-timeline: --frame block; }
-    .masonry-item img {
+    /* Timeline is named on the frame so the clip on .print doesn't become the scroller */
+    .shot { view-timeline: --frame block; }
+    .shot img {
       scale: 1.06;   /* 3 % bleed per side covers the ±2.5 % drift */
       animation: galleryParallax linear both;
       animation-timeline: --frame;
@@ -445,7 +445,7 @@ ul   { list-style: none; }
 /*
   Unconditionally strips every new effect — clip-path, stagger, parallax.
   !important overrides @supports and @media blocks above.
-  .masonry-item also needs transition: none so the JS entrance is instant.
+  .shot also needs transition: none so the JS entrance is instant.
 */
 @media (prefers-reduced-motion: reduce) {
   .work-card,
@@ -462,12 +462,12 @@ ul   { list-style: none; }
     opacity: 1 !important;
     transform: none !important;
   }
-  .masonry-item {
+  .shot {
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
-  .masonry-item img {
+  .shot img {
     animation: none !important;
     translate: none !important;
     scale: none !important;
@@ -526,6 +526,14 @@ ul   { list-style: none; }
   --stamp: #FF9B50; --paper: #E9E1CF; }
 body.page-home { overflow-x: clip; }
 .h5-layout { animation: pageIn var(--dur-slow) var(--ease-out) both; }
+/* Until home.js has sized the name and placed the print, kit and film (.ready), keep them out of sight —
+   otherwise a slow font load (iOS Safari) flashes the unplaced layout. Failsafe: shown anyway after 2.5 s. */
+.js .h5-layout:not(.ready) :is(.h-name, .h-self, .gear, .h-copy, .film) {
+  opacity: 0;
+  animation: h5Failsafe .4s 2.5s forwards;
+}
+.h5-layout :is(.h-name, .h-self, .gear, .h-copy, .film) { transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1), opacity .5s var(--ease-out); }
+@keyframes h5Failsafe { to { opacity: 1; } }
 .edge { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--edge); font-variant-numeric: tabular-nums; }
 
 .h5-layout { height: 100svh; min-height: 640px; display: flex; flex-direction: column;
@@ -725,72 +733,145 @@ body.page-home { overflow-x: clip; }
 .blog-layout .card-col { gap: 20px; }
 
 
-/* ── 11. Gallery Page — masonry ──────────────────────────── */
+/* ── 11. Gallery Page — rolls ───────────────────────────── */
 /*
-  Equal-width columns, each photo at its natural ratio — no cropping.
-  Border + radius sit on the .masonry-item frame (the photo drifts inside it).
+  The gallery reads as rolls of film: an index of rolls (title, place, month, count), then each
+  roll as justified rows of square-cut prints with an edge-print caption (number ▸ title).
+  Shooting notes (.exif) rise over a print on hover and follow the title in the viewer.
 */
-.masonry-grid {
-  columns: 4;
-  --cols: 4;          /* read by main.js — keep in sync with `columns` at each breakpoint */
-  column-gap: 12px;
-}
-/*
-  With JS, main.js moves the items into --cols real flex columns (shortest-column-first).
-  CSS multi-column is only the no-JS fallback: WebKit (Safari, all iOS browsers) mispositions
-  animated (opacity/transform) children of multi-column containers — items painted in the
-  wrong column, IntersectionObserver geometry wrong — so the entrance never completed.
-*/
-.masonry-grid.is-split {
-  columns: auto;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.masonry-col {
-  flex: 1 1 0;
-  min-width: 0;
+.gallery-count {
+  font-size: 10.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(201,169,110,.5);
+  font-variant-numeric: tabular-nums;
 }
 
-.masonry-item {
-  break-inside: avoid;
+/* Index of rolls */
+.roll-index {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  padding-bottom: clamp(26px, 4vh, 40px);
+  margin-bottom: clamp(30px, 5vh, 48px);
+  border-bottom: 0.5px solid var(--gold-border-em);
+}
+.ri { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ri-k { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(201,169,110,.55); font-variant-numeric: tabular-nums; }
+.ri-t {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(19px, 1.6vw, 24px);
+  line-height: 1.1;
+  color: var(--gold-light);
+  transition: color var(--dur-fast) var(--ease-inout);
+}
+.ri:hover .ri-t { color: #fff3d6; }
+.ri-m { font-size: 12px; color: var(--text-muted); }
+
+/* A roll: its label, then its frames */
+.roll { scroll-margin-top: calc(var(--nav-h) + 16px); }
+.roll + .roll { margin-top: clamp(48px, 8vh, 80px); }
+.roll-head { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; margin-bottom: 18px; }
+.rh-k { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(201,169,110,.55); }
+.rh-t { margin: 0; font-family: var(--font-display); font-weight: 300; font-style: italic; font-size: clamp(26px, 2.4vw, 34px); line-height: 1; color: var(--gold-light); }
+.rh-m { font-size: 12.5px; color: var(--text-muted); }
+.rh-l { margin-left: auto; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.rh-l:hover { color: var(--gold-light); }
+
+/* Frames. Without JS: wrap at a fixed height. With JS (.rows-ready): main.js builds justified rows. */
+.roll-frames { display: flex; flex-wrap: wrap; gap: 24px 14px; }
+.roll-frames .print { height: 220px; }
+.roll-frames .shot img { width: auto; height: 100%; }
+.rows-ready .roll-frames { display: block; }
+.shot-row { display: flex; gap: 14px; }
+.shot-row + .shot-row { margin-top: 24px; }
+.rows-ready .shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.shot {
+  flex: none;
   display: block;
-  width: 100%;
-  margin-bottom: 12px;
   cursor: zoom-in;
-  border-radius: var(--r-card);
-  border: 0.5px solid var(--gold-border);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+/* Hidden for the JS entrance only when JS is running (html.js set inline in <head>) */
+.js .shot:not(.visible) { opacity: 0; transform: translateY(8px); }
+
+/* The print: square-cut, no frame; it clips the photo's scroll drift */
+.print { position: relative; display: block; overflow: hidden; overflow: clip; background: var(--bg-lift); }
+.shot img { display: block; transition: filter var(--dur-base) var(--ease-inout); }
+.shot:hover img { filter: brightness(1.08); }
+.shot:focus-visible { outline: 1.5px solid var(--gold); outline-offset: 4px; }
+
+/* Edge-print caption: number ▸ title */
+.cap { display: flex; gap: 10px; align-items: baseline; margin-top: 8px; min-width: 0; height: 16px; }
+.cap .n { flex: none; font-size: 9.5px; letter-spacing: .2em; color: rgba(201,169,110,.5); font-variant-numeric: tabular-nums; }
+.cap .t {
+  min-width: 0;
   overflow: hidden;
-  overflow: clip;
-  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out),
-              border-color var(--dur-fast) var(--ease-inout), box-shadow var(--dur-fast) var(--ease-inout);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color var(--dur-fast) var(--ease-inout);
 }
-/* Hidden for the JS entrance only when JS is running (html.js set inline in <head>);
-   without JS every item is simply visible */
-.js .masonry-item:not(.visible) {
+.shot:hover .cap .t { color: var(--gold-light); }
+.cap-short .cap .t { display: none; }
+
+/* Shooting notes: rise over the bottom of the print on hover */
+.exif {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 14px;
+  row-gap: 2px;
+  padding: 28px 12px 10px;
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  color: var(--gold-light);
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(to top, rgba(5,13,10,.82), rgba(5,13,10,.55) 55%, transparent);
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+@media (hover: hover) {
+  .shot:hover .exif,
+  .shot:focus-visible .exif { opacity: 1; transform: none; }
+}
+/* In the viewer: on the title's line, after it */
+.lb-exif {
+  position: static;
+  display: inline-flex;
+  vertical-align: 2px;
+  margin-left: 22px;
+  padding: 0;
+  background: none;
+  opacity: 1;
+  transform: none;
+  font-family: var(--font-ui);
+  font-style: normal;
+  font-size: 11px;
 }
 
-.masonry-item img {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: opacity var(--dur-fast) var(--ease-inout);
+/* The license closes the last roll */
+.gallery-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: clamp(40px, 7vh, 72px);
+  padding-top: 16px;
+  border-top: 0.5px solid var(--gold-border-em);
 }
-
-.masonry-item:hover {
-  border-color: rgba(201,169,110,.65);
-  box-shadow: 0 0 0 1px rgba(201,169,110,.18);
-}
-.masonry-item:hover img { opacity: .88; }
-
-/* Keyboard focus ring — visible only for keyboard navigation */
-.masonry-item:focus-visible {
-  outline: 1.5px solid var(--gold);
-  outline-offset: 3px;
-  border-radius: var(--r-card);
-}
+.gallery-foot .end { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 15px; color: var(--gold-light); opacity: .8; }
 
 /* Skeleton loading cards — shown before notes.js replaces them.
    Wide gradient (400%) + slow cubic-bezier sweep = silky highlight.
@@ -819,12 +900,13 @@ body.page-home { overflow-x: clip; }
   .skeleton-card { animation: none; background: var(--bg-lift); }
 }
 
-/* Gallery heading row: title left, license right */
+/* Gallery heading row: title left, count right */
 .gallery-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: clamp(20px, 3vh, 32px);
 }
 .gallery-header .section-heading {
   margin-bottom: 0;
@@ -1495,7 +1577,7 @@ body.page-home { overflow-x: clip; }
   .contact-row-top > .contact-card + .contact-card { border-left: none; border-top: 0.5px solid var(--gold-border); }
 
   /* Tablet: 3 columns */
-  .masonry-grid { columns: 3; --cols: 3; }
+  .roll-index { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
 
   /* Hamburger visible */
   .menu-toggle { display: flex; }
@@ -1664,8 +1746,6 @@ body.page-home { overflow-x: clip; }
 /* ─ Mobile ≤ 480 px ─ */
 @media (max-width: 480px) {
 
-  /* Phone: 2 columns */
-  .masonry-grid { columns: 2; --cols: 2; }
 
   /* Gallery strip: single row of 5 on phone (inherits from tablet rule) */
 
@@ -1677,6 +1757,9 @@ body.page-home { overflow-x: clip; }
 
 /* ─ ≤ 720 px ─────────────────────────────────────────────── */
 @media (max-width: 720px) {
+  /* Gallery: no room for shooting notes beside the viewer's title; roll link drops under its label */
+  .lb-exif { display: none; }
+  .rh-l { margin-left: 0; }
   .tag { font-size: 11px; padding: 2px 8px; }
 }
 
@@ -1684,7 +1767,6 @@ body.page-home { overflow-x: clip; }
 /* ─ Ultra-narrow ≤ 360 px (Fold cover / compact phones) ────── */
 @media (max-width: 360px) {
   :root { --side-pad: 16px; }
-  .masonry-grid { columns: 2; --cols: 2; }
 }
 
 
@@ -1702,8 +1784,7 @@ body.page-home { overflow-x: clip; }
   /* No mouseout on touch — keep the accent line from sticking after a tap */
   .card:hover::before { height: 0; }
 
-  .masonry-item:hover { border-color: var(--gold-border); box-shadow: none; }
-  .masonry-item:hover img { opacity: 1; }
+  .shot:hover img { filter: none; }
 
   .nav-links a:hover,
   .back-link:hover,

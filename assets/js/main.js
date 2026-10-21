@@ -10,7 +10,7 @@
  * 4. Navbar auto-hide · Latest button · Contact local time
  * 5. Lightbox          — zooms from / back to its thumbnail (FLIP), ← → / Escape,
  *                        swipe sideways to navigate, swipe down to close, pinch to zoom
- * 6. Gallery           — JS masonry columns (WebKit-safe) + staggered entrance
+ * 6. Gallery           — rolls in justified rows + staggered entrance
  */
 
 const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)');
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbCounter = document.getElementById('lightbox-counter');
   const lbCaption = document.getElementById('lightbox-caption');
 
-  const allImgs = [...document.querySelectorAll('.masonry-item img')];
+  const allImgs = [...document.querySelectorAll('.shot img')];
   let sortedImgs = [];   // visual order snapshot — rebuilt each time the lightbox opens
   let current = 0;
   let _scale = 1;        // pinch-zoom level
@@ -279,8 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Sort by screen position: top→bottom, then left→right (row-major visual order)
   function buildVisualOrder() {
     sortedImgs = [...allImgs].sort((a, b) => {
-      const ra = a.closest('.masonry-item').getBoundingClientRect();
-      const rb = b.closest('.masonry-item').getBoundingClientRect();
+      const ra = a.closest('.shot').getBoundingClientRect();
+      const rb = b.closest('.shot').getBoundingClientRect();
       if (Math.abs(ra.top - rb.top) > 30) return ra.top - rb.top;
       return ra.left - rb.left;
     });
@@ -317,7 +317,12 @@ document.addEventListener('DOMContentLoaded', () => {
     lbImg.style.width  = `${box.width}px`;
     lbImg.style.height = `${box.height}px`;
     lbImg.alt = thumb.alt || '';
-    if (lbCaption) lbCaption.textContent = thumb.alt || '';
+    if (lbCaption) {
+      lbCaption.textContent = thumb.alt || '';
+      // shooting notes follow the title on the same line (desktop; hidden on phones)
+      const ex = thumb.closest('.shot')?.querySelector('.exif');
+      if (ex) lbCaption.append(Object.assign(ex.cloneNode(true), { className: 'exif lb-exif' }));
+    }
     lbImg.src = thumb.currentSrc || thumb.src;
     const full = thumb.dataset.full;
     if (full) {
@@ -419,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Attach click + keyboard (Enter / Space) to each thumbnail — build visual order on open
   allImgs.forEach(img => {
-    const item = img.closest('.masonry-item');
+    const item = img.closest('.shot');
     const openThis = () => {
       _returnFocus = item;
       buildVisualOrder();
@@ -538,48 +543,72 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── 6. Gallery — masonry columns + entrance (visual row-major order, 70 ms apart) ── */
-/*
-  Items are spread over columns, but the user reads left→right across each
-  row. We sort by visual position (top then left, with a 30 px threshold for
-  "same row") after layout so the stagger sweeps across each row rather than
-  down each column.
-*/
+/* ── 6. Gallery — rolls in justified rows + entrance (visual row-major order, 70 ms apart) ── */
 (function () {
-  const items = [...document.querySelectorAll('.masonry-item')];
+  const items = [...document.querySelectorAll('.shot')];
   if (!items.length) return;
 
-  /* Masonry: distribute items into --cols flex columns, each into the currently
-     shortest one (heights from the width/height attributes — no image load needed).
-     Replaces CSS multi-column, which WebKit mis-renders once items animate. */
-  const grid = document.getElementById('masonry-grid');
-  let cols = 0;
-  function split() {
-    const n = parseInt(getComputedStyle(grid).getPropertyValue('--cols'), 10) || 4;
-    if (n === cols) return;
-    cols = n;
-    const columns = Array.from({ length: n }, () => {
-      const c = document.createElement('div');
-      c.className = 'masonry-col';
-      return c;
+  /* Rows: within each roll, every photo in a row shares one height and every row runs edge to
+     edge (greedy fill; a short last row shares its frames with the row above so both fill).
+     Ratios come from the width/height attributes — no image load needed. Height follows the
+     width only, so iOS toolbar resizes don't reflow the page. Without JS, CSS wraps them at a fixed height. */
+  const rolls = [...document.querySelectorAll('.roll-frames')];
+  const ratio = it => { const img = it.querySelector('img'); return (+img.getAttribute('width') / +img.getAttribute('height')) || 1.5; };
+  const arSum = part => part.reduce((t, it) => t + ratio(it), 0);
+
+  function rowsFor(list, W, H, gap) {
+    const rows = [];
+    let cur = [];
+    list.forEach(it => {
+      cur.push(it);
+      if (arSum(cur) * H + gap * (cur.length - 1) >= W) { rows.push(cur); cur = []; }
     });
-    const heights = new Array(n).fill(0);
-    items.forEach(item => {
-      if (item.style.display === 'none') return;          // failed image (onerror)
-      const img = item.querySelector('img');
-      const ratio = (+img.getAttribute('height') / +img.getAttribute('width')) || 0.67;
-      const i = heights.indexOf(Math.min(...heights));
-      columns[i].appendChild(item);                       // moves the node; listeners stay attached
-      heights[i] += ratio;
-    });
-    grid.replaceChildren(...columns);
-    grid.classList.add('is-split');
+    if (cur.length) {
+      const fill = (arSum(cur) * H + gap * (cur.length - 1)) / W;
+      if (fill < .85 && rows.length) {
+        const all = [...rows.pop(), ...cur];
+        let best = 1, bestD = Infinity;
+        for (let k = 1; k < all.length; k++) {
+          const d = Math.abs((W - gap * (k - 1)) / arSum(all.slice(0, k)) - (W - gap * (all.length - k - 1)) / arSum(all.slice(k)));
+          if (d < bestD) { bestD = d; best = k; }
+        }
+        rows.push(all.slice(0, best), all.slice(best));
+      } else rows.push(cur);
+    }
+    // a short roll may not fill the width: it stays short rather than growing huge
+    return rows.map(r => ({ items: r, h: Math.min((W - gap * (r.length - 1)) / arSum(r), H * 1.5) }));
   }
-  split();
+
+  let lastW = 0;
+  function layout() {
+    const W = rolls[0].clientWidth;
+    if (!W || W === lastW) return;
+    lastW = W;
+    const narrow = innerWidth <= 720;
+    const H = narrow ? 150 : innerWidth <= 1100 ? 220 : Math.min(280, Math.max(210, W * .19));
+    const gap = narrow ? 8 : 14;
+    rolls.forEach(roll => {
+      const list = [...roll.querySelectorAll('.shot')].filter(it => it.style.display !== 'none');
+      roll.replaceChildren(...rowsFor(list, W, H, gap).map(r => {
+        const row = document.createElement('div');
+        row.className = 'shot-row';
+        r.items.forEach(it => {
+          const w = ratio(it) * r.h;
+          it.style.width = `${w}px`;
+          it.querySelector('.print').style.height = `${r.h}px`;
+          it.classList.toggle('cap-short', w < 120);   // too narrow for its title: number only
+          row.appendChild(it);
+        });
+        return row;
+      }));
+    });
+    document.documentElement.classList.add('rows-ready');
+  }
+  layout();
   let resizeTimer = 0;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { split(); check(); }, 100);
+    resizeTimer = setTimeout(() => { layout(); check(); }, 100);
   });
 
   /* Entrance: each item fades in once it is on screen and its photo has loaded,

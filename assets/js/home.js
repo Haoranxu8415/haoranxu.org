@@ -224,7 +224,9 @@
 
   function relayout() { layout(); measureLoop(); }
   Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 600))]).then(() => {
-    relayout(); requestAnimationFrame(t => { last = t; frame(t); });
+    relayout();
+    document.querySelector('.h5-layout').classList.add('ready');   // laid out: fade the hero in (style.css §6)
+    requestAnimationFrame(t => { last = t; frame(t); });
   });
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(relayout, 120); });
   [...track.querySelectorAll('img')].forEach(im => im.addEventListener('load', measureLoop, { once: true }));
