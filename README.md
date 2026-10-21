@@ -12,7 +12,8 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 
 ## Tech Stack
 
-- Vanilla HTML / CSS / JavaScript — no frameworks
+- Vanilla HTML / CSS / JavaScript — no frameworks, no runtime dependencies
+- Node 18+ — only for `tools/build.mjs` (no packages to install)
 - [marked.js](https://marked.js.org) — Markdown rendering for Notes
 - Cormorant Garamond + DM Sans — self-hosted in `assets/fonts/` (SIL OFL 1.1)
 - Font Awesome brand icons — inlined as SVG on the contact page
@@ -28,6 +29,8 @@ gallery.html            Photography, as rolls (index → rolls of prints) with l
 works.html              Works index
 notes.html              Writing, rendered from Markdown
 contact.html            Contact and social links
+404.html                Not-found page (absolute links — served at any path)
+sitemap.xml, robots.txt Search engines: page list; robots keeps /posts/ (note bodies) out of search
 
 works/                  Individual work detail pages
 posts/                  Markdown files for Notes articles
@@ -42,9 +45,17 @@ assets/
   js/notes.js           Renders Notes timeline and post cards
   js/main.js            Page transitions, progress bar, lightbox, navbar (ink, frost, mobile index)
   images/
-    gallery/            Originals (archive) + thumbs/ (720w) + large/ (2400) + mini/ (320w, home strip)
+    gallery/            Originals (archive) + thumbs/ (720w) + large/ (2400) + mini/ (320w, home film strip)
     kexue/              Photos for A Winter's Light work page
     bubbles/            Screenshots for Information Bubbles work page
+```
+
+## Local Preview
+
+Serve the folder (pages use root-relative paths, so opening the files directly won't work):
+
+```
+python3 -m http.server 8000      # then open http://localhost:8000
 ```
 
 ## Content Maintenance
@@ -63,6 +74,7 @@ assets/
    }
    ```
 3. The timeline, post cards, and the home "Lately writing" line all update automatically.
+   Note bodies are kept out of search on purpose (`robots.txt` disallows `/posts/`).
 
 ### Add a Work
 
@@ -78,7 +90,8 @@ assets/
    }
    ```
 3. Run `node tools/build.mjs` — it writes the card into `works.html`. (The deploy runs it too, but run it locally to preview.)
-4. The newest work (by `date`) becomes the home "Now researching" line automatically.
+4. Add the page to `sitemap.xml`.
+5. The newest work (by `date`) becomes the home "Now researching" line automatically.
 
 ### Add a Gallery Photo
 
@@ -134,7 +147,7 @@ Never edit inside the markers — the next build overwrites it. The build render
 
 ## TODO
 
-- [ ] Bring Works, Notes and Contact into the home / gallery language (field notes, rolls)
+- [ ] Bring Works and Notes (then Contact) into the home / gallery language — field notes, rolls
 
 ## Deployment
 

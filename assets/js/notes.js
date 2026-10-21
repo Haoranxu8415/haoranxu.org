@@ -1,6 +1,6 @@
 /**
  * notes.js — renders Notes page from POSTS data
- * Depends on: data.js (POSTS global), marked.js (sync script in <head>)
+ * Depends on: data.js (POSTS global), marked.js (deferred in <head>, runs before this)
  *
  * To add a new note:
  *   1. Drop a .md file in /posts/
