@@ -562,7 +562,7 @@ body.page-home {
 .home-panels {
   flex: 0 0 auto;
   display: flex;
-  gap: 12px;
+  gap: 0;
   align-items: stretch;
   padding: 14px 0 14px;
   overflow: hidden;
@@ -720,31 +720,19 @@ body.page-home {
 /* ── 8. Home Page — Bottom Panels ────────────────────────── */
 
 /* Shared panel card — compact padding to fit the 25% row */
+/* Frameless like the cards: the three panels are divided by vertical hairlines */
 .panel {
   flex: 1;
-  background: var(--bg-surface);
-  border: 0.5px solid var(--gold-border);
-  border-radius: var(--r-panel);
-  padding: 10px 14px 10px 18px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  transition: border-color var(--dur-fast) var(--ease-inout), transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
 }
-/* Left accent bar on each panel */
-.panel::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--bg-lift);
-  border-radius: 0;
-}
-.panel:hover {
-  border-color: rgba(201,169,110,.25);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(201,169,110,.08);
+.home-panels .panel:not(:last-child) { padding-right: 22px; }
+.home-panels .panel + .panel {
+  border-left: 0.5px solid var(--gold-border);
+  padding-left: 22px;
 }
 
 /* Panel header row: label + link */
@@ -973,36 +961,36 @@ body.page-home {
 
 
 /* ── 10. Shared Cards ─────────────────────────────────────── */
+/*
+  Frameless "cards": no surface, border or radius anywhere on the site —
+  structure comes from hairlines and space (see each list below).
+  What remains of the card is its accent: a 1 px gold line just left of the
+  heading that draws downward on hover. --accent-top / --accent-left line it up
+  with the text when a card has its own padding (always 18 px left of the text).
+*/
 .card {
-  background: var(--bg-surface);
-  border: 0.5px solid var(--gold-border);
-  border-radius: var(--r-card);
-  padding: 14px 16px 14px 20px;
   position: relative;
-  overflow: hidden;
-  transition: border-color var(--dur-fast) var(--ease-inout), transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
 }
-/* 2 px accent bar */
 .card::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 20%;
-  width: 2px;
+  left: var(--accent-left, -18px);
+  top: var(--accent-top, 4px);
+  width: 1px;
   height: 0;
   background: var(--gold);
-  border-radius: 1px;
-  transition: height var(--dur-base) var(--ease-out), top var(--dur-base) var(--ease-out);
+  opacity: .7;
+  pointer-events: none;
+  transition: height var(--dur-slow) var(--ease-out);
 }
-.card:hover::before {
-  top: 15%;
-  height: 70%;
-}
-.card:hover {
-  border-color: rgba(201,169,110,.32);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(201,169,110,.08);
-}
+.card:hover::before { height: 32px; }
+/* No accent on the icon row (icons have their own hover) or loading placeholders */
+.social-card::before,
+.skeleton-card::before { display: none; }
 
 .card-tag {
   font-size: 11px;
@@ -1325,18 +1313,16 @@ body.page-home {
 .works-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .work-card {
   display: flex;
   align-items: flex-start;
   gap: 18px;
-  /* Generous padding to match the large display title */
-  padding: 32px 24px 32px 28px;
+  padding: 30px 0;
+  --accent-top: 32px;
 }
-/* Thicker accent bar for works cards — more presence than base .card */
-.work-card::before { width: 3px; background: var(--gold); }
+.work-card + .work-card { border-top: 0.5px solid var(--gold-border); }
 
 .work-card-body { flex: 1; min-width: 0; }
 .work-card-meta {
@@ -1405,14 +1391,7 @@ body.page-home {
   max-width: var(--article-w);
   margin-left: auto;
   margin-right: auto;
-  padding: 0;
-  background: none;
-  border: none;
-  border-radius: 0;
-  overflow: visible;
 }
-.card.project-card::before { display: none; }
-.card.project-card:hover { transform: none; box-shadow: none; }
 
 /* "← Works" sits on the article's left edge, not the page's */
 .page-content:has(> .project-card) > .back-link {
@@ -1563,13 +1542,13 @@ body.page-home {
   margin-right: auto;
 }
 
-/* Sticky date sidebar */
+/* Sticky date sidebar — pinned beside the start of the reading column (it used to
+   float at mid-screen), and it marks the post currently being read (notes.js) */
 .timeline-col {
   width: 72px;
   flex-shrink: 0;
   position: sticky;
-  top: 50vh;
-  transform: translateY(-50%);
+  top: calc(var(--nav-h) + 28px);
   font-size: 11px;
   color: var(--text-muted);
   padding-top: 2px;
@@ -1612,16 +1591,32 @@ body.page-home {
 }
 .timeline-entry:hover .timeline-dot { background: var(--gold); }
 
-/* Post cards — stronger gold border than base .card, champagne accents */
-.post-card {
-  scroll-margin-top: 24px; /* breathing room when opened via notes.html#post-N */
-  padding: 16px 18px 16px 22px;
-  border-color: rgba(201,169,110,.22);  /* more visible than base 10% */
+/* "You are here" — the post in view */
+.timeline-dot {
+  transition: background var(--dur-base) var(--ease-inout), box-shadow var(--dur-base) var(--ease-inout);
 }
-.post-card:hover {
-  border-color: rgba(201,169,110,.40);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(201,169,110,.08);
+.timeline-entry.is-active { color: var(--gold-light); }
+.timeline-entry.is-active .timeline-dot {
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, .18);
+}
+
+/*
+  Posts are set directly on the page like the work articles — no card surface,
+  border, padding or hover lift. Consecutive posts are separated by a hairline
+  and generous space.
+*/
+.card.post-card {
+  scroll-margin-top: 24px; /* breathing room when opened via notes.html#post-N */
+  --accent-top: 6px;
+}
+.card.post-card + .card.post-card {
+  margin-top: 36px;          /* + the column's 20 px gap */
+  padding-top: 48px;
+  --accent-top: 54px;
+  border-top: 0.5px solid var(--gold-border);
+  /* Land jumps on the title, not on the empty space above it (48 px padding − 24 px) */
+  scroll-margin-top: -24px;
 }
 
 /* Title — champagne gold, clearly dominant over body text.
@@ -1730,14 +1725,15 @@ body.page-home {
 /* Top row: identity + email 50/50 */
 .contact-row-top {
   display: flex;
-  gap: 12px;
   align-items: stretch;
 }
 
 .contact-card {
   flex: 1 1 0;
   min-width: 0;      /* equal columns regardless of content length */
-  padding: 44px 32px 44px 40px;
+  padding: 20px 40px;
+  --accent-top: 26px;
+  --accent-left: 22px;   /* 40 px padding − 18 px: beside the text, right of the divider */
   min-height: 160px;
   display: flex;
   flex-direction: column;
@@ -1752,6 +1748,8 @@ body.page-home {
   margin-bottom: 20px;
   white-space: nowrap;
 }
+.contact-row-top > .contact-card + .contact-card { border-left: 0.5px solid var(--gold-border); }
+
 /* Shared label/value list — both top cards use it, so rows sit on the same baselines */
 .contact-list  { display: flex; flex-direction: column; gap: 16px; }
 .contact-item  { display: flex; flex-direction: column; gap: 4px; }
@@ -1767,8 +1765,9 @@ body.page-home {
   justify-content: center;
   align-items: center;
   gap: clamp(28px, 7vw, 48px);
-  padding: 44px 32px;
-  min-height: 120px;
+  padding: 32px 32px 8px;
+  min-height: 0;
+  border-top: 0.5px solid var(--gold-border);
 }
 .social-card a {
   font-size: clamp(34px, 9vw, 42px);
@@ -1808,6 +1807,15 @@ body.page-home {
     padding: 20px 0;
     overflow: visible;
   }
+  /* Stacked on narrow screens: horizontal hairlines instead of vertical */
+  .home-panels .panel:not(:last-child) { padding-right: 0; }
+  .home-panels .panel + .panel {
+    border-left: none;
+    padding-left: 0;
+    border-top: 0.5px solid var(--gold-border);
+    padding-top: 18px;
+  }
+
   .home-footer { display: none; }
 
   /* Panel photo strip: single row of 5 on tablet/mobile */
@@ -1820,7 +1828,8 @@ body.page-home {
   /* Works / contact stack */
   .contact-grid { flex-direction: column; }
   .contact-row-top { flex-direction: column; }
-  .contact-card { padding: 28px 24px; flex: none; }  /* stacked: size to content, not 0 basis */
+  .contact-card { padding: 24px 0; flex: none; --accent-top: 30px; --accent-left: -18px; }  /* stacked: size to content, not 0 basis */
+  .contact-row-top > .contact-card + .contact-card { border-left: none; border-top: 0.5px solid var(--gold-border); }
 
   /* Tablet: 3 columns */
   .masonry-grid { columns: 3; --cols: 3; }
@@ -2071,14 +2080,8 @@ body.page-home {
   that cannot hover — phones, tablets, etc.
 */
 @media (hover: none) {
-  .card:hover,
-  .panel:hover,
-  .post-card:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: var(--gold-border);
-    background: var(--bg-surface);
-  }
+  /* No mouseout on touch — keep the accent line from sticking after a tap */
+  .card:hover::before { height: 0; }
   /* Entry hover bar: keep hidden on touch — no mouseout to reset it */
   .works-entry:hover::before,
   .notes-entry:hover::before { height: 0; }

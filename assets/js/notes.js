@@ -116,6 +116,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loads.forEach(p => window.pbTrack?.(p));  // drive the arrival progress bar
 
+  /* ── Timeline: highlight the post being read ────────── */
+  // The active post is the last one whose top has passed a line 35% down the
+  // screen (or the last post once the page bottom is reached — a short final
+  // post may never get that high). Time-throttled scroll checks, no rAF, as in main.js.
+  if (timeline) {
+    const entries  = [...timeline.querySelectorAll('.timeline-entry')];
+    const cards    = [...cardCol.querySelectorAll('.post-card')];
+    const scroller = document.querySelector('.page-wrapper');
+    let current = null;
+
+    function spy() {
+      if (!cards.length) return;
+      let active = cards[0];
+      const atBottom = scroller && scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
+      if (atBottom) active = cards[cards.length - 1];
+      else {
+        const line = innerHeight * 0.35;
+        for (const c of cards) {
+          if (c.getBoundingClientRect().top <= line) active = c;
+          else break;
+        }
+      }
+      if (active === current) return;
+      current = active;
+      entries.forEach(a => {
+        const on = a.getAttribute('href') === `#${active.id}`;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'location');
+        else    a.removeAttribute('aria-current');
+      });
+    }
+
+    let lastSpy = 0, trailingSpy = 0;
+    (scroller || window).addEventListener('scroll', () => {
+      const now = performance.now();
+      if (now - lastSpy > 100) { lastSpy = now; spy(); }
+      clearTimeout(trailingSpy);
+      trailingSpy = setTimeout(spy, 120);
+    }, { passive: true });
+    Promise.allSettled(loads).then(spy);   // posts above change height as bodies load
+    spy();
+  }
+
   // Arriving via notes.html#post-N (home panel links): posts above the target
   // grow as their bodies load and web fonts swap in, so re-align after both.
   const target = location.hash && document.getElementById(location.hash.slice(1));
