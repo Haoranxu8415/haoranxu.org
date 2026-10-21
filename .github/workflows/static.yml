@@ -35,6 +35,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      # Generated blocks (works cards …) are rebuilt from their sources, so a page that
+      # wasn't rebuilt locally can't ship out of date. See tools/build.mjs.
+      - name: Build generated blocks
+        run: node tools/build.mjs
       # Browsers may reuse cached CSS/JS for 10 min (max-age=600) while fetching new
       # HTML, so right after a deploy returning visitors saw new markup with old styles.
       # Stamp every CSS/JS reference with this commit so each deploy gets fresh files.

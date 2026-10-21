@@ -31,6 +31,7 @@ contact.html            Contact and social links
 
 works/                  Individual work detail pages
 posts/                  Markdown files for Notes articles
+tools/build.mjs         Writes the generated blocks into the pages (see Build)
 
 assets/
   css/style.css         All styles — labelled sections (§0 self-hosted fonts)
@@ -68,13 +69,14 @@ assets/
 2. Add one entry to the `WORKS` array in `assets/js/data.js`:
    ```js
    {
-     title: 'Your Work Title',
-     tag:   'Category · Label',
-     date:  '2026-01-01',       // year only matters for display order
-     href:  'works/your-page.html',
+     title:   'Your Work Title',
+     tag:     'Category · Label',
+     date:    '2026-01-01',       // sorts the list; the card shows the year
+     href:    'works/your-page.html',
+     excerpt: 'One or two sentences for the card.',
    }
    ```
-3. Add a `.card.work-card` block to `works.html` pointing to the new page.
+3. Run `node tools/build.mjs` — it writes the card into `works.html`. (The deploy runs it too, but run it locally to preview.)
 4. The newest work (by `date`) becomes the home "Now researching" line automatically.
 
 ### Add a Gallery Photo
@@ -110,11 +112,25 @@ assets/
 
 The navbar markup is repeated in every page (`index.html`, the four section pages, `404.html`, and each page in `works/`, which use `../` links). Changing a link, the one-line notes shown in the phone menu (`.nav-desc`), or the contact line at its foot (`.nav-foot`) means updating all of them. Mark the current page with `class="active"` on its link; the gold underline follows it.
 
+## Build
+
+The site is plain static HTML, but a few blocks repeat or mirror `data.js`. Each has one source;
+`tools/build.mjs` (Node, no dependencies) writes it into the pages between `<!-- build:NAME -->` markers:
+
+| Block | Source | Pages |
+|---|---|---|
+| `works` | `WORKS` in `assets/js/data.js` | `works.html` |
+
+```
+node tools/build.mjs          # rewrite the blocks
+node tools/build.mjs --check  # exit 1 if a page is out of date
+```
+
+Never edit inside the markers — the next build overwrites it. The deploy workflow runs the build before publishing.
+
 ## TODO
 
-**Works**
-- [ ] Add cover images to the work cards on `works.html`
-- [ ] Generate `works.html` cards from `WORKS` in `assets/js/data.js` (add `excerpt` + `cover` fields) so a new work only needs one entry instead of two
+- [ ] Bring Works, Notes and Contact into the home / gallery language (field notes, rolls)
 
 ## Deployment
 

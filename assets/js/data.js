@@ -1,7 +1,8 @@
 /**
  * data.js — single source of truth for haoranxu.org
  *
- * To add a new Work:  push an entry to WORKS (newest first)
+ * To add a new Work:  push an entry to WORKS (newest first), then run
+ *                     `node tools/build.mjs` — it writes the card into works.html
  * To add a new Note:  push an entry to POSTS — timeline, cards,
  *                     and home preview all update automatically.
  *
@@ -10,6 +11,7 @@
  *   tag     Category label  e.g. "Design · Web"
  *   date    ISO date for sorting  e.g. "2025-03-01"
  *   href    Path from site root   e.g. "works/algorithm-mirror.html"
+ *   excerpt One or two sentences for the card on works.html (plain text)
  *
  * POSTS fields:
  *   id      Anchor id used on notes.html  e.g. "post-1"
@@ -38,24 +40,28 @@ const WORKS = [
     tag:   'Research · LLM',
     date:  '2026-01-01',
     href:  'works/dark-patterns.html',
+    excerpt: 'An ongoing study into whether visual design in AI-powered shopping interfaces can independently shift model judgement, beyond what the numbers alone convey.',
   },
   {
     title: 'Information Bubbles',
     tag:   'Design · Web',
     date:  '2025-01-01',
     href:  'works/algorithm-mirror.html',
+    excerpt: 'An interactive prototype simulating social media recommendation algorithms. Users experience firsthand how their own behaviour shapes what they see, and what that reveals about them.',
   },
   {
     title: 'WYEF · Shadow Walker',
     tag:   'Business · Design',
     date:  '2024-01-01',
     href:  'works/wyef-shadow-walker.html',
+    excerpt: 'A business concept for a stealth-adventure game, designed and produced under competition pressure. Responsible for visual concept design and the narrative video.',
   },
   {
     title: "A Winter's Light",
     tag:   'Photography',
     date:  '2023-01-01',
     href:  'works/kexue-island.html',
+    excerpt: 'Winter light over a still lake and bare forest in Hefei, 2023. The first time I went somewhere specifically to photograph.',
   },
 ];
 
