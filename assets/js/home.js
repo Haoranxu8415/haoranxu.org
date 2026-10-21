@@ -17,8 +17,21 @@ const SCREEN_H = innerHeight;
     `<a href="${work.href}" class="on"><span class="lt-k">Now researching</span><span class="lt-t">${work.title} →</span></a>` +
     `<a href="notes.html#${note.id}"><span class="lt-k">Lately writing</span><span class="lt-t">${note.title} →</span></a>`;
   if (!REDUCED) {
-    const items = [...document.querySelectorAll('#lt3 a')]; let i = 0;
-    setInterval(() => { if (document.hidden) return; items[i].classList.remove('on'); i = (i + 1) % items.length; items[i].classList.add('on'); }, 2800);
+    // Alternates every 2.8 s — but holds still while the pointer is on it or it has keyboard focus,
+    // so the line you're about to click can't change under you; the full 2.8 s restarts after you leave.
+    const lt = document.getElementById('lt3'), items = [...lt.querySelectorAll('a')];
+    let i = 0, timer = 0, held = false;
+    const next = () => {
+      if (!document.hidden) { items[i].classList.remove('on'); i = (i + 1) % items.length; items[i].classList.add('on'); }
+      timer = setTimeout(next, 2800);
+    };
+    const hold = () => { held = true; clearTimeout(timer); };
+    const release = () => { if (!held) return; held = false; clearTimeout(timer); timer = setTimeout(next, 2800); };
+    lt.addEventListener('pointerenter', hold);
+    lt.addEventListener('pointerleave', () => { if (!lt.contains(document.activeElement)) release(); });
+    lt.addEventListener('focusin', hold);
+    lt.addEventListener('focusout', e => { if (!lt.contains(e.relatedTarget) && !lt.matches(':hover')) release(); });
+    timer = setTimeout(next, 2800);
   }
 
   const ridges = (x0, x1, y0, y1, step = 3) => { let s = ''; for (let x = x0; x <= x1; x += step) s += `M${x} ${y0}V${y1}`; return `<path class="d" d="${s}"/>`; };
