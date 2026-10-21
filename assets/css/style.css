@@ -210,6 +210,10 @@ ul   { list-style: none; }
   opacity: 0;
   transition: opacity .35s var(--ease-inout);
 }
+/* Touch / phone screens: a near-opaque bar instead of a live blur — backdrop-filter re-blurs every scroll frame */
+@media (hover: none), (max-width: 900px) {
+  .navbar::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(10, 28, 22, .94); }
+}
 .navbar.scrolled { border-bottom-color: rgba(201,169,110,.1); }
 .navbar.scrolled::before { opacity: 1; }
 .navbar:has(.nav-wrapper.open)::before { opacity: 0; }
@@ -542,15 +546,16 @@ body.page-home { overflow-x: clip; }
 .hero5 { flex: 1 1 auto; min-height: 0; position: relative;
   padding: clamp(14px, 2.6vh, 32px) var(--gut) clamp(16px, 2.6vh, 30px); perspective: 1200px; }
 .hero5::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background: radial-gradient(circle, rgba(232,213,163,.07) 1px, transparent 1.3px) 0 0 / 26px 26px;
-  mask-image: linear-gradient(to bottom, #000 55%, transparent); }
+  /* the fade is a page-coloured gradient laid over the dots, not a mask: WebKit repaints masked layers while scrolling */
+  background: linear-gradient(to bottom, transparent 55%, var(--bg-base)),
+              radial-gradient(circle, rgba(232,213,163,.07) 1px, transparent 1.3px) 0 0 / 26px 26px; }
 .h-top { position: relative; z-index: 3; display: flex; justify-content: space-between; gap: 16px; }
 
 .h-name { position: relative; z-index: 4; margin: clamp(4px, 1.5vh, 18px) 0 0 -.04em !important;
   font-family: var(--font-display); font-weight: 300; color: var(--gold);
   line-height: .8; letter-spacing: -.012em; pointer-events: none;
   text-shadow: 0 1px 0 rgba(0,0,0,.18), 0 .06em .1em rgba(4,10,7,.35), 0 .14em .45em rgba(4,10,7,.38);
-  transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+  transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); }
 .h-name em { display: block; font-style: italic; color: var(--gold-light); }
 
 .h-copy { position: absolute; z-index: 3; left: var(--gut); bottom: clamp(16px, 2.6vh, 30px); max-width: 520px; }
@@ -558,7 +563,8 @@ body.page-home { overflow-x: clip; }
 .h-copy .hero-status { margin: 0; }
 
 /* the one print on the desk: the portrait on paper, with its label written on the border */
-.h-self { position: absolute; z-index: 2; margin: 0; transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+.h-self { position: absolute; z-index: 2; margin: 0; transition: transform .9s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (hover: hover) and (pointer: fine) { .h-name, .h-self { will-change: transform; } }   /* only where the pointer parallax runs */
 .h-self .frame { position: relative; display: flex; flex-direction: column; padding: 3.2% 3.2% 0; background: var(--paper); border-radius: 1px;
   transform: rotate(-2deg); box-shadow: 0 30px 50px -22px rgba(0,0,0,.7), 0 2px 5px rgba(0,0,0,.25); }
 .h-self .pic { position: relative; }
@@ -598,8 +604,11 @@ body.page-home { overflow-x: clip; }
 
 /* ── Film row (unchanged from v4) ── */
 .film { flex: 0 0 auto; height: clamp(150px, 23svh, 250px); background: var(--film); position: relative;
-  overflow: hidden; border-top: 0.5px solid var(--gold-border); cursor: grab;
-  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+  overflow: hidden; border-top: 0.5px solid var(--gold-border); cursor: grab; touch-action: pan-y; }
+/* Soft ends: page-coloured gradients over the strip rather than a mask — a mask over a strip that moves
+   every frame makes Safari repaint it every frame */
+.film-edge { position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(90deg, var(--bg-base), transparent 4%, transparent 96%, var(--bg-base)); }
 .film.dragging { cursor: grabbing; }
 .film::before, .film::after { content: ''; position: absolute; left: 0; right: 0; height: 9px; z-index: 2; pointer-events: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9'%3E%3Crect x='6' y='1' width='11' height='7' rx='1.6' fill='%23E8D5A3' fill-opacity='.13'/%3E%3C/svg%3E") repeat-x; }

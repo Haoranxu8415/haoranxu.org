@@ -4,6 +4,8 @@
 (() => {
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pad = n => String(n).padStart(2, '0');
+// Phone toolbars change innerHeight while scrolling; size from the height at load so nothing reflows mid-scroll
+const SCREEN_H = innerHeight;
   const now = new Date();
   document.getElementById('stamp').textContent = `'${String(now.getFullYear()).slice(2)} ${pad(now.getMonth() + 1)} ${pad(now.getDate())}`;
   document.getElementById('entry').textContent = 'Field notes · ' + now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -127,7 +129,7 @@
     const toHero = r => ({ x: r.left - hr.left, y: r.top - hr.top, w: r.width, h: r.height });
 
     if (innerWidth <= 900) {
-      const fs = Math.min(120 * (W - 2 * padL) * .97 / wordW, innerHeight * .42 / 1.72);
+      const fs = Math.min(120 * (W - 2 * padL) * .97 / wordW, SCREEN_H * .42 / 1.72);
       name.style.fontSize = Math.max(56, fs) + 'px';
       // print under the name, right of centre; kit scattered around it; copy below
       const sw = Math.min(W * .56, 300), nb = name.offsetTop + name.offsetHeight;
@@ -211,8 +213,16 @@
     if (!dragging) x -= v * SPEED * dt;
     if (loopW) { if (x <= -loopW) x += loopW; if (x > 0) x -= loopW; }
     track.style.transform = `translate3d(${x}px,0,0)`;
-    requestAnimationFrame(frame);
+    running = onScreen && !document.hidden;
+    if (running) requestAnimationFrame(frame);
   }
+  // Only run while the strip is on screen and the page is visible (it costs every frame otherwise)
+  let running = false, onScreen = true;
+  const resume = () => {
+    if (!running && onScreen && !document.hidden) { running = true; requestAnimationFrame(t => { last = t; frame(t); }); }
+  };
+  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; resume(); }).observe(film);
+  document.addEventListener('visibilitychange', resume);
   film.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') target = 0; });
   film.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && !REDUCED) target = 1; dragging = false; film.classList.remove('dragging'); });
   film.addEventListener('pointerdown', e => { dragging = true; dragStart = e.clientX; dragX = x; target = 0; film.classList.add('dragging'); film.setPointerCapture(e.pointerId); });
@@ -226,9 +236,15 @@
   Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 600))]).then(() => {
     relayout();
     document.querySelector('.h5-layout').classList.add('ready');   // laid out: fade the hero in (style.css §6)
-    requestAnimationFrame(t => { last = t; frame(t); });
+    resume();
   });
-  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(relayout, 120); });
+  // Re-lay out only when the width changes — not when a phone's toolbar slides in or out mid-scroll
+  let rt, lastW = innerWidth;
+  addEventListener('resize', () => {
+    if (innerWidth === lastW) return;
+    lastW = innerWidth;
+    clearTimeout(rt); rt = setTimeout(relayout, 120);
+  });
   [...track.querySelectorAll('img')].forEach(im => im.addEventListener('load', measureLoop, { once: true }));
 
 })();
