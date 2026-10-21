@@ -7,6 +7,8 @@
 
   A generated block sits between <!-- build:NAME … --> and <!-- /build:NAME --> in a page.
   Edit the source, never the block:
+    nav    ← _partials/nav.html            (every page; links prefixed per folder, current section marked)
+                                           — a new page goes into PAGES below (works/*.html are picked up)
     works  ← WORKS in assets/js/data.js    (the cards in works.html)
 
   The pages stay plain static HTML (no runtime includes), so they work without JS and
@@ -26,10 +28,31 @@ const read  = f => readFileSync(join(ROOT, f), 'utf8');
 const data = {};
 runInNewContext(`${read('assets/js/data.js')}\n;this.WORKS = WORKS;`, data);
 
-/* ── Pages that carry generated blocks ── */
-const PAGES = ['works.html'];
+// the partial minus its leading comment
+const NAV = read('_partials/nav.html').replace(/^<!--[\s\S]*?-->\n/, '').replace(/\n+$/, '');
+
+/* ── Pages: [file, path prefix to the site root, current section] ── */
+const PAGES = [
+  ['index.html',   '',  'home'],
+  ['gallery.html', '',  'gallery'],
+  ['works.html',   '',  'works'],
+  ['notes.html',   '',  'notes'],
+  ['contact.html', '',  'contact'],
+  ['404.html',     '/', null],          // served at any missing path, so links are absolute
+  ...readdirSync(join(ROOT, 'works')).filter(f => f.endsWith('.html')).sort()
+    .map(f => [`works/${f}`, '../', 'works']),
+];
 
 /* ── Renderers ── */
+function nav(root, current) {
+  const out = NAV
+    .replaceAll('{home}', root || './')
+    .replaceAll('{root}', root)
+    .replace(/\{active:(\w+)\}/g, (_, key) => (key === current ? ' class="active"' : ''));
+  if (/\{[a-z:]+\}/.test(out)) throw new Error('nav: unknown placeholder in _partials/nav.html');
+  return out;
+}
+
 function works() {
   const cards = [...data.WORKS]
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -58,15 +81,26 @@ function fill(html, name, content, file) {
   return html.replace(re, (_, open, close) => open + content + close);
 }
 
-let stale = 0;
-for (const file of PAGES) {
+// A page with a navbar that isn't listed above would silently keep a stale copy — refuse instead
+const listed = new Set(PAGES.map(([f]) => f));
+const htmlFiles = [...readdirSync(ROOT).filter(f => f.endsWith('.html')),
+                   ...readdirSync(join(ROOT, 'works')).filter(f => f.endsWith('.html')).map(f => `works/${f}`)];
+for (const f of htmlFiles)
+  if (!listed.has(f) && read(f).includes('class="navbar"'))
+    throw new Error(`${f} has a navbar but isn't in PAGES in tools/build.mjs`);
+
+// Render everything first, write only if every page succeeded — never leave the site half-updated
+const changed = PAGES.map(([file, root, current]) => {
   const before = read(file);
-  let after = before;
+  let after = fill(before, 'nav', nav(root, current), file);
   if (file === 'works.html') after = fill(after, 'works', works(), file);
-  if (after === before) continue;
-  stale++;
-  if (CHECK) console.log(`out of date: ${file}`);
-  else { writeFileSync(join(ROOT, file), after); console.log(`updated: ${file}`); }
+  return [file, before, after];
+}).filter(([, before, after]) => after !== before);
+
+if (CHECK) {
+  changed.forEach(([file]) => console.log(`out of date: ${file}`));
+  if (changed.length) { console.error(`\n${changed.length} page(s) out of date — run: node tools/build.mjs`); process.exit(1); }
+} else {
+  changed.forEach(([file, , after]) => { writeFileSync(join(ROOT, file), after); console.log(`updated: ${file}`); });
 }
-if (CHECK && stale) { console.error(`\n${stale} page(s) out of date — run: node tools/build.mjs`); process.exit(1); }
-if (!stale) console.log(`all ${PAGES.length} pages up to date`);
+if (!changed.length) console.log(`all ${PAGES.length} pages up to date`);

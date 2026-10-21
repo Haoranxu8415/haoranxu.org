@@ -32,6 +32,7 @@ contact.html            Contact and social links
 works/                  Individual work detail pages
 posts/                  Markdown files for Notes articles
 tools/build.mjs         Writes the generated blocks into the pages (see Build)
+_partials/nav.html      The navbar, once — copied into every page by the build
 
 assets/
   css/style.css         All styles — labelled sections (§0 self-hosted fonts)
@@ -110,7 +111,9 @@ assets/
 
 ### Navigation
 
-The navbar markup is repeated in every page (`index.html`, the four section pages, `404.html`, and each page in `works/`, which use `../` links). Changing a link, the one-line notes shown in the phone menu (`.nav-desc`), or the contact line at its foot (`.nav-foot`) means updating all of them. Mark the current page with `class="active"` on its link; the gold underline follows it.
+The navbar lives once, in `_partials/nav.html`. Edit it there — a link, the one-line notes in the phone menu (`.nav-desc`), the contact line at its foot (`.nav-foot`) — then run `node tools/build.mjs`; it copies it into every page with the right link prefix (`./`, `../` for `works/`, `/` for `404.html`) and marks the current section `class="active"` (the gold underline follows it).
+
+A new page needs the `<!-- build:nav -->` / `<!-- /build:nav -->` markers where the navbar goes (copy them from any page) and a line in `PAGES` in `tools/build.mjs`; pages in `works/` are picked up automatically. The build refuses to run if a page has a navbar but isn't listed, so none can be left behind.
 
 ## Build
 
@@ -119,6 +122,7 @@ The site is plain static HTML, but a few blocks repeat or mirror `data.js`. Each
 
 | Block | Source | Pages |
 |---|---|---|
+| `nav` | `_partials/nav.html` | every page |
 | `works` | `WORKS` in `assets/js/data.js` | `works.html` |
 
 ```
@@ -126,7 +130,7 @@ node tools/build.mjs          # rewrite the blocks
 node tools/build.mjs --check  # exit 1 if a page is out of date
 ```
 
-Never edit inside the markers — the next build overwrites it. The deploy workflow runs the build before publishing.
+Never edit inside the markers — the next build overwrites it. The build renders every page before writing any, so an error leaves nothing half-updated. The deploy workflow runs it before publishing.
 
 ## TODO
 

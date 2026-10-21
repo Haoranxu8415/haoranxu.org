@@ -1,0 +1,33 @@
+<!--
+  The navbar, once. tools/build.mjs copies it into every page, between the
+  build:nav markers (run: node tools/build.mjs). Placeholders:
+    {home}       link to the home page  ('./', '../' or '/')
+    {root}       prefix for other pages ('', '../' or '/')
+    {active:X}   becomes class="active" on the current section's link
+-->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="{home}" class="nav-logo">Haoran Xu</a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-wrapper">
+      <p class="nav-index" aria-hidden="true">Index</p>
+      <ul class="nav-links">
+        <li><a href="{home}"{active:home}><span class="nav-label">Home</span><span class="nav-desc" aria-hidden="true">start here</span></a></li>
+        <li><a href="{root}gallery.html"{active:gallery}><span class="nav-label">Gallery</span><span class="nav-desc" aria-hidden="true">photographs</span></a></li>
+        <li><a href="{root}works.html"{active:works}><span class="nav-label">Works</span><span class="nav-desc" aria-hidden="true">research</span></a></li>
+        <li><a href="{root}notes.html"{active:notes}><span class="nav-label">Notes</span><span class="nav-desc" aria-hidden="true">writing</span></a></li>
+        <li><a href="{root}contact.html"{active:contact}><span class="nav-label">Contact</span><span class="nav-desc" aria-hidden="true">say hello</span></a></li>
+      </ul>
+      <div class="nav-foot">
+        <a class="mail" href="mailto:me@haoranxu.org">me@haoranxu.org</a>
+        <div class="row">
+          <a href="https://www.linkedin.com/in/ryan-xu-7a6aba396/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Haoranxu8415" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://instagram.com/haoran8415" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </nav>

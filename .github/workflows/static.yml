@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      # Generated blocks (works cards …) are rebuilt from their sources, so a page that
+      # Generated blocks (the navbar on every page, the works cards) are rebuilt from their sources, so a page that
       # wasn't rebuilt locally can't ship out of date. See tools/build.mjs.
       - name: Build generated blocks
         run: node tools/build.mjs
