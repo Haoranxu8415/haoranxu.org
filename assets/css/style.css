@@ -1394,16 +1394,36 @@ body.page-home {
 
 
 /* ── 14. Works Detail ─────────────────────────────────────── */
-.project-card {
-  padding: 20px 20px 20px 24px;
-  max-width: 720px;
+/*
+  Work detail = an article set directly on the page, not a boxed card.
+  The card frame (surface, border, padding) made long reads feel boxed in and cost
+  a few lines per screen; the hover lift + accent bar were meant for clickable cards.
+  Column ~84 characters a line at 17 px.
+*/
+.card.project-card {
+  --article-w: 760px;
+  max-width: var(--article-w);
   margin-left: auto;
   margin-right: auto;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.card.project-card::before { display: none; }
+.card.project-card:hover { transform: none; box-shadow: none; }
+
+/* "← Works" sits on the article's left edge, not the page's */
+.page-content:has(> .project-card) > .back-link {
+  margin-left: max(0px, calc((100% - 760px) / 2));
+  margin-bottom: 28px;   /* breathing room above the tag now there's no card edge */
 }
 .card.project-card h2 {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(30px, 3.4vw, 46px);
+  font-size: clamp(28px, 2.7vw, 38px);
+  text-wrap: balance;   /* long titles split into two even lines, not one word on line 2 */
   color: var(--gold-light);
   line-height: 1.2;
   margin-bottom: 14px;
@@ -1417,12 +1437,12 @@ body.page-home {
 .project-card > p:not(.card-tag) {
   font-size: 17px;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
   margin-bottom: 10px;
 }
-/* On mobile the card is already viewport-width — remove the cap */
+/* On mobile the article already spans the content width — remove the cap */
 @media (max-width: 900px) {
-  .project-card { max-width: none; }
+  .card.project-card { max-width: none; }
 }
 .project-images {
   display: flex;
@@ -1440,13 +1460,15 @@ body.page-home {
 }
 .project-images img:hover { border-color: var(--gold-border-em); }
 
+.nowrap { white-space: nowrap; }
+
 /* Stat strip — key figures of a work at a glance (works/dark-patterns.html).
    <dt> label comes first in the markup for screen readers; column-reverse puts
    the number on top visually. */
 .stat-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin: 6px 0 26px;
+  margin: 2px 0 20px;
   border-top: 0.5px solid var(--gold-border);
   border-bottom: 0.5px solid var(--gold-border);
 }
@@ -1454,15 +1476,15 @@ body.page-home {
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-end;
-  gap: 6px;
-  padding: 18px 18px 16px;
+  gap: 4px;
+  padding: 12px 16px 11px;
 }
 .stat + .stat { border-left: 0.5px solid var(--gold-border); }
 .stat:first-child { padding-left: 0; }
 .stat dd {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(32px, 3.4vw, 44px);
+  font-size: clamp(28px, 2.6vw, 34px);
   line-height: 1;
   color: var(--gold-light);
   font-variant-numeric: lining-nums tabular-nums;
@@ -1476,10 +1498,11 @@ body.page-home {
 /* Any number of stats on one row */
 .stat-strip { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 1fr; }
 /* Word values ("Best Narrative") read smaller than figures */
-.stat-strip--words .stat dd { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.15; }
+.stat-strip--words .stat dd { font-size: clamp(22px, 2.1vw, 26px); line-height: 1.15; }
 @media (max-width: 560px) {
   .stat-strip { grid-auto-flow: row; grid-template-columns: repeat(2, 1fr); }
-  .stat { padding: 16px 18px; }
+  .stat { padding: 10px 14px 9px; }
+  .stat dd { font-size: 26px; }
   .stat:nth-child(odd)  { padding-left: 0; border-left: none; }
   .stat:nth-child(n+3)  { border-top: 0.5px solid var(--gold-border); }
 }
@@ -1524,7 +1547,7 @@ body.page-home {
   font-size: 11px;
   color: var(--text-muted);
   letter-spacing: .04em;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   transition: color var(--dur-fast) var(--ease-inout);
 }
 .back-link:hover { color: var(--gold); }
