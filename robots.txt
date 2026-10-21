@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-# CSS/JS must stay crawlable: search engines render pages with them, and the
-# home page's Works / Notes lists are built by JS.
+# CSS/JS must stay crawlable: search engines render pages with them, and parts
+# of the home page (latest work / note, film strip) are built by JS.
 # Note bodies are deliberately kept out of search: notes.html loads them from
 # /posts/, so blocking that folder keeps the article text unindexed.
 Disallow: /posts/

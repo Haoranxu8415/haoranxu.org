@@ -7,11 +7,9 @@
    1.  Tokens
    2.  Reset
    3.  Top Bar
-   4.  Navbar
+   4.  Navbar      (clear → frosted, gold ink; phone index menu in §17)
    5.  Animations  (gentle fade — no spring/bounce)
-   6.  Home Page   — two-row no-scroll layout
-   7.  Home Page   — Hero (name · divider · info · photo)
-   8.  Home Page   — Bottom Panels
+   6.  Home Page   — field notes (name over the print, scattered kit, film strip)
    9.  Inner Pages — Page Wrapper (72 vw)
    10. Shared Cards
    11. Gallery Page (masonry)
@@ -124,7 +122,6 @@
   /* radii */
   --r-btn:   9px;
   --r-card:  12px;
-  --r-panel: 18px;
 
   /* layout */
   --topbar-h:  2.5px;

@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     spy();
   }
 
-  // Arriving via notes.html#post-N (home panel links): posts above the target
+  // Arriving via notes.html#post-N (the home "Lately writing" link): posts above the target
   // grow as their bodies load and web fonts swap in, so re-align after both.
   const target = location.hash && document.getElementById(location.hash.slice(1));
   if (target) {

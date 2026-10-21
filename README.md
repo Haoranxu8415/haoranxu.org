@@ -75,12 +75,13 @@ assets/
    }
    ```
 3. Add a `.card.work-card` block to `works.html` pointing to the new page.
+4. The newest work (by `date`) becomes the home "Now researching" line automatically.
 
 ### Add a Gallery Photo
 
 1. Keep the original in `assets/images/gallery/` (archive only — never loaded by the site).
-2. Export two WebP versions (EXIF rotation applied):
-   - `thumbs/photoN.webp` — 720px wide, quality ~78 (masonry grid, home strip)
+2. Export WebP versions (EXIF rotation applied):
+   - `thumbs/photoN.webp` — 720px wide, quality ~78 (masonry grid)
    - `large/photoN.webp` — 2400px long edge, quality ~82 (lightbox)
    - `mini/photoN.webp` — 320px wide, quality ~72 (home film strip)
 3. Add a `.masonry-item` block to `gallery.html` (width/height = the thumb's pixel size, prevents layout shift):
@@ -94,6 +95,19 @@ assets/
    ```
 4. Optionally add it to the home film strip (the `P` list in `assets/js/home.js`, uses the `mini/` version).
 
+### Home page
+
+`index.html` holds the markup; everything that moves or is placed is in `assets/js/home.js`:
+
+- **Latest line** — "Now researching" (newest `WORKS` entry) and "Lately writing" (newest `POSTS` entry) alternate every 2.8 s. Nothing to edit by hand.
+- **Film strip** — the `P` list: `[photo number, title, width, height]` of the `mini/` image.
+- **Kit drawings** — the `KIT` list: `name` (shown on hover), `vb` (the SVG viewBox size; all drawings share one scale, so a bigger object gets a bigger viewBox) and `svg` (the line drawing). Pieces are placed automatically into the free space around the portrait; on screens ≥ 1800 px they stay right of "Xu".
+- **Date stamp / "Field notes" date** — today's date, set in the browser.
+
+### Navigation
+
+The navbar markup is repeated in every page (`index.html`, the four section pages, `404.html`, and each page in `works/`, which use `../` links). Changing a link, the one-line notes shown in the phone menu (`.nav-desc`), or the contact line at its foot (`.nav-foot`) means updating all of them. Mark the current page with `class="active"` on its link; the gold underline follows it.
+
 ## TODO
 
 **Works**
@@ -104,7 +118,7 @@ assets/
 
 Pushing to `main` triggers the GitHub Actions workflow (`.github/workflows/static.yml`), which deploys the site to GitHub Pages automatically.
 
-If CSS or JS files are updated and the changes don't appear on the live site, purge the Cloudflare cache: **Dashboard → haoranxu.org → Caching → Configuration → Purge Cache**.
+The workflow stamps every CSS/JS reference in the HTML with the commit (`style.css?v=<sha>`), so browsers fetch fresh files after each deploy — keep plain `assets/css/…` / `assets/js/…` paths in the source. If a change still doesn't appear, purge the Cloudflare cache: **Dashboard → haoranxu.org → Caching → Configuration → Purge Cache**.
 
 ---
 
