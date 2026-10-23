@@ -212,9 +212,18 @@ const SCREEN_H = innerHeight;
     [3,'Maple Leaves',720,1077],[13,'Seagull in the Sky',720,480],[5,'Splitting Bamboo',720,1077],[9,'Stone in the River',720,480],
     [14,'Fireworks',720,480],[15,'Abstract Leaves',720,1077],[1,'Lamp by the Riverside',720,480],[18,'Reaching for Seagulls',720,960],
     [11,'Baking Tea',720,481],[12,"Suzhou's Sunset",720,481],[7,'Painting with a Brush',720,481],[10,'Holding Tea',720,481]];
-  const set = (rep) => P.map(([n, t, w, h], i) => `<a href="gallery.html" style="aspect-ratio:${w}/${h}" aria-label="${t}"${rep ? ' aria-hidden="true" tabindex="-1"' : ''}>` +
-    `<img src="assets/images/gallery/mini/photo${n}.webp" alt="${rep ? '' : t}" draggable="false" decoding="async">` +
-    `<span class="edge n">${i === 0 ? 'HX 400  ' : ''}${pad(i + 1)} ▸ ${pad(i + 1)}A</span><span class="ttl">${t}</span></a>`).join('');
+  // A DX-style barcode for the bottom edge, different for every frame (bits from the frame number)
+  const dx = n => {
+    const bits = ((n * 2654435761) >>> 0).toString(2).padStart(32, '0').slice(3, 17);
+    return `<svg class="dx" viewBox="0 0 28 4" preserveAspectRatio="none" aria-hidden="true">${
+      [...bits].map((b, k) => (b === '1' ? `<rect x="${k * 2}" width="1.2" height="4"/>` : '')).join('')}</svg>`;
+  };
+  // Each frame carries its edge print: film name above, frame numbers + barcode below (title on hover)
+  const set = (rep) => P.map(([n, t, w, h], i) => `<a href="gallery.html" aria-label="${t}"${rep ? ' aria-hidden="true" tabindex="-1"' : ''}>` +
+    `<img src="assets/images/gallery/mini/photo${n}.webp" style="aspect-ratio:${w}/${h}" alt="${rep ? '' : t}" draggable="false" decoding="async">` +
+    `<span class="rb rb-top" aria-hidden="true">HX 400<i>${i % 4 === 0 ? '◆' : ''}</i></span>` +
+    `<span class="rb rb-bot" aria-hidden="true"><b>▸ ${pad(i + 1)}</b>${dx(i + 1)}<b>${pad(i + 1)}A</b></span>` +
+    `<span class="ttl">${t}</span></a>`).join('');
   const track = document.getElementById('track'), film = document.getElementById('film');
   track.innerHTML = set(false) + set(true);
   let x = 0, v = 0, target = REDUCED ? 0 : 1, last = performance.now(), loopW = 0, dragging = false, dragX = 0, dragStart = 0;

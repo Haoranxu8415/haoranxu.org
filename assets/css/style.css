@@ -526,7 +526,7 @@ ul   { list-style: none; }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; box-shadow: 0 0 5px rgba(201,169,110,.5); }
 .tag { font-size: 11px; letter-spacing: .08em; color: var(--gold); border: 0.5px solid var(--gold-border-em); border-radius: 4px; padding: 3px 10px; }
 
-:root { --film: #060b08; --gut: clamp(20px, 4.2vw, 64px); --edge: rgba(201,169,110,.5);
+:root { --film: #050706; --gut: clamp(20px, 4.2vw, 64px); --edge: rgba(201,169,110,.5);
   --stamp: #FF9B50; --paper: #E9E1CF; }
 body.page-home { overflow-x: clip; }
 .h5-layout { animation: pageIn var(--dur-slow) var(--ease-out) both; }
@@ -602,27 +602,45 @@ body.page-home { overflow-x: clip; }
 .lt-t { font-family: var(--font-display); font-weight: 300; font-style: italic; color: var(--gold-light); }
 .lt-3 a:hover .lt-t { color: #fff3d6; }
 
-/* ── Film row (unchanged from v4) ── */
+/* ── Film row: a strip of real 35 mm film ──
+   Black base; perforations at the real pitch (4.75 mm, 2.8 × 1.98 mm holes, a little light through
+   them) that travel with the film; edge print (film name, frame numbers, DX code); unexposed base
+   between frames. Sizes come from the strip's height via container units: the film's 35 mm = 100cqh,
+   the 24 mm image = 68.6cqh. Photos keep their own aspect ratio. */
 .film { flex: 0 0 auto; height: clamp(150px, 23svh, 250px); background: var(--film); position: relative;
-  overflow: hidden; border-top: 0.5px solid var(--gold-border); cursor: grab; touch-action: pan-y; }
+  overflow: hidden; cursor: grab; touch-action: pan-y; container-type: size; }
 /* Soft ends: page-coloured gradients over the strip rather than a mask — a mask over a strip that moves
    every frame makes Safari repaint it every frame */
 .film-edge { position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background: linear-gradient(90deg, var(--bg-base), transparent 4%, transparent 96%, var(--bg-base)); }
 .film.dragging { cursor: grabbing; }
-.film::before, .film::after { content: ''; position: absolute; left: 0; right: 0; height: 9px; z-index: 2; pointer-events: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9'%3E%3Crect x='6' y='1' width='11' height='7' rx='1.6' fill='%23E8D5A3' fill-opacity='.13'/%3E%3C/svg%3E") repeat-x; }
-.film::before { top: 8px; } .film::after { bottom: 8px; }
-.track { position: absolute; top: 24px; bottom: 34px; left: 0; display: flex; gap: 12px; will-change: transform; }
-.track a { position: relative; height: 100%; flex: none; display: block; }
-.track img { height: 100%; width: auto; display: block; border-radius: 1px; user-select: none; -webkit-user-drag: none;
+.track { position: absolute; top: 0; bottom: 0; left: 0; display: flex; will-change: transform;
+  width: max-content;                       /* base + perforations paint under every frame, not just the first screen-width */
+  gap: 5.7cqh;                              /* ≈ 2 mm of unexposed base between frames */
+  padding: 0 2.85cqh;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='475' height='198'%3E%3Crect x='0' y='0' width='280' height='198' rx='42' fill='%23E8D5A3' fill-opacity='.2'/%3E%3C/svg%3E") 0 5.4cqh / 13.57cqh 5.66cqh repeat-x,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='475' height='198'%3E%3Crect x='0' y='0' width='280' height='198' rx='42' fill='%23E8D5A3' fill-opacity='.2'/%3E%3C/svg%3E") 0 calc(100% - 5.4cqh) / 13.57cqh 5.66cqh repeat-x,
+    linear-gradient(to bottom, #030404, #0b0d0c 18%, #090b0a 50%, #0b0d0c 82%, #030404); }
+.track a { position: relative; height: 100%; flex: none; display: flex; align-items: center; }
+.track img { height: 68.6cqh; width: auto; display: block; border-radius: .6cqh; user-select: none; -webkit-user-drag: none;
   transition: filter var(--dur-base) var(--ease-inout); }
 .track a:hover img { filter: brightness(1.1); }
-.track .n { position: absolute; left: 0; top: calc(100% + 6px); white-space: nowrap; font-size: 9.5px; }
-.track .ttl { position: absolute; right: 0; top: calc(100% + 5px); font-family: var(--font-display); font-style: italic;
-  font-size: 12.5px; color: var(--gold-light); opacity: 0; white-space: nowrap; transition: opacity var(--dur-base) var(--ease-inout); }
+/* Edge print: pale gold, tiny, in the rebates between the perforations and the frame */
+.rb { position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 1.6cqh;
+  font: 500 3.3cqh/1 var(--font-ui); letter-spacing: .14em; color: rgba(232,213,163,.62);
+  white-space: nowrap; pointer-events: none; transition: opacity var(--dur-base) var(--ease-inout); }
+.rb-top { top: 11.6cqh; }
+.rb-top i { font-style: normal; font-size: 2.6cqh; }
+.rb-bot { top: calc(15.7cqh + 68.6cqh + .7cqh); justify-content: space-between; }
+.rb b { font-weight: 500; }
+.dx { width: 9cqh; height: 2.6cqh; fill: rgba(232,213,163,.55); }
+/* Hover: the title takes the bottom rebate */
+.track .ttl { position: absolute; left: 0; bottom: calc(15.7cqh - 4.4cqh); font-family: var(--font-display); font-style: italic;
+  font-size: 3.6cqh; color: var(--gold-light); opacity: 0; white-space: nowrap; pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-inout); }
 .track a:hover .ttl { opacity: 1; }
-.track a:hover .n { opacity: 0; }
+.track a:hover .rb-bot { opacity: 0; }
 
 @media (max-width: 900px) {
   .h5-layout { height: auto; min-height: 0; }
@@ -782,7 +800,17 @@ body.page-home { overflow-x: clip; }
 /* A roll: its label, then its frames */
 .roll { scroll-margin-top: calc(var(--nav-h) + 16px); }
 .roll + .roll { margin-top: clamp(48px, 8vh, 80px); }
-.roll-head { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; margin-bottom: 18px; }
+.roll-head { position: relative; display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 16px; row-gap: 4px;
+  padding-bottom: 16px; margin-bottom: 18px; }
+/* A faint row of perforations under the title, fading out — a piece cut from the film's edge */
+.roll-head::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 5px;
+  background:
+    linear-gradient(90deg, transparent 55%, var(--bg-base)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='5'%3E%3Crect x='0' y='0' width='8' height='5' rx='1.4' fill='%23E8D5A3' fill-opacity='.16'/%3E%3C/svg%3E") 0 0 / 14px 5px repeat-x;
+}
 .rh-k { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(201,169,110,.55); }
 .rh-t { margin: 0; font-family: var(--font-display); font-weight: 300; font-style: italic; font-size: clamp(26px, 2.4vw, 34px); line-height: 1; color: var(--gold-light); }
 .rh-m { font-size: 12.5px; color: var(--text-muted); }
