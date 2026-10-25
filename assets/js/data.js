@@ -12,6 +12,8 @@
  *   date    ISO date for sorting  e.g. "2025-03-01"
  *   href    Path from site root   e.g. "works/algorithm-mirror.html"
  *   excerpt One or two sentences for the card on works.html (plain text)
+ *   stats   Optional key figures shown under the excerpt: [[value, label], …] — only
+ *           figures stated on the work's own page
  *
  * POSTS fields:
  *   id      Anchor id used on notes.html  e.g. "post-1"
@@ -40,6 +42,7 @@ const WORKS = [
     tag:   'Research · LLM',
     date:  '2026-01-01',
     href:  'works/dark-patterns.html',
+    stats: [['5', 'models'], ['4,800', 'API calls'], ['4,619', 'observations'], ['8', 'products']],
     excerpt: 'An ongoing study into whether visual design in AI-powered shopping interfaces can independently shift model judgement, beyond what the numbers alone convey.',
   },
   {
@@ -54,6 +57,7 @@ const WORKS = [
     tag:   'Business · Design',
     date:  '2024-01-01',
     href:  'works/wyef-shadow-walker.html',
+    stats: [['Best Narrative', 'award'], ['Bronze', 'global finish'], ['Top 20', 'of 76 teams']],
     excerpt: 'A business concept for a stealth-adventure game, designed and produced under competition pressure. Responsible for visual concept design and the narrative video.',
   },
   {

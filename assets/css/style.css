@@ -407,7 +407,7 @@ ul   { list-style: none; }
   No @supports needed — opacity + transform are universally available.
 */
 @media (prefers-reduced-motion: no-preference) {
-  .work-card,
+  .file,
   .post-card {
     animation: staggerIn var(--dur-slow) var(--ease-out) both;
     animation-delay: calc(var(--stagger-i, 0) * 90ms + 150ms);
@@ -452,7 +452,7 @@ ul   { list-style: none; }
   .shot also needs transition: none so the JS entrance is instant.
 */
 @media (prefers-reduced-motion: reduce) {
-  .work-card,
+  .file,
   .post-card,
   .contact-card,
   .social-card {
@@ -758,6 +758,56 @@ body.page-home { overflow-x: clip; }
 .card-col { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 180px; }
 /* Notes page overrides card-col gap to give posts more breathing room */
 .blog-layout .card-col { gap: 20px; }
+
+
+/* Shared marks of the notebook (gallery, works, notes) */
+.edge-k {
+  font-size: 10.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(201,169,110,.55);
+  font-variant-numeric: tabular-nums;
+}
+/* A row of perforations between items, fading out — a piece cut from the film's edge */
+.perf-rule {
+  height: 5px;
+  margin: clamp(30px, 5vh, 44px) 0;
+  background: linear-gradient(90deg, transparent 55%, var(--bg-base)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='5'%3E%3Crect x='0' y='0' width='8' height='5' rx='1.4' fill='%23E8D5A3' fill-opacity='.16'/%3E%3C/svg%3E") 0 0 / 14px 5px repeat-x;
+}
+/* The license closes the page: "— end of …" left, © right */
+.page-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: clamp(40px, 7vh, 72px);
+  padding-top: 16px;
+  border-top: 0.5px solid var(--gold-border-em);
+}
+.page-foot .end { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 15px; color: var(--gold-light); opacity: .8; }
+/* The home print's date imprint, in the site's gold */
+.stamp-g {
+  font: 500 12px/1 var(--font-ui);
+  letter-spacing: .14em;
+  color: var(--gold-light);
+  opacity: .85;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 6px rgba(232,213,163,.35);
+  white-space: nowrap;
+}
+/* Faint dot-grid paper at the top of a page, as on the home page */
+.page-content.paper { position: relative; }
+.page-content.paper::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 420px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 30%, var(--bg-base)),
+              radial-gradient(circle, rgba(232,213,163,.06) 1px, transparent 1.3px) 0 0 / 26px 26px;
+}
 
 
 /* ── 11. Gallery Page — rolls ───────────────────────────── */
@@ -1123,78 +1173,48 @@ body.page-home { overflow-x: clip; }
 
 
 
-/* ── 13. Works Index ──────────────────────────────────────── */
+/* ── 13. Works Index — files ─────────────────────────────── */
 /*
-  Grid of work entries: tag · title · excerpt · arrow link.
-  Flex-wrap so it adjusts from 2-col to 1-col on narrow screens.
+  Each work is a file: its number and year (File 04 ▸ 2026) and its tag in the margin; title,
+  excerpt, and — where the work's own page states them — key figures as one line of edge print.
+  Generated from WORKS in data.js by tools/build.mjs.
 */
-.works-grid {
-  display: flex;
-  flex-direction: column;
+.file {
+  display: grid;
+  grid-template-columns: minmax(150px, 15%) minmax(0, 1fr) auto;
+  column-gap: clamp(20px, 3vw, 48px);
+  align-items: start;
+  color: inherit;
 }
-
-.work-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 18px;
-  padding: 30px 0;
-  --accent-top: 32px;
-}
-.work-card + .work-card { border-top: 0.5px solid var(--gold-border); }
-
-.work-card-body { flex: 1; min-width: 0; }
-.work-card-meta {
-  font-size: 11px;
-  letter-spacing: .10em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .7;
-  margin-bottom: 5px;
-}
-/* Title — the hero of each work card.
-   Specificity must beat .card h2 (tag+class), so we use .card .work-card-title */
-.card .work-card-title {
+.file-k { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; }
+.file-k .edge-k:first-child { color: var(--gold); }
+.file-t {
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(26px, 2.8vw, 40px);
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.12;
   color: var(--gold-light);
-  line-height: 1.05;
-  margin-bottom: 12px;
+  transition: color var(--dur-fast) var(--ease-inout);
 }
-/* Excerpt recedes — smaller and muted so the title dominates */
-.work-card-excerpt {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.7;
-  max-width: 68ch;
-}
-/* Header row inside work card: meta tag left, timestamp right */
-.work-card-header {
+.file:hover .file-t { color: #fff3d6; }
+.file-x { margin: 12px 0 0; max-width: 62ch; font-size: 14.5px; line-height: 1.7; color: var(--text-secondary); }
+/* Key figures: the same small edge print as the labels, so files with and without them weigh the same */
+.file-stats {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
+  flex-wrap: wrap;
+  column-gap: 22px;
+  row-gap: 6px;
+  margin: 14px 0 0;
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(201,169,110,.55);
 }
-
-/* Timestamp — e.g. "2025" or "2024 – 2025" */
-.work-card-date {
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: .04em;
-  white-space: nowrap;
-}
-
-.work-card-arrow {
-  font-size: 18px;
-  color: var(--text-dim);
-  flex-shrink: 0;
-  padding-top: 4px;
-  transition: transform var(--dur-fast) var(--ease-inout), color var(--dur-fast) var(--ease-inout);
-}
-.work-card:hover .work-card-arrow {
-  transform: translateX(4px);
-  color: var(--gold);
-}
+.file-stats div { display: flex; align-items: baseline; gap: 7px; }
+.file-stats dd { margin: 0; color: var(--gold-light); letter-spacing: .1em; font-variant-numeric: tabular-nums; }
+.file-ar { padding-top: 12px; color: var(--gold); transition: transform var(--dur-fast) var(--ease-inout); }
+.file:hover .file-ar { transform: translateX(4px); }
 
 
 /* ── 14. Works Detail ─────────────────────────────────────── */
@@ -1350,6 +1370,21 @@ body.page-home { overflow-x: clip; }
 .back-link:hover { color: var(--gold); }
 
 
+/* A work page's file label (over the title) and the next file (at the end) — both generated */
+.file-head { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; margin-bottom: 10px; }
+.file-head .edge-k:first-child { color: var(--gold); }
+.next-file { display: flex; flex-direction: column; gap: 8px; color: inherit; }
+.next-file .edge-k { color: var(--gold); }
+.next-file b {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(24px, 2.4vw, 32px);
+  color: var(--gold-light);
+  transition: color var(--dur-fast) var(--ease-inout);
+}
+.next-file:hover b { color: #fff3d6; }
+
+
 /* ── 15. Notes Page ───────────────────────────────────────── */
 .blog-layout {
   display: flex;
@@ -1371,13 +1406,16 @@ body.page-home { overflow-x: clip; }
   color: var(--text-muted);
   padding-top: 2px;
 }
+/* the timeline's rail: a vertical strip of perforations */
 .timeline-col::before {
   content: '';
   position: absolute;
-  top: 20px; bottom: -16px; left: 8px;
-  width: 1px;
-  background: linear-gradient(to bottom, var(--gold-border-em), transparent);
+  top: 22px; bottom: -16px; left: 6px;
+  width: 5px;
   pointer-events: none;
+  background:
+    linear-gradient(to bottom, transparent 70%, var(--bg-base)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='12'%3E%3Crect x='0' y='0' width='5' height='7' rx='1.4' fill='%23E8D5A3' fill-opacity='.16'/%3E%3C/svg%3E") 0 0 / 5px 12px repeat-y;
 }
 .timeline-year {
   font-family: var(--font-display);
@@ -1400,11 +1438,11 @@ body.page-home { overflow-x: clip; }
 }
 .timeline-entry:hover { color: var(--gold); }
 .timeline-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--text-dim);
+  width: 7px; height: 7px;
+  border-radius: 1.6px;
+  background: transparent;
   flex-shrink: 0;
-  margin-left: 6px;
+  margin-left: 5px;
   transition: background var(--dur-fast) var(--ease-inout);
 }
 .timeline-entry:hover .timeline-dot { background: var(--gold); }
@@ -1416,26 +1454,23 @@ body.page-home { overflow-x: clip; }
 .timeline-entry.is-active { color: var(--gold-light); }
 .timeline-entry.is-active .timeline-dot {
   background: var(--gold);
-  box-shadow: 0 0 0 3px rgba(201, 169, 110, .18);
+  box-shadow: 0 0 6px rgba(201, 169, 110, .5);
 }
 
 /*
   Posts are set directly on the page like the work articles — no card surface,
-  border, padding or hover lift. Consecutive posts are separated by a hairline
-  and generous space.
+  border, padding or hover lift. Each is a numbered entry; a perforation rule
+  separates consecutive entries.
 */
 .card.post-card {
   scroll-margin-top: 24px; /* breathing room when opened via notes.html#post-N */
   --accent-top: 6px;
 }
-.card.post-card + .card.post-card {
-  margin-top: 36px;          /* + the column's 20 px gap */
-  padding-top: 48px;
-  --accent-top: 54px;
-  border-top: 0.5px solid var(--gold-border);
-  /* Land jumps on the title, not on the empty space above it (48 px padding − 24 px) */
-  scroll-margin-top: -24px;
-}
+/* Entries are separated by a perforation rule (inserted by notes.js), not a hairline */
+.entry-rule { margin: clamp(36px, 6vh, 56px) 0; }
+/* An entry's label line: "Entry 06" left, the gold date stamp right */
+.entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 12px; }
+.entry-end { margin: 28px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 15px; color: var(--gold-light); opacity: .7; }
 
 /* Title — champagne gold, clearly dominant over body text.
    Specificity must beat .card h2 (tag+class), so we use .card .post-title */
@@ -1445,27 +1480,20 @@ body.page-home { overflow-x: clip; }
   font-size: clamp(24px, 2.5vw, 36px);
   color: var(--gold-light);
   line-height: 1.15;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-/* Date + tags — DM Sans, muted supporting role */
+/* Tags · reading time — edge print */
 .post-meta {
   font-family: var(--font-ui);
-  font-size: 11px;
-  color: var(--text-muted);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(201,169,110,.55);
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 18px;
   margin-bottom: 14px;
-}
-.post-divider {
-  height: 0.5px;
-  background: var(--gold-border);
-  margin-bottom: 14px;
-}
-/* Reading time — slightly dimmer than date/tags */
-.read-time {
-  color: var(--text-muted);   /* text-dim was ~2:1 on the background — unreadable at 11 px */
 }
 /* Post body — DM Sans, comfortable long-form reading size */
 .post-body {
@@ -1794,6 +1822,10 @@ body.page-home { overflow-x: clip; }
 
 /* ─ ≤ 720 px ─────────────────────────────────────────────── */
 @media (max-width: 720px) {
+  /* Works: the file's label moves above its title */
+  .file { grid-template-columns: minmax(0, 1fr) auto; row-gap: 10px; }
+  .file-k { grid-column: 1 / -1; flex-direction: row; gap: 14px; padding-top: 0; }
+  .file-ar { padding-top: 6px; }
   /* Gallery: no room for shooting notes beside the viewer's title; roll link drops under its label */
   .lb-exif { display: none; }
   .rh-l { margin-left: 0; }

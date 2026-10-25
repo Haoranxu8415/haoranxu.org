@@ -73,7 +73,7 @@ python3 -m http.server 8000      # then open http://localhost:8000
      tags:  'Tag One · Tag Two',
    }
    ```
-3. The timeline, post cards, and the home "Lately writing" line all update automatically.
+3. The timeline, the numbered entries (Entry 01 = oldest), the count, and the home "Lately writing" line all update automatically.
    Note bodies are kept out of search on purpose (`robots.txt` disallows `/posts/`).
 
 ### Add a Work
@@ -87,9 +87,10 @@ python3 -m http.server 8000      # then open http://localhost:8000
      date:    '2026-01-01',       // sorts the list; the card shows the year
      href:    'works/your-page.html',
      excerpt: 'One or two sentences for the card.',
+     stats:   [['5', 'models'], ['4,800', 'API calls']],   // optional — only figures stated on the work's page
    }
    ```
-3. Run `node tools/build.mjs` — it writes the card into `works.html`. (The deploy runs it too, but run it locally to preview.)
+3. Copy the `<!-- build:file-head -->` and `<!-- build:file-next -->` markers into the new page (from any page in `works/`), then run `node tools/build.mjs` — it writes the file into `works.html` (numbered by date: File 01 = oldest), updates the count, and fills each work page's file label and its "Next ▸" link. (The deploy runs it too, but run it locally to preview.)
 4. Add the page to `sitemap.xml`.
 5. The newest work (by `date`) becomes the home "Now researching" line automatically.
 
@@ -136,7 +137,8 @@ The site is plain static HTML, but a few blocks repeat or mirror `data.js`. Each
 | Block | Source | Pages |
 |---|---|---|
 | `nav` | `_partials/nav.html` | every page |
-| `works` | `WORKS` in `assets/js/data.js` | `works.html` |
+| `works`, `works-count` | `WORKS` in `assets/js/data.js` | `works.html` |
+| `file-head`, `file-next` | `WORKS` in `assets/js/data.js` | each page in `works/` |
 
 ```
 node tools/build.mjs          # rewrite the blocks
@@ -147,7 +149,7 @@ Never edit inside the markers — the next build overwrites it. The build render
 
 ## TODO
 
-- [ ] Bring Works and Notes (then Contact) into the home / gallery language — field notes, rolls
+- [ ] Bring Contact into the notebook language (Works and Notes are done)
 
 ## Deployment
 

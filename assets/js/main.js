@@ -5,7 +5,7 @@
  *                        indeterminate "waiting" sweep only if leaving takes > 300 ms
  * 1. Page transitions  — native cross-document View Transitions (pure CSS, see style.css §5);
  *                        JS only starts the waiting state on internal link clicks
- * 2. Stagger entrance  — assigns --stagger-i to .work-card and .post-card
+ * 2. Stagger entrance  — assigns --stagger-i to .file and .post-card
  * 3. Mobile nav toggle — hamburger
  * 4. Navbar auto-hide · Latest button · Contact local time
  * 5. Lightbox          — zooms from / back to its thumbnail (FLIP), ← → / Escape,
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Sets --stagger-i (0-based index) so CSS animation-delay cascades each item.
   // Covers static card lists (works.html, notes.html, contact.html).
   [
-    [...document.querySelectorAll('.work-card')],
+    [...document.querySelectorAll('.file')],
     [...document.querySelectorAll('.post-card')],
     [...document.querySelectorAll('.contact-card, .social-card')],
   ].forEach(list => {
@@ -395,6 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function close() {
     if (!isOpen()) return;
+    // came in on a #photoN link: drop it, so a refresh shows the gallery rather than reopening the photo
+    if (/^#photo\d+$/.test(location.hash)) history.replaceState(null, '', location.pathname + location.search);
     clearTimeout(_navTimer);
     const to = sortedImgs[current].getBoundingClientRect();
 
@@ -439,6 +441,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); }
     });
   });
+
+  // Deep link (the home film strip links here): gallery.html#photoN scrolls to that frame and opens it
+  const deep = location.hash.match(/^#photo(\d+)$/);
+  const deepImg = deep && allImgs.find(im => im.getAttribute('src').endsWith(`/photo${deep[1]}.webp`));
+  if (deepImg) {
+    const item = deepImg.closest('.shot');
+    item.scrollIntoView({ block: 'center' });
+    item.classList.add('visible');                 // skip its entrance: the viewer opens out of a visible frame
+    setTimeout(() => item.click(), 350);           // after the page's own entrance has settled
+  }
 
   lbClose.addEventListener('click', close);
   lbPrev.addEventListener('click', () => go(-1));

@@ -218,8 +218,9 @@ const SCREEN_H = innerHeight;
     return `<svg class="dx" viewBox="0 0 28 4" preserveAspectRatio="none" aria-hidden="true">${
       [...bits].map((b, k) => (b === '1' ? `<rect x="${k * 2}" width="1.2" height="4"/>` : '')).join('')}</svg>`;
   };
-  // Each frame carries its edge print: film name above, frame numbers + barcode below (title on hover)
-  const set = (rep) => P.map(([n, t, w, h], i) => `<a href="gallery.html" aria-label="${t}"${rep ? ' aria-hidden="true" tabindex="-1"' : ''}>` +
+  // Each frame carries its edge print: film name above, frame numbers + barcode below (title on hover).
+  // A click opens that photo in the gallery (gallery.html#photoN).
+  const set = (rep) => P.map(([n, t, w, h], i) => `<a href="gallery.html#photo${n}" aria-label="${t}"${rep ? ' aria-hidden="true" tabindex="-1"' : ''}>` +
     `<img src="assets/images/gallery/mini/photo${n}.webp" style="aspect-ratio:${w}/${h}" alt="${rep ? '' : t}" draggable="false" decoding="async">` +
     `<span class="rb rb-top" aria-hidden="true">HX 400<i>${i % 4 === 0 ? '◆' : ''}</i></span>` +
     `<span class="rb rb-bot" aria-hidden="true"><b>▸ ${pad(i + 1)}</b>${dx(i + 1)}<b>${pad(i + 1)}A</b></span>` +

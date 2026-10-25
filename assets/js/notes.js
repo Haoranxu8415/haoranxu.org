@@ -5,7 +5,7 @@
  * To add a new note:
  *   1. Drop a .md file in /posts/
  *   2. Add one entry to POSTS in data.js
- *   → Timeline, post cards, and home preview all update automatically.
+ *   → Timeline, entries, and the home "Lately writing" line all update automatically.
  */
 
 function stripFrontmatter(text) {
@@ -21,6 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Newest first
   const sorted = [...POSTS].sort((a, b) => localDate(b.date) - localDate(a.date));
+
+  // "06 entries · 2024 – 2026" beside the title
+  const count = document.getElementById('notes-count');
+  if (count) {
+    const ys = sorted.map(p => p.date.slice(0, 4));
+    count.textContent = `${String(sorted.length).padStart(2, '0')} entries · ${ys[ys.length - 1]} – ${ys[0]}`;
+  }
+
+  // Set by the timeline click, read by the scroll-spy below: while a click's smooth scroll
+  // runs, the highlight stays on the post you chose instead of stepping through the ones it passes
+  let pinned = null, unpin = 0, markActive = () => {}, release = () => { pinned = null; };
 
   /* ── Timeline sidebar ────────────────────────────────── */
   const timeline = document.querySelector('.timeline-col');
@@ -51,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!target) return;
             // Align the post's top (title) under the navbar — 'center' landed mid-article
             // on any post taller than the screen
+            pinned = target;
+            markActive(target);
+            clearTimeout(unpin);
+            unpin = setTimeout(() => release(), 600);   // released here if the page didn't need to scroll
             target.scrollIntoView({
               behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
               block: 'start',
@@ -73,14 +88,17 @@ document.addEventListener('DOMContentLoaded', () => {
     card.id        = p.id;
     card.className = 'card post-card';
     card.style.setProperty('--stagger-i', i);
+    // An entry in the notebook: numbered in the order written, dated with the gold stamp
+    const num = String(sorted.length - i).padStart(2, '0');
+    const [yy, mm, dd] = p.date.split('-');
     card.innerHTML =
+      `<header class="entry-head"><span class="edge-k">Entry ${num}</span>` +
+        `<time class="stamp-g" datetime="${p.date}" title="${formatDate(p.date)}">'${yy.slice(2)} ${mm} ${dd}</time></header>` +
       `<h2 class="post-title">${p.title}</h2>` +
-      `<div class="post-meta">` +
-        `<time datetime="${p.date}">${formatDate(p.date)}</time>` +
-        `<span>${p.tags}</span>` +
-      `</div>` +
-      `<div class="post-divider"></div>` +
-      `<div id="${bodyId}" class="post-body"></div>`;
+      `<div class="post-meta"><span>${p.tags}</span></div>` +
+      `<div id="${bodyId}" class="post-body"></div>` +
+      `<p class="entry-end">— end of entry ${num}</p>`;
+    if (i > 0) cardCol.insertAdjacentHTML('beforeend', '<div class="perf-rule entry-rule" aria-hidden="true"></div>');
     cardCol.appendChild(card);
 
     // Fetch and render markdown body
@@ -126,8 +144,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const scroller = document.querySelector('.page-wrapper');
     let current = null;
 
+    markActive = card => {
+      if (card === current) return;
+      current = card;
+      entries.forEach(a => {
+        const on = a.getAttribute('href') === `#${card.id}`;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'location');
+        else    a.removeAttribute('aria-current');
+      });
+    };
+
     function spy() {
-      if (!cards.length) return;
+      if (!cards.length || pinned) return;
       let active = cards[0];
       const atBottom = scroller && scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
       if (atBottom) active = cards[cards.length - 1];
@@ -138,18 +167,16 @@ document.addEventListener('DOMContentLoaded', () => {
           else break;
         }
       }
-      if (active === current) return;
-      current = active;
-      entries.forEach(a => {
-        const on = a.getAttribute('href') === `#${active.id}`;
-        a.classList.toggle('is-active', on);
-        if (on) a.setAttribute('aria-current', 'location');
-        else    a.removeAttribute('aria-current');
-      });
+      markActive(active);
     }
 
     let lastSpy = 0, trailingSpy = 0;
+    // A click's scroll is over: let the spy take over again
+    release = () => { clearTimeout(unpin); pinned = null; spy(); };
+    // scrollend (where supported) marks the end exactly; otherwise half a second without scrolling does
+    (scroller || window).addEventListener('scrollend', () => { if (pinned) release(); });
     (scroller || window).addEventListener('scroll', () => {
+      if (pinned) { clearTimeout(unpin); unpin = setTimeout(release, 500); return; }
       const now = performance.now();
       if (now - lastSpy > 100) { lastSpy = now; spy(); }
       clearTimeout(trailingSpy);
