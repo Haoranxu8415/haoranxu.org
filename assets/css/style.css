@@ -412,11 +412,6 @@ ul   { list-style: none; }
     animation: staggerIn var(--dur-slow) var(--ease-out) both;
     animation-delay: calc(var(--stagger-i, 0) * 90ms + 150ms);
   }
-  .contact-card,
-  .social-card {
-    animation: staggerIn var(--dur-slow) var(--ease-out) both;
-    animation-delay: calc(var(--stagger-i, 0) * 100ms + 150ms);
-  }
   .page-content .section-heading {
     animation: staggerIn var(--dur-slow) var(--ease-out) both;
     animation-delay: .1s;
@@ -453,9 +448,7 @@ ul   { list-style: none; }
 */
 @media (prefers-reduced-motion: reduce) {
   .file,
-  .post-card,
-  .contact-card,
-  .social-card {
+  .post-card {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -520,11 +513,10 @@ ul   { list-style: none; }
   that "Haoran" and "Xu" cross with depth; the kit, drawn in gold line, is scattered into the
   empty space around it (placed by home.js); a strip of film drifts below.
 */
-/* Intro copy and status line (home); identity tags (contact, works) */
+/* Intro copy and status line (home) */
 .hero-about { font-size: 15px; line-height: 1.75; color: var(--text-secondary); max-width: 520px; margin-bottom: 16px; }
 .hero-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); letter-spacing: .02em; margin-bottom: 14px; }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; box-shadow: 0 0 5px rgba(201,169,110,.5); }
-.tag { font-size: 11px; letter-spacing: .08em; color: var(--gold); border: 0.5px solid var(--gold-border-em); border-radius: 4px; padding: 3px 10px; }
 
 :root { --film: #050706; --gut: clamp(20px, 4.2vw, 64px); --edge: rgba(201,169,110,.5);
   --stamp: #FF9B50; --paper: #E9E1CF; }
@@ -722,8 +714,7 @@ body.page-home { overflow-x: clip; }
   transition: height var(--dur-slow) var(--ease-out);
 }
 .card:hover::before { height: 32px; }
-/* No accent on the icon row (icons have their own hover) or loading placeholders */
-.social-card::before,
+/* No accent on loading placeholders */
 .skeleton-card::before { display: none; }
 
 .card-tag {
@@ -1533,95 +1524,45 @@ body.page-home { overflow-x: clip; }
 .newest-button:hover { color: var(--gold); border-color: var(--gold-border-em); }
 
 
-/* ── 16. Contact Page ─────────────────────────────────────── */
-
-/* Modifier class for pages that should be vertically centered in viewport.
-   Used only on contact.html — does not affect other pages. */
+/* ── 16. Contact Page — the last page ─────────────────────── */
 /*
-  Contact page: heading stays at the normal top position (same as all other pages).
-  The contact-grid below it is pushed to the vertical center of the remaining space
-  by making .page-content a flex column and letting the grid auto-margin.
+  "Say hello." and the one address to use, large; the academic / backup addresses and the
+  other places as a quiet list of text links; local time in the header; and, as on the inside
+  cover of a notebook, "If found, please return to —".
 */
-.page-wrapper--centered .page-content {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+.say {
+  margin: clamp(24px, 6vh, 64px) 0 10px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(56px, 8vw, 104px);
+  line-height: .95;
+  letter-spacing: -.01em;
+  color: var(--gold);
 }
-/* Centered composition: heading and cards share one centre line, and the cards
-   sit directly under the heading (vertical centering left it stranded above a gap) */
-.page-wrapper--centered .section-heading { text-align: center; }
-.page-wrapper--centered .contact-grid {
-  margin: 8px auto 0;
-}
-
-/*
-  Contact layout: two rows stacked, max-width constrained and centered.
-    Row 1 — identity + email side by side
-    Row 2 — social icons centered full-width
-*/
-.contact-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;       /* auto margins in the flex column would otherwise shrink-wrap to content */
-  max-width: 820px;
-  margin: 0 auto;
-}
-
-/* Top row: identity + email 50/50 */
-.contact-row-top {
-  display: flex;
-  align-items: stretch;
-}
-
-.contact-card {
-  flex: 1 1 0;
-  min-width: 0;      /* equal columns regardless of content length */
-  padding: 20px 40px;
-  --accent-top: 26px;
-  --accent-left: 22px;   /* 40 px padding − 18 px: beside the text, right of the divider */
-  min-height: 160px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.contact-card h2 {
+.mail-big {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: 28px;
-  line-height: 1.2;
+  font-size: clamp(26px, 3.2vw, 40px);
   color: var(--gold-light);
-  margin-bottom: 20px;
-  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-thickness: .5px;
+  text-underline-offset: .18em;
+  text-decoration-color: rgba(232,213,163,.35);
+  transition: color var(--dur-fast) var(--ease-inout), text-decoration-color var(--dur-fast) var(--ease-inout);
 }
-.contact-row-top > .contact-card + .contact-card { border-left: 0.5px solid var(--gold-border); }
+.mail-big:hover { color: #fff3d6; text-decoration-color: currentColor; }
+.mail-big + .perf-rule, .c-rows { max-width: 760px; }
 
-/* Shared label/value list — both top cards use it, so rows sit on the same baselines */
-.contact-list  { display: flex; flex-direction: column; gap: 16px; }
-.contact-item  { display: flex; flex-direction: column; gap: 4px; }
-.contact-label { font-size: 11px; line-height: 1.4; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
-.contact-value { font-size: 13px; line-height: 1.5; color: var(--text-secondary); overflow-wrap: anywhere; }
-.contact-value a { transition: color var(--dur-fast) var(--ease-inout); }
-.contact-value a:hover { color: var(--gold); }
+.c-rows { display: grid; gap: 14px; margin: 0; }
+.c-rows > div { display: grid; grid-template-columns: 9.5em 1fr; align-items: baseline; gap: 16px; }
+.c-rows dd { margin: 0; font-size: 15px; color: var(--text-secondary); }
+.c-rows a { color: var(--text-primary); transition: color var(--dur-fast) var(--ease-inout); }
+.c-rows a:hover { color: var(--gold-light); }
+.c-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 
-/* Bottom row: social icons, full width, centered */
-.social-card {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: clamp(28px, 7vw, 48px);
-  padding: 32px 32px 8px;
-  min-height: 0;
-  border-top: 0.5px solid var(--gold-border);
-}
-.social-card a {
-  font-size: clamp(34px, 9vw, 42px);
-  color: var(--text-muted);
-  transition: color var(--dur-fast) var(--ease-inout), transform var(--dur-fast) var(--ease-inout);
-}
-.social-card a:hover { color: var(--gold); transform: scale(1.1); }
-.social-card svg { display: block; height: 1em; width: auto; fill: currentColor; }
+.return { margin: clamp(56px, 12vh, 120px) 0 0; display: flex; flex-direction: column; gap: 8px; }
+.return-to { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 17px; color: var(--gold-light); opacity: .75; }
 
 
 /* ── 17. Responsive ───────────────────────────────────────── */
@@ -1635,11 +1576,8 @@ body.page-home { overflow-x: clip; }
   /* Timeline sidebar hidden below 900px */
   .timeline-col { display: none; }
 
-  /* Works / contact stack */
-  .contact-grid { flex-direction: column; }
-  .contact-row-top { flex-direction: column; }
-  .contact-card { padding: 24px 0; flex: none; --accent-top: 30px; --accent-left: -18px; }  /* stacked: size to content, not 0 basis */
-  .contact-row-top > .contact-card + .contact-card { border-left: none; border-top: 0.5px solid var(--gold-border); }
+  /* Contact: labels above their values */
+  .c-rows > div { grid-template-columns: 1fr; gap: 4px; }
 
   /* Tablet: 3 columns */
   .roll-index { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
@@ -1829,7 +1767,6 @@ body.page-home { overflow-x: clip; }
   /* Gallery: no room for shooting notes beside the viewer's title; roll link drops under its label */
   .lb-exif { display: none; }
   .rh-l { margin-left: 0; }
-  .tag { font-size: 11px; padding: 2px 8px; }
 }
 
 
@@ -1857,7 +1794,6 @@ body.page-home { overflow-x: clip; }
 
   .nav-links a:hover,
   .back-link:hover,
-  .contact-value a:hover,
   .not-found-link:hover {
     color: inherit;
     border-color: var(--gold-border);

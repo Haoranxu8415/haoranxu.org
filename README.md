@@ -16,7 +16,6 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 - Node 18+ — only for `tools/build.mjs` (no packages to install)
 - [marked.js](https://marked.js.org) — Markdown rendering for Notes
 - Cormorant Garamond + DM Sans — self-hosted in `assets/fonts/` (SIL OFL 1.1)
-- Font Awesome brand icons — inlined as SVG on the contact page
 - GitHub Pages — hosting
 - Cloudflare — CDN and DNS
 
@@ -146,10 +145,6 @@ node tools/build.mjs --check  # exit 1 if a page is out of date
 ```
 
 Never edit inside the markers — the next build overwrites it. The build renders every page before writing any, so an error leaves nothing half-updated. The deploy workflow runs it before publishing.
-
-## TODO
-
-- [ ] Bring Contact into the notebook language (Works and Notes are done)
 
 ## Deployment
 

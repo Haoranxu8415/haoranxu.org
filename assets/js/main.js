@@ -120,11 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── 2. Stagger entrance ─────────────────────────────────── */
   // Sets --stagger-i (0-based index) so CSS animation-delay cascades each item.
-  // Covers static card lists (works.html, notes.html, contact.html).
+  // Covers the works files and the notes entries.
   [
     [...document.querySelectorAll('.file')],
     [...document.querySelectorAll('.post-card')],
-    [...document.querySelectorAll('.contact-card, .social-card')],
   ].forEach(list => {
     list.forEach((el, i) => el.style.setProperty('--stagger-i', i));
   });
