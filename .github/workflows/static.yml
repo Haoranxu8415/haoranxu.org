@@ -48,10 +48,17 @@ jobs:
           find . -name '*.html' -not -path './.git/*' -print0 \
             | xargs -0 sed -i -E "s#(assets/(css|js)/[A-Za-z0-9_-]+\.(css|js))\"#\1?v=${V}\"#g"
           grep -rhoE 'assets/(css|js)/[^"]+\?v=[0-9a-f]+' --include='*.html' . | sort | uniq -c
+      # Publish the site only: not the photo originals (full size, with EXIF incl. GPS —
+      # the site serves stripped WebP copies), and not the repo's tooling and docs.
+      - name: Leave non-site files out of the published site
+        run: |
+          rm -f assets/images/gallery/*.jpg assets/images/gallery/*.JPG assets/images/gallery/*.jpeg
+          rm -rf tools _partials .github README.md LICENSE .gitattributes .gitignore
+          find . -name '.DS_Store' -delete
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
+          # The repository minus the step above
           path: '.'
       - name: Deploy to GitHub Pages
         id: deployment

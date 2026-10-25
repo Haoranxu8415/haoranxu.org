@@ -6,10 +6,6 @@ Allow: /
 # Note bodies are deliberately kept out of search: notes.html loads them from
 # /posts/, so blocking that folder keeps the article text unindexed.
 Disallow: /posts/
-Disallow: /.github/
 Disallow: /CNAME
-Disallow: /README.md
-Disallow: /tools/
-Disallow: /_partials/
 
 Sitemap: https://haoranxu.org/sitemap.xml

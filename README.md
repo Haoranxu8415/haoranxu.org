@@ -23,12 +23,11 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 
 ```
 index.html              Home (served at /)
-home.html               Redirect to / for old links
 gallery.html            Photography, as rolls (index → rolls of prints) with lightbox
 works.html              Works index
 notes.html              Writing, rendered from Markdown
 contact.html            Contact and social links
-404.html                Not-found page (absolute links — served at any path)
+404.html                Not-found page (absolute links — served at any path); sends old /home.html links to /
 sitemap.xml, robots.txt Search engines: page list; robots keeps /posts/ (note bodies) out of search
 
 works/                  Individual work detail pages
@@ -95,7 +94,7 @@ python3 -m http.server 8000      # then open http://localhost:8000
 
 ### Add a Gallery Photo
 
-1. Keep the original in `assets/images/gallery/` (archive only — never loaded by the site).
+1. Keep the original in `assets/images/gallery/` (archive only — never loaded by the site, and left out of the published site by the deploy, since originals carry full EXIF incl. GPS).
 2. Export WebP versions (EXIF rotation applied):
    - `thumbs/photoN.webp` — 720px wide, quality ~78 (gallery prints)
    - `large/photoN.webp` — 2400px long edge, quality ~82 (lightbox)
@@ -148,7 +147,7 @@ Never edit inside the markers — the next build overwrites it. The build render
 
 ## Deployment
 
-Pushing to `main` triggers the GitHub Actions workflow (`.github/workflows/static.yml`), which deploys the site to GitHub Pages automatically.
+Pushing to `main` triggers the GitHub Actions workflow (`.github/workflows/static.yml`), which deploys the site to GitHub Pages automatically. It publishes the site only — photo originals, `tools/`, `_partials/`, README and licence files stay in the repository but are not served.
 
 The workflow stamps every CSS/JS reference in the HTML with the commit (`style.css?v=<sha>`), so browsers fetch fresh files after each deploy — keep plain `assets/css/…` / `assets/js/…` paths in the source. If a change still doesn't appear, purge the Cloudflare cache: **Dashboard → haoranxu.org → Caching → Configuration → Purge Cache**.
 
