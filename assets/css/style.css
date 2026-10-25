@@ -1443,9 +1443,17 @@ body.page-home { overflow-x: clip; }
   transition: background var(--dur-base) var(--ease-inout), box-shadow var(--dur-base) var(--ease-inout);
 }
 .timeline-entry.is-active { color: var(--gold-light); }
-.timeline-entry.is-active .timeline-dot {
+/* The marker: one gold square that slides along the rail with the reading (notes.js) */
+.timeline-marker {
+  position: absolute;
+  top: 0; left: 5px;
+  width: 7px; height: 7px;
+  margin-top: -3.5px;
+  border-radius: 1.6px;
   background: var(--gold);
   box-shadow: 0 0 6px rgba(201, 169, 110, .5);
+  pointer-events: none;
+  will-change: transform;
 }
 
 /*

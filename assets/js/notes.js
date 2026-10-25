@@ -29,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     count.textContent = `${String(sorted.length).padStart(2, '0')} entries · ${ys[ys.length - 1]} – ${ys[0]}`;
   }
 
-  // Set by the timeline click, read by the scroll-spy below: while a click's smooth scroll
-  // runs, the highlight stays on the post you chose instead of stepping through the ones it passes
-  let pinned = null, unpin = 0, markActive = () => {}, release = () => { pinned = null; };
-
   /* ── Timeline sidebar ────────────────────────────────── */
   const timeline = document.querySelector('.timeline-col');
   if (timeline) {
@@ -62,10 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!target) return;
             // Align the post's top (title) under the navbar — 'center' landed mid-article
             // on any post taller than the screen
-            pinned = target;
-            markActive(target);
-            clearTimeout(unpin);
-            unpin = setTimeout(() => release(), 600);   // released here if the page didn't need to scroll
             target.scrollIntoView({
               behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
               block: 'start',
@@ -134,56 +126,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loads.forEach(p => window.pbTrack?.(p));  // drive the arrival progress bar
 
-  /* ── Timeline: highlight the post being read ────────── */
-  // The active post is the last one whose top has passed a line 35% down the
-  // screen (or the last post once the page bottom is reached — a short final
-  // post may never get that high). Time-throttled scroll checks, no rAF, as in main.js.
+  /* ── Timeline: a gold marker that follows the reading ──── */
+  // One marker slides along the rail, tied to the scroll position: it sits on a post's date
+  // when that post's title reaches the top of the page (where a timeline click lands it) and
+  // slides toward the next date as you read on. A click's smooth scroll therefore carries it
+  // through every post on the way, at the scroll's own pace. The date being read is lit too.
   if (timeline) {
     const entries  = [...timeline.querySelectorAll('.timeline-entry')];
     const cards    = [...cardCol.querySelectorAll('.post-card')];
     const scroller = document.querySelector('.page-wrapper');
-    let current = null;
+    const marker   = document.createElement('span');
+    marker.className = 'timeline-marker';
+    marker.setAttribute('aria-hidden', 'true');
+    timeline.appendChild(marker);
 
-    markActive = card => {
-      if (card === current) return;
-      current = card;
-      entries.forEach(a => {
-        const on = a.getAttribute('href') === `#${card.id}`;
-        a.classList.toggle('is-active', on);
-        if (on) a.setAttribute('aria-current', 'location');
-        else    a.removeAttribute('aria-current');
+    // Cached geometry, re-measured when layout can change: the scroll position at which each
+    // post "arrives" (title under the navbar, as a click lands it) and each date's height on the rail
+    let arrive = [], dotY = [], current = -1;
+    function measure() {
+      if (!scroller) return;
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      const top = scroller.getBoundingClientRect().top - scroller.scrollTop;
+      const land = parseFloat(getComputedStyle(scroller).scrollPaddingTop) || 0;
+      arrive = cards.map(c => {
+        const cs = getComputedStyle(c);
+        // minus any entrance-animation offset still running (the rect includes the transform, layout doesn't)
+        const shift = cs.transform && cs.transform !== 'none' ? new DOMMatrixReadOnly(cs.transform).m42 : 0;
+        const at = c.getBoundingClientRect().top - shift - top - land - (parseFloat(cs.scrollMarginTop) || 0);
+        return Math.min(max, Math.max(0, at));
       });
-    };
-
-    function spy() {
-      if (!cards.length || pinned) return;
-      let active = cards[0];
-      const atBottom = scroller && scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
-      if (atBottom) active = cards[cards.length - 1];
-      else {
-        const line = innerHeight * 0.35;
-        for (const c of cards) {
-          if (c.getBoundingClientRect().top <= line) active = c;
-          else break;
-        }
-      }
-      markActive(active);
+      dotY = entries.map(a => a.offsetTop + a.offsetHeight / 2);
+      follow();
     }
 
-    let lastSpy = 0, trailingSpy = 0;
-    // A click's scroll is over: let the spy take over again
-    release = () => { clearTimeout(unpin); pinned = null; spy(); };
-    // scrollend (where supported) marks the end exactly; otherwise half a second without scrolling does
-    (scroller || window).addEventListener('scrollend', () => { if (pinned) release(); });
-    (scroller || window).addEventListener('scroll', () => {
-      if (pinned) { clearTimeout(unpin); unpin = setTimeout(release, 500); return; }
-      const now = performance.now();
-      if (now - lastSpy > 100) { lastSpy = now; spy(); }
-      clearTimeout(trailingSpy);
-      trailingSpy = setTimeout(spy, 120);
-    }, { passive: true });
-    Promise.allSettled(loads).then(spy);   // posts above change height as bodies load
-    spy();
+    function follow() {
+      if (!arrive.length) return;
+      const y = scroller.scrollTop + 2;                        // 2 px of slack for rounding
+      let i = 0;
+      while (i < arrive.length - 1 && arrive[i + 1] <= y) i++;
+      // between post i's arrival and post i+1's, slide between their dates
+      let pos = dotY[i];
+      if (i < arrive.length - 1 && arrive[i + 1] > arrive[i]) {
+        const f = Math.min(1, Math.max(0, (y - arrive[i]) / (arrive[i + 1] - arrive[i])));
+        pos += f * (dotY[i + 1] - dotY[i]);
+      }
+      marker.style.transform = `translateY(${pos}px)`;
+      if (i !== current) {
+        current = i;
+        entries.forEach((a, k) => {
+          a.classList.toggle('is-active', k === i);
+          if (k === i) a.setAttribute('aria-current', 'location');
+          else         a.removeAttribute('aria-current');
+        });
+      }
+    }
+
+    // Every scroll event (one per frame at most) — reads only scrollTop, so it stays cheap
+    (scroller || window).addEventListener('scroll', follow, { passive: true });
+    window.addEventListener('resize', measure);
+    // post bodies arriving, fonts swapping in, images loading — anything that changes the column's height
+    if ('ResizeObserver' in window) new ResizeObserver(() => measure()).observe(cardCol);
+    Promise.allSettled([...loads, document.fonts.ready]).then(measure);
+    measure();
   }
 
   // Arriving via notes.html#post-N (the home "Lately writing" link): posts above the target
