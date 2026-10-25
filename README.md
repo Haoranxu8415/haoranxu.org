@@ -15,6 +15,7 @@ Emerald × Champagne Gold. Two typefaces: Cormorant Garamond (display/identity) 
 - Vanilla HTML / CSS / JavaScript — no frameworks, no runtime dependencies
 - Node 18+ — only for `tools/build.mjs` (no packages to install)
 - [marked.js](https://marked.js.org) — Markdown rendering for Notes
+- Font Awesome brand icons — inlined as small SVGs on the contact page (CC BY 4.0)
 - Cormorant Garamond + DM Sans — self-hosted in `assets/fonts/` (SIL OFL 1.1)
 - GitHub Pages — hosting
 - Cloudflare — CDN and DNS

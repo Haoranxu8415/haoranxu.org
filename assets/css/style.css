@@ -1567,7 +1567,11 @@ body.page-home { overflow-x: clip; }
 .c-rows dd { margin: 0; font-size: 15px; color: var(--text-secondary); }
 .c-rows a { color: var(--text-primary); transition: color var(--dur-fast) var(--ease-inout); }
 .c-rows a:hover { color: var(--gold-light); }
-.c-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.c-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; }
+/* small brand icons, the colour of the edge print; gold on hover */
+.c-links a { display: inline-flex; padding: 4px; margin: -4px; color: rgba(201,169,110,.7); }
+.c-links a:hover { color: var(--gold-light); }
+.c-links svg { display: block; height: 18px; width: auto; fill: currentColor; }
 
 .return { margin: clamp(56px, 12vh, 120px) 0 0; display: flex; flex-direction: column; gap: 8px; }
 .return-to { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 17px; color: var(--gold-light); opacity: .75; }
