@@ -100,6 +100,8 @@ const SCREEN_H = innerHeight;
     `<div class="g" role="listitem" aria-label="${k.name}"><svg viewBox="0 0 ${k.vb[0]} ${k.vb[1]}" aria-hidden="true">${k.svg}</svg>` +
     `<span class="lbl"><b>${k.name}</b></span></div>`).join('');
   const G = [...gear.children];
+  // on a phone only a few fit: the α7R III, the iPhone and the 24–105 took the gallery; the 50mm or the Pocket when one doesn't fit
+  const MOBILE_KIT = [1, 5, 4, 3, 6];
 
   /* ── Layout ── */
   const hero = document.getElementById('hero'), name = document.getElementById('name'), em = name.querySelector('em');
@@ -107,12 +109,13 @@ const SCREEN_H = innerHeight;
   const rangeRect = node => { const r = document.createRange(); r.selectNodeContents(node); return r.getBoundingClientRect(); };
 
   // scatter: biggest pieces first, each into the free spot closest to the print
-  function scatter(blocked, box, k, cx, cy) {
+  function scatter(blocked, box, k, cx, cy, only, lab = 22) {
     const placed = [], GAP = 16 * k + 10, STEP = 8; let missed = 0;
+    G.forEach((el, i) => { if (only && !only.includes(i)) el.style.display = 'none'; });
     const hit = (a, b, m) => a.x < b.x + b.w + m && a.x + a.w + m > b.x && a.y < b.y + b.h + m && a.y + a.h + m > b.y;
-    const order = KIT.map((it, i) => i).sort((a, b) => KIT[b].vb[0] * KIT[b].vb[1] - KIT[a].vb[0] * KIT[a].vb[1]);
+    const order = (only || KIT.map((it, i) => i)).slice().sort((a, b) => KIT[b].vb[0] * KIT[b].vb[1] - KIT[a].vb[0] * KIT[a].vb[1]);
     for (const i of order) {
-      const w = KIT[i].vb[0] * k, h = KIT[i].vb[1] * k, lab = 22;          // room for the name under it
+      const w = KIT[i].vb[0] * k, h = KIT[i].vb[1] * k;          // lab: room for the name under it
       let best = null, bestS = Infinity;
       for (let y = box.y; y + h + lab <= box.y + box.h; y += STEP)
         for (let x = box.x; x + w <= box.x + box.w; x += STEP) {
@@ -144,18 +147,21 @@ const SCREEN_H = innerHeight;
     if (innerWidth <= 900) {
       const fs = Math.min(120 * (W - 2 * padL) * .97 / wordW, SCREEN_H * .42 / 1.72);
       name.style.fontSize = Math.max(56, fs) + 'px';
-      // print under the name, right of centre; kit scattered around it; copy below
+      // print under the name, right of centre; a few pieces of kit in the space left of it; copy right below
       const sw = Math.min(W * .56, 300), nb = name.offsetTop + name.offsetHeight;
       self.style.setProperty('--cap', Math.max(11, sw * .045) + 'px');
       Object.assign(self.style, { width: sw + 'px', left: (R - sw - W * .04) + 'px', top: (nb - fs * .35) + 'px' });
-      const sh = self.offsetHeight, k0 = Math.min(.55, W / 700);
-      const blk = [toHero(rangeRect(name.firstChild)), toHero(rangeRect(em)), toHero(self.getBoundingClientRect())];
-      for (let k = k0; k > .3; k -= .04) {
-        const box = { x: L, y: nb + 4, w: R - L, h: sh + fs * .35 + 260 * k };
-        if (!scatter(blk, box, k, parseFloat(self.style.left) + sw / 2, parseFloat(self.style.top) + sh / 2)) break;
-      }
-      const used = Math.max(...G.filter(g => g.style.display !== 'none').map(g => g.getBoundingClientRect().bottom - hr.top), parseFloat(self.style.top) + sh);
-      copy.style.marginTop = (used - nb + 28) + 'px';
+      const sh = self.offsetHeight, st = parseFloat(self.style.top), sl = parseFloat(self.style.left);
+      // glyph boxes, not line boxes, so the pieces can sit close under "Xu"
+      const xr = toHero(rangeRect(em));
+      const blk = [toHero(rangeRect(name.firstChild)), { x: xr.x, y: xr.y + xr.h * .12, w: xr.w, h: xr.h * .72 }, toHero(self.getBoundingClientRect())];
+      // the column beside the print, under "Xu": three pieces (four on a tablet), in MOBILE_KIT order, skipping any that don't fit
+      const box = { x: L - 6, y: xr.y, w: sl - L - 4, h: st + sh - xr.y };
+      const fit = only => { for (let k = Math.min(.8, W / 780); k >= .34; k -= .02) if (!scatter(blk, box, k, box.x + box.w / 2, box.y + box.h / 2, only, 8)) return k; return 0; };
+      const pick = [];
+      for (const i of MOBILE_KIT) if (pick.length < (W < 600 ? 3 : 4) && fit([...pick, i])) pick.push(i);
+      if (!pick.length || !fit(pick)) G.forEach(g => { g.style.display = 'none'; });
+      copy.style.marginTop = (st + sh - nb + 28) + 'px';
       G.forEach(g => g.classList.add('in'));
       return;
     }

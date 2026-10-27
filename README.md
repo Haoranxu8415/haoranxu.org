@@ -119,7 +119,7 @@ python3 -m http.server 8000      # then open http://localhost:8000
 
 - **Latest line** — "Now researching" (newest `WORKS` entry) and "Lately writing" (newest `POSTS` entry) alternate every 2.8 s. Nothing to edit by hand.
 - **Film strip** — the `P` list: `[photo number, title, width, height]` of the `mini/` image.
-- **Kit drawings** — the `KIT` list: `name` (shown on hover), `vb` (the SVG viewBox size; all drawings share one scale, so a bigger object gets a bigger viewBox) and `svg` (the line drawing). Pieces are placed automatically into the free space around the portrait; on screens ≥ 1800 px they stay right of "Xu".
+- **Kit drawings** — the `KIT` list: `name` (shown on hover), `vb` (the SVG viewBox size; all drawings share one scale, so a bigger object gets a bigger viewBox) and `svg` (the line drawing). Pieces are placed automatically into the free space around the portrait; on screens ≥ 1800 px they stay right of "Xu". At ≤ 900 px only a few go in the space left of the portrait — three on a phone, four on a tablet, picked in `MOBILE_KIT` order (indexes into `KIT`).
 - **Date stamp / "Field notes" date** — today's date, set in the browser.
 
 ### Navigation
